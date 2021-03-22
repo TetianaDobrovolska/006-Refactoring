@@ -26,3 +26,9 @@ TEST(CalculatorTest, emptyString) {
      ASSERT_EQ(actual, -1);
  }
 
+ TEST(CalculatorTest, multipleNumbers) {
+     StringCalc c;
+     int actual = c.Add("5,2,5,8,9");
+     ASSERT_EQ(actual, 29);
+ }
+ 

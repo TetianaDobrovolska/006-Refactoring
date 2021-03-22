@@ -19,7 +19,7 @@ int StringCalc::Add(string numbers)
 	uint8_t sum = 0;
 	if (numbers != "")
 	{
-		if (numbers.find_first_not_of("012,") == string::npos)
+		if (numbers.find_first_not_of("0123456789,") == string::npos)
 		{
 			string delimiter = ",";
 			auto deliPosition = numbers.find(delimiter);
@@ -29,9 +29,14 @@ int StringCalc::Add(string numbers)
 			}
 			else
 			{
-				const uint8_t a = stoi(numbers.substr(0, 1));
-				const uint8_t b = stoi(numbers.substr(deliPosition+1, 1));
-				sum = a + b;
+				size_t start;
+				size_t end = 0;
+
+				while ((start = numbers.find_first_not_of(delimiter, end)) != std::string::npos)
+				{
+					end = numbers.find(delimiter, start);
+					sum += stoi(numbers.substr(start, end - start));
+				}
 			}
 		}
 		else

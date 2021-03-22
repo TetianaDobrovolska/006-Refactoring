@@ -7,14 +7,14 @@ TEST(CalculatorTest, TestName) {
   EXPECT_TRUE(true);
 }
 
- TEST(CalculatorTest, SampleTest) {
+TEST(CalculatorTest, SampleTest) {
         StringCalc c;
         const int expected_value = 18;
         int actual = c.Add("13,5");
         ASSERT_EQ(actual, expected_value);
  }
 
- TEST(CalculatorTest, NumberOfOperandsTest) {
+TEST(CalculatorTest, NumberOfOperandsTest) {
         StringCalc c;
 
         const int expected_result1 = 18;
@@ -38,17 +38,32 @@ TEST(CalculatorTest, TestName) {
         ASSERT_EQ(actual, default_result);
  }
 
- TEST(CalculatorTest, NegativeNumberTest) {
+TEST(CalculatorTest, NegativeNumberTest) {
         StringCalc c;
 
         const int error_result = -1;
-        int actual = c.Add("-2, 0");
+        int actual = c.Add("-2,0");
         ASSERT_EQ(actual, error_result);
 
-        actual = c.Add("0, -4");
+        actual = c.Add("0,-4");
         ASSERT_EQ(actual, error_result);
 
         actual = c.Add("-1");
         ASSERT_EQ(actual, error_result);
- }
+}
 
+TEST(CalculatorTest, NewLineSeparatorTest) {
+        StringCalc c;
+
+        const int expected_result1 = 18;
+        int actual = c.Add("13,5");
+        ASSERT_EQ(actual, expected_result1);
+
+        const int expected_result2 = 37;
+        actual = c.Add("13\n2,4,5\n6,7");
+        ASSERT_EQ(actual, expected_result2);
+
+        const int expected_result3 = 9;
+        actual = c.Add("3,2\n4");
+        ASSERT_EQ(actual, expected_result3);
+ }

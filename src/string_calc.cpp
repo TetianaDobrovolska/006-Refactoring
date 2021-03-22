@@ -40,7 +40,7 @@ std::vector<int> StringCalc::parser(const string &input)
 
     for (int i; ss >> i;) {
         output.push_back(i);
-        if (ss.peek() == ',')
+        if (ss.peek() == ',' || ss.peek() == '\n')
             ss.ignore();
     }
 

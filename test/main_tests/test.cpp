@@ -17,17 +17,21 @@ TEST(CalculatorTest, TestName) {
  TEST(CalculatorTest, NumberOfOperandsTest) {
         StringCalc c;
 
-        const int error_result = -1;
-        int actual = c.Add("13,5,4");
-        ASSERT_EQ(actual, error_result);
-
         const int expected_result1 = 18;
-        actual = c.Add("13,5");
+        int actual = c.Add("13,5");
         ASSERT_EQ(actual, expected_result1);
 
         const int expected_result2 = 13;
         actual = c.Add("13");
         ASSERT_EQ(actual, expected_result2);
+
+        const int expected_result3 = 37;
+        actual = c.Add("13,2,4,5,6,7");
+        ASSERT_EQ(actual, expected_result3);
+
+        const int expected_result4 = 9;
+        actual = c.Add("3,2,4");
+        ASSERT_EQ(actual, expected_result4);
 
         const int default_result = 0;
         actual = c.Add("");

@@ -22,10 +22,6 @@ long StringCalc::Add(string numbers)
     std::stringstream ss(numbers);
 
     vector<int> values = parser(numbers);
-    if (values.size() > 2) {
-        std::cout << "Wrong number of operands";
-        return -1;
-    }
 
     long sum = 0;
 

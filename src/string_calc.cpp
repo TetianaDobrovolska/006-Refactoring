@@ -31,10 +31,6 @@ int StringCalc::Add(string numbers)
             return -1;
     }
 
-    if(operands.size() > 2) {
-        return -1;
-    }
-
     for (std::size_t i = 0; i < operands.size(); i++)
         sum+= operands[i];
 

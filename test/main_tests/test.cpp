@@ -37,8 +37,8 @@ TEST(CalculatorTest, NegativeInputTest) {
     ASSERT_EQ(actual, -1);
 }
 
-TEST(CalculatorTest, MoreThanTwoOperandTest) {
+TEST(CalculatorTest, MultipleOperandTest) {
     StringCalc c;
-    int actual = c.Add("1,2,3");
-    ASSERT_EQ(actual, -1);
+    int actual = c.Add("1,2,3,4,5");
+    ASSERT_EQ(actual, 15);
 }

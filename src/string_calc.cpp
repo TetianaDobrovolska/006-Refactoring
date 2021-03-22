@@ -1,6 +1,9 @@
 #include "string_calc.hpp"
 #include <vector>
 #include <algorithm>
+#include <string>
+#include <sstream>
+#include <iostream>
 
 using namespace std;
 
@@ -14,7 +17,36 @@ StringCalc::~StringCalc()
 }
 
 
-int StringCalc::Add(string numbers)
+long StringCalc::Add(string numbers)
 {
-	return 0;//Not Implemented yet
+    std::stringstream ss(numbers);
+
+    vector<int> values = parser(numbers);
+    if (values.size() > 2) {
+        std::cout << "Wrong number of operands";
+        return -1;
+    }
+
+    long sum = 0;
+
+    for (auto& value : values) {
+       if (value < 0) return -1;
+       sum += value;
+    }
+
+    return sum;
+}
+
+std::vector<int> StringCalc::parser(const string &input)
+{
+    vector<int> output;
+    std::stringstream ss(input);
+
+    for (int i; ss >> i;) {
+        output.push_back(i);
+        if (ss.peek() == ',')
+            ss.ignore();
+    }
+
+    return output;
 }

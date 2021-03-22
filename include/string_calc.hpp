@@ -2,6 +2,7 @@
 #define STRING_CALC_HPP
 
 #include <string>
+#include <vector>
 
 class StringCalc
 {
@@ -10,7 +11,9 @@ public:
 
 	~StringCalc();
 	
-	int Add(std::string numbers);
+        long Add(std::string numbers);
+        std::vector<int> parser(const std::string& input);
+
 };
 
 #endif

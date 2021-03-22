@@ -42,3 +42,10 @@ TEST(CalculatorTest, MultipleOperandTest) {
     int actual = c.Add("1,2,3,4,5");
     ASSERT_EQ(actual, 15);
 }
+
+TEST(CalculatorTest, NewLineInputSeparatorTest) {
+    StringCalc c;
+    int actual = c.Add("1,2,3\n4\n5");
+    ASSERT_EQ(actual, 15);
+}
+

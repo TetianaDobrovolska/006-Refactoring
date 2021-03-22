@@ -6,11 +6,14 @@
 class StringCalc
 {
 public:
-	StringCalc();
+    StringCalc();
 
-	~StringCalc();
-	
-	int Add(std::string numbers);
+    ~StringCalc();
+
+    int Add(std::string numbers);
+
+private:
+    int convertToIntHelper(std::string token);
 };
 
 #endif

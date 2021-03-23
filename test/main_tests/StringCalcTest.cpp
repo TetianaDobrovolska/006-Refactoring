@@ -114,3 +114,13 @@ TEST_F(StringCalcTest, TestStep4_customDelimiter_exception_wrongCustomeDelimiter
     ASSERT_THROW(c.Add("//a\n 2b 3b  1 b  211b 222"), std::invalid_argument);
 }
 
+TEST_F(StringCalcTest, TestStep6_ignoreNumberOver1000) {
+    int actual = c.Add("1000, 1003, 40");
+    ASSERT_EQ(actual, 1040);
+}
+
+TEST_F(StringCalcTest, TestStep6_allOver1000) {
+    int actual = c.Add("1002, 1003, 1040");
+    ASSERT_EQ(actual, 0);
+}
+

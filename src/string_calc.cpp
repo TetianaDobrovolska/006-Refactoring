@@ -72,6 +72,9 @@ int StringCalc::convertToIntHelper(string token)
     if (parsedNum < 0) {
         throw out_of_range("Must bigger than 0");
     }
+    else if (parsedNum > 1000) {
+        parsedNum = 0;
+    }
     return parsedNum;
 }
 

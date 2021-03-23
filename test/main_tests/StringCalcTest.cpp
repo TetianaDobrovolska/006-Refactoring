@@ -79,8 +79,28 @@ TEST_F(StringCalcTest, TestStep3_mixedSeparator) {
     ASSERT_EQ(actual, 14);
 }
 
-
-TEST_F(StringCalcTest, TestStep2_tenNumbers) {
-    int actual = c.Add("2, 3, 1, 4, 4,100, 30, 90, 90, 70");
+TEST_F(StringCalcTest, TestStep4_customDelimiter_good_spaceAsDelimiter) {
+    int actual = c.Add("// \n2  3  1  4		 4 100  30 90 90 70");
     ASSERT_EQ(actual, 394);
 }
+
+TEST_F(StringCalcTest, TestStep4_customDelimiter_good_characterAsDelimiter) {
+    int actual = c.Add("//a\n2 a 3 a 1 a 4	a	 4a 100 a 30 a90 a90 a70");
+    ASSERT_EQ(actual, 394);
+}
+
+TEST_F(StringCalcTest, TestStep4_customDelimiter_exception_noNewLine) {
+    int actual = c.Add("// 2  3  1  4		 4 100  30 90 90 70");
+    ASSERT_EQ(actual, -1);
+}
+
+TEST_F(StringCalcTest, TestStep4_customDelimiter_exception_oneSplash) {
+    int actual = c.Add("/ \n 2  3  1  4		 4 100  30 90 90 70");
+    ASSERT_EQ(actual, -1);
+}
+
+TEST_F(StringCalcTest, TestStep4_customDelimiter_exception_wrongCustomeDelimiter) {
+    int actual = c.Add("//a\n 2 b 3 b 1 b 4	b	 4b 100b  30 b90 b90b 70");
+    ASSERT_EQ(actual, -1);
+}
+

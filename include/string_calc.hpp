@@ -15,7 +15,9 @@ public:
 
 private:
     int convertToIntHelper(std::string token);
-    size_t nextDelimiterPosition(std::string inputStr, std::string &foundDelimiter);
+    size_t nextDelimiterPosition(std::string inputStr,
+        std::vector<std::string> delimiters, std::string &foundDelimiter);
+    std::vector<std::string> parseDelimiter(std::string inputStr, std::string &stringForCalc);
 
     std::vector<std::string> defaultDelimiters;
 };

@@ -19,22 +19,23 @@ StringCalc::~StringCalc()
 
 int StringCalc::Add(string numbers)
 {
-    string inputStr = numbers;
     int result = 0;
-
     size_t pos = 0;
     string token;
 
     try {
         string delimiter = "";
-        while ((pos = nextDelimiterPosition(inputStr, delimiter)) != string::npos) {
+        string inputStr = "";
+        auto parsedDelimiter = parseDelimiter(numbers, inputStr);
+        while ((pos = nextDelimiterPosition(inputStr, parsedDelimiter, delimiter)) != string::npos) {
             token = inputStr.substr(0, pos);
             result += convertToIntHelper(token);
             inputStr.erase(0, pos + delimiter.length());
         }
         result += convertToIntHelper(inputStr);
-    } catch (exception& e) {
-        cerr << "exception caught: " << e.what() << '\n';
+    }
+    catch (exception& e2) {
+        cerr << "exception caught: " << e2.what() << '\n';
         result = -1;
     }
 
@@ -71,16 +72,35 @@ int StringCalc::convertToIntHelper(string token)
     return parsedNum;
 }
 
-size_t StringCalc::nextDelimiterPosition(std::string inputStr, std::string &foundDelimiter)
+size_t StringCalc::nextDelimiterPosition(string inputStr, vector<string> delimiters, string &foundDelimiter)
 {
     size_t ret = string::npos;
-    for (int i = 0; i < defaultDelimiters.size(); i++) {
-        auto pos = inputStr.find(defaultDelimiters[i]);
+    for (int i = 0; i < delimiters.size(); i++) {
+        auto pos = inputStr.find(delimiters[i]);
         if (pos < ret) {
             ret = pos;
-            foundDelimiter = defaultDelimiters[i];
+            foundDelimiter = delimiters[i];
         }
     }
+    return ret;
+}
+
+vector<string> StringCalc::parseDelimiter(string inputStr, string &stringForCalc)
+{
+    vector<string> ret = defaultDelimiters;
+    stringForCalc = inputStr;
+
+    /// To have custom delimiter, length should bigger than 3 letters '/','/', and '\n'
+    if (inputStr.length() > 3 && inputStr[0] == '/' && inputStr[1] == '/') {
+        auto pos = inputStr.find('\n');
+        if (pos != string::npos) {
+            string delimiter = inputStr.substr(2, pos - 2);
+            ret.clear();
+            ret.push_back(delimiter);
+            stringForCalc = inputStr.substr(pos + 1, inputStr.length());
+        }
+    }
+
     return ret;
 }
 

@@ -2,6 +2,7 @@
 #define STRING_CALC_HPP
 
 #include <string>
+#include <vector>
 
 #define ERR_INVALID_ARGS -1
 
@@ -10,12 +11,15 @@ class StringCalc
 public:
     StringCalc();
 
+    StringCalc(char delimiter);
+
     ~StringCalc();
 
-    int Add(std::string numbers);
+    int Add(const std::string& numbers);
 
 private:
-    int ConvertOperand(std::string operand);
+    bool ExtractOperands(const std::string& numbers, std::vector<int> &operands);
+    char m_delimiter;
 };
 
 #endif

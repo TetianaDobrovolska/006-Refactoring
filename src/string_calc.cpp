@@ -1,10 +1,13 @@
 #include "string_calc.hpp"
-#include <vector>
 #include <algorithm>
-#include <stdexcept>
 #include <limits>
+#include <sstream>
 
-StringCalc::StringCalc()
+StringCalc::StringCalc() : m_delimiter(',')
+{
+}
+
+StringCalc::StringCalc(char delimiter) : m_delimiter(delimiter)
 {
 }
 
@@ -12,56 +15,46 @@ StringCalc::~StringCalc()
 {
 }
 
-int StringCalc::ConvertOperand(std::string operand)
+bool StringCalc::ExtractOperands(const std::string& numbers, std::vector<int>& operands)
 {
-    int result = 0;
+    if (numbers == "") {
+        return ERR_INVALID_ARGS;
+    }
 
-    // empty string interpreted as 0
-    if (!operand.length())
-        return result;
-    try {
-        result = std::stoi(operand);
-    }
-    catch(const std::out_of_range&) {
-        return ERR_INVALID_ARGS;
-    }
-    catch(const std::invalid_argument&) {
-        return ERR_INVALID_ARGS;
-    }
-    // negative numbers not allowed
-    if (result < 0)
-        return ERR_INVALID_ARGS;
+    //TODO: remove spaces and check extra chars
 
-    return result;
+    std::stringstream ss{numbers};
+    int operand;
+
+    while (!ss.eof()) {
+        while (ss.peek() == m_delimiter)
+            ss.ignore();
+
+        ss >> operand;
+        if (ss.fail()) {
+            return false;
+        }
+        operands.push_back(operand);
+    }
+    return true;
 }
 
-int StringCalc::Add(std::string numbers)
+int StringCalc::Add(const std::string& numbers)
 {
-    int result = 0;
-
-    size_t commaPos = numbers.find(',');
-
-    // single operand (no comma)
-    if (commaPos == std::string::npos) {
-        return ConvertOperand(numbers);
-    }
-    // multiple operands (2 for now)
-    else {
-        std::string op1str = numbers.substr(0, commaPos);
-        std::string op2str = numbers.substr(commaPos + 1);
-        int op1 = ConvertOperand(op1str);
-        int op2 = ConvertOperand(op2str);
-
-        if (op1 == ERR_INVALID_ARGS || op2 == ERR_INVALID_ARGS) {
-            return ERR_INVALID_ARGS;
-        }
-        // sum of half ints leads to int overflow
-        const int halfInt = std::numeric_limits<int>::max() / 2;
-        if (op1 > halfInt && op2 > halfInt) {
-            return ERR_INVALID_ARGS;
-        }
-        result = op1 + op2;
+    std::vector<int> operands;
+    if (!ExtractOperands(numbers, operands)) {
+        return ERR_INVALID_ARGS;
     }
 
-    return result;
+    long sum = 0;
+    for (int val : operands) {
+        if (val < 0)
+            return ERR_INVALID_ARGS;
+        sum += val;
+    }
+
+    if ((sum < 0) || (sum > static_cast<long>(std::numeric_limits<int>::max()))) {
+        return ERR_INVALID_ARGS;
+    }
+    return static_cast<int>(sum);
 }

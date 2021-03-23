@@ -3,38 +3,43 @@
 #include <sstream>
 #include <algorithm>
 
-using namespace std;
-
 StringCalc::StringCalc()
 {
 }
-
 
 StringCalc::~StringCalc()
 {
 }
 
-bool StringCalc::hasNegatives(const std::string& str)
+bool StringCalc::hasNegatives(const std::string& str) const
 {
     return (str.find('-') != std::string::npos);
 }
 
-std::vector<int> StringCalc::convertStringToIntVect(const std::string& str)
+std::string StringCalc::convertNewlinesToDelimiters(const std::string& str) const
 {
-    std::stringstream ss(str);
-    std::vector<int> integers_vector;
+    std::string result = str;
+    std::replace(result.begin(), result.end(), '\n', _delimiter);
+    return result;
+}
 
+std::vector<int> StringCalc::convertStringToIntVect(const std::string& str) const
+{
+    std::vector<int> integers_vector;
+    std::string converted_str = convertNewlinesToDelimiters(str);
+
+    std::stringstream ss(converted_str);
     while(ss.good())
     {
         std::string substr;
-        std::getline(ss, substr, ',');
+        std::getline(ss, substr, _delimiter);
         integers_vector.push_back(std::stoi(substr));
     }
 
     return integers_vector;
 }
 
-int StringCalc::Add(string numbers)
+int StringCalc::Add(const std::string& numbers) const
 {
     // zero for empty string
     if(numbers.empty())

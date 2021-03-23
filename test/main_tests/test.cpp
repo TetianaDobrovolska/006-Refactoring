@@ -8,7 +8,11 @@
  *  [done] zero as input
  *  [done] one positive integer
  *  [done] two positive integers
- *  [done] three positive integers
+ *  [done] comma delimits three positive integers
+ *  [done] new-line delimits two positive integers
+ *  [done] new-line and comma delimit three positive integers
+ *  [done] comma and new-line delimit three positive integers
+ *  [done] new-line delimits three positive integers
  *
  * Negative tests:
  *  [done] one negative integer
@@ -51,9 +55,41 @@ TEST(CalculatorTest, ZeroInput) {
     ASSERT_EQ(expected, actual);
  }
 
- TEST(CalculatorTest, ThreePositiveIntegers) {
+ TEST(CalculatorTest, CommaDelimitsThreePositiveIntegers) {
     StringCalc c;
     const std::string input = "1,2,3";
+    const int expected = 6;
+    int actual = c.Add(input);
+    ASSERT_EQ(expected, actual);
+ }
+
+ TEST(CalculatorTest, NewLineDelimitsTwoPositiveIntegers) {
+    StringCalc c;
+    const std::string input = "1\n2";
+    const int expected = 3;
+    int actual = c.Add(input);
+    ASSERT_EQ(expected, actual);
+ }
+
+ TEST(CalculatorTest, NewLineAndCommaDelimitThreePositiveIntegers) {
+    StringCalc c;
+    const std::string input = "1\n2,3";
+    const int expected = 6;
+    int actual = c.Add(input);
+    ASSERT_EQ(expected, actual);
+ }
+
+ TEST(CalculatorTest, CommaAndNewLineDelimitThreePositiveIntegers) {
+    StringCalc c;
+    const std::string input = "1,2\n3";
+    const int expected = 6;
+    int actual = c.Add(input);
+    ASSERT_EQ(expected, actual);
+ }
+
+ TEST(CalculatorTest, NewLineDelimitsThreePositiveIntegers) {
+    StringCalc c;
+    const std::string input = "1\n2\n3";
     const int expected = 6;
     int actual = c.Add(input);
     ASSERT_EQ(expected, actual);

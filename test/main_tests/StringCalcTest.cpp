@@ -53,3 +53,24 @@ TEST_F(StringCalcTest, TestStep1_exception_negativeNumberWithComma) {
     int actual = c.Add("55,-2");
     ASSERT_EQ(actual, -1);
 }
+
+TEST_F(StringCalcTest, TestStep2_threeNumbers_good) {
+    int actual = c.Add("2, 3, 40");
+    ASSERT_EQ(actual, 45);
+}
+
+TEST_F(StringCalcTest, TestStep2_threeNumbers_goodWithZero) {
+    int actual = c.Add("2, 3, 0");
+    ASSERT_EQ(actual, 5);
+}
+
+TEST_F(StringCalcTest, TestStep2_twoNumbersAndEmpty) {
+    int actual = c.Add("2, 3, ");
+    ASSERT_EQ(actual, 5);
+}
+
+TEST_F(StringCalcTest, TestStep2_tenNumbers) {
+    int actual = c.Add("2, 3, 1, 4, 4,100, 30, 90, 90, 70");
+    ASSERT_EQ(actual, 394);
+}
+

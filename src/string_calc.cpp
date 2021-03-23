@@ -7,6 +7,8 @@ using namespace std;
 
 StringCalc::StringCalc()
 {
+    defaultDelimiters.push_back(",");
+    defaultDelimiters.push_back("\n");
 }
 
 
@@ -24,7 +26,8 @@ int StringCalc::Add(string numbers)
     string token;
 
     try {
-        while ((pos = inputStr.find(delimiter)) != string::npos) {
+        string delimiter = "";
+        while ((pos = nextDelimiterPosition(inputStr, delimiter)) != string::npos) {
             token = inputStr.substr(0, pos);
             result += convertToIntHelper(token);
             inputStr.erase(0, pos + delimiter.length());
@@ -66,5 +69,18 @@ int StringCalc::convertToIntHelper(string token)
         throw out_of_range("Must bigger than 0");
     }
     return parsedNum;
+}
+
+size_t StringCalc::nextDelimiterPosition(std::string inputStr, std::string &foundDelimiter)
+{
+    size_t ret = string::npos;
+    for (int i = 0; i < defaultDelimiters.size(); i++) {
+        auto pos = inputStr.find(defaultDelimiters[i]);
+        if (pos < ret) {
+            ret = pos;
+            foundDelimiter = defaultDelimiters[i];
+        }
+    }
+    return ret;
 }
 

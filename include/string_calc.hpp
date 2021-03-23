@@ -2,6 +2,7 @@
 #define STRING_CALC_HPP
 
 #include <string>
+#include <vector>
 
 class StringCalc
 {
@@ -14,7 +15,9 @@ public:
 
 private:
     int convertToIntHelper(std::string token);
-    const std::string delimiter = ",";
+    size_t nextDelimiterPosition(std::string inputStr, std::string &foundDelimiter);
+
+    std::vector<std::string> defaultDelimiters;
 };
 
 #endif

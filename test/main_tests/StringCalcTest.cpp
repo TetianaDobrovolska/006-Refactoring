@@ -69,8 +69,18 @@ TEST_F(StringCalcTest, TestStep2_twoNumbersAndEmpty) {
     ASSERT_EQ(actual, 5);
 }
 
+TEST_F(StringCalcTest, TestStep3_onlyNewSeparator) {
+    int actual = c.Add("2\n 3\n 1\n 4\n 4");
+    ASSERT_EQ(actual, 14);
+}
+
+TEST_F(StringCalcTest, TestStep3_mixedSeparator) {
+    int actual = c.Add("2, 3\n 1, 4\n 4");
+    ASSERT_EQ(actual, 14);
+}
+
+
 TEST_F(StringCalcTest, TestStep2_tenNumbers) {
     int actual = c.Add("2, 3, 1, 4, 4,100, 30, 90, 90, 70");
     ASSERT_EQ(actual, 394);
 }
-

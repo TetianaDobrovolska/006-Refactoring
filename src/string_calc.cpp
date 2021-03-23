@@ -36,9 +36,6 @@ int StringCalc::Add(const string &numbers)
 
     auto tokens = split(numbers);
     auto n = tokens.size();
-    if(n < 1 || n > 2) {
-        return -1;
-    }
 
     int sum = 0;
     try {

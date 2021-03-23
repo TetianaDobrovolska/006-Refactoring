@@ -35,7 +35,7 @@ TEST(CalculatorTest, OneNumber) {
 TEST(CalculatorTest, ThreeNumber) {
     StringCalc c;
     int actual = c.Add("0,1,2");
-    ASSERT_EQ(actual, -1);
+    ASSERT_EQ(actual, 3);
 }
 
 TEST(CalculatorTest, Negative) {

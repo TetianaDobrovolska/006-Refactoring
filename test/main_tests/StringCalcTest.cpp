@@ -35,13 +35,17 @@ TEST_F(StringCalcTest, TestStep1_emptyStringWithComma) {
 }
 
 TEST_F(StringCalcTest, TestStep1_exception_conversion) {
-    int actual = c.Add("aaaa");
-    ASSERT_EQ(actual, -1);
+//    int actual = c.Add("aaaa");
+//    ASSERT_EQ(actual, -1);
+// Step5
+    ASSERT_THROW(c.Add("aaaa"), std::invalid_argument);
 }
 
 TEST_F(StringCalcTest, TestStep1_exception_conversionWithComma) {
-    int actual = c.Add("22,aaaa");
-    ASSERT_EQ(actual, -1);
+//    int actual = c.Add("22,aaaa");
+//    ASSERT_EQ(actual, -1);
+// Step5
+    ASSERT_THROW(c.Add("22,aaaa"), std::invalid_argument);
 }
 
 TEST_F(StringCalcTest, TestStep1_exception_negativeNumber) {
@@ -90,17 +94,23 @@ TEST_F(StringCalcTest, TestStep4_customDelimiter_good_characterAsDelimiter) {
 }
 
 TEST_F(StringCalcTest, TestStep4_customDelimiter_exception_noNewLine) {
-    int actual = c.Add("// 2  3  1  4		 4 100  30 90 90 70");
-    ASSERT_EQ(actual, -1);
+//    int actual = c.Add("// 2  3  1  4		 4 100  30 90 90 70");
+//    ASSERT_EQ(actual, -1);
+//  Step5
+    ASSERT_THROW(c.Add("// 2 3  1   211 222"), std::invalid_argument);
 }
 
 TEST_F(StringCalcTest, TestStep4_customDelimiter_exception_oneSplash) {
-    int actual = c.Add("/ \n 2  3  1  4		 4 100  30 90 90 70");
-    ASSERT_EQ(actual, -1);
+//    int actual = c.Add("/ \n 2  3  1  4		 4 100  30 90 90 70");
+//    ASSERT_EQ(actual, -1);
+//  Step5
+    ASSERT_THROW(c.Add("/ \n 2 3  1   211 222"), std::invalid_argument);
 }
 
 TEST_F(StringCalcTest, TestStep4_customDelimiter_exception_wrongCustomeDelimiter) {
-    int actual = c.Add("//a\n 2 b 3 b 1 b 4	b	 4b 100b  30 b90 b90b 70");
-    ASSERT_EQ(actual, -1);
+//    int actual = c.Add("//a\n 2 b 3 b 1 b 4	b	 4b 100b  30 b90 b90b 70");
+//    ASSERT_EQ(actual, -1);
+//  Step5
+    ASSERT_THROW(c.Add("//a\n 2b 3b  1 b  211b 222"), std::invalid_argument);
 }
 

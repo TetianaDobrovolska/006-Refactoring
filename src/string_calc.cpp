@@ -34,6 +34,9 @@ int StringCalc::Add(string numbers)
         }
         result += convertToIntHelper(inputStr);
     }
+    catch (invalid_argument e1) {
+        throw e1;
+    }
     catch (exception& e2) {
         cerr << "exception caught: " << e2.what() << '\n';
         result = -1;

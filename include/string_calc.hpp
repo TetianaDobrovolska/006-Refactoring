@@ -10,13 +10,15 @@ public:
 	StringCalc();
 	~StringCalc();
 
-    int Add(const std::string& numbers) const;
+    int add(const std::string& numbers);
+
 private:
     bool hasNegatives(const std::string& str) const;
     std::string convertNewlinesToDelimiters(const std::string& str) const;
-    std::vector<int> convertStringToIntVect(const std::string& str) const;
+    bool usesCustomDelimiter(std::string& str);
+    std::vector<int> convertStringToIntVect(const std::string& str);
 
-    static inline const char _delimiter = ',';
+    char _delimiter;
 };
 
 #endif

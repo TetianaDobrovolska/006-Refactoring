@@ -7,7 +7,7 @@
 class StringCalc
 {
 public:
-    StringCalc(const char delimiter = ',');
+    StringCalc();
 
 	~StringCalc();
 	
@@ -16,7 +16,7 @@ public:
 private:
     std::vector<std::string> split(const std::string& s);
 
-    const char m_delimiter;
+    const char default_delimiter = ',';
 };
 
 #endif

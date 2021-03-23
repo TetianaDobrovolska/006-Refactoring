@@ -49,3 +49,15 @@ TEST(CalculatorTest, WrongArgument) {
     int actual = c.Add("Arg");
     ASSERT_EQ(actual, -1);
 }
+
+TEST(CalculatorTest, NewLineDelimiter) {
+    StringCalc c;
+    int actual = c.Add("1\n2");
+    ASSERT_EQ(actual, 3);
+}
+
+TEST(CalculatorTest, MixedDelimiter) {
+    StringCalc c;
+    int actual = c.Add("1\n2,3");
+    ASSERT_EQ(actual, 6);
+}

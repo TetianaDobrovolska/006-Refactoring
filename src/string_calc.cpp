@@ -1,6 +1,7 @@
 #include "string_calc.hpp"
 #include <algorithm>
 #include <sstream>
+#include <regex>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ vector<string> StringCalc::split(const std::string& s)
    string token;
    istringstream tokenStream(s);
 
-   while (getline(tokenStream, token, m_delimiter))
+   while (getline(tokenStream, token, default_delimiter))
    {
       tokens.push_back(token);
    }
@@ -18,8 +19,7 @@ vector<string> StringCalc::split(const std::string& s)
    return tokens;
 }
 
-StringCalc::StringCalc(const char delimiter)
-    : m_delimiter(delimiter)
+StringCalc::StringCalc()
 {
 }
 
@@ -34,8 +34,11 @@ int StringCalc::Add(const string &numbers)
         return 0;
     }
 
-    auto tokens = split(numbers);
-    auto n = tokens.size();
+    regex alternative_delimiters("\n");
+    string delimiter(1, default_delimiter);
+    string normalized_string = regex_replace(numbers, alternative_delimiters, delimiter);
+
+    auto tokens = split(normalized_string);
 
     int sum = 0;
     try {

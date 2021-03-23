@@ -14,6 +14,7 @@ public:
 
 private:
     int convertToIntHelper(std::string token);
+    const std::string delimiter = ",";
 };
 
 #endif

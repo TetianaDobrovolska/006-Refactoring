@@ -18,7 +18,6 @@ StringCalc::~StringCalc()
 int StringCalc::Add(string numbers)
 {
     string inputStr = numbers;
-    string delimiter = ",";
     int result = 0;
 
     size_t pos = 0;

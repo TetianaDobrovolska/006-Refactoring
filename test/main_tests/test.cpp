@@ -5,12 +5,12 @@
 /**
  * Positive tests:
  *  [done] empty string
- *  [....] zero as input
+ *  [done] zero as input
  *  [done] one positive integer
  *  [done] two positive integers
+ *  [done] three positive integers
  *
  * Negative tests:
- *  [done] three positive integers
  *  [done] one negative integer
  *  [done] one negative integer and one positive integer
  *  [done] one positive integer and one negative integer
@@ -51,10 +51,10 @@ TEST(CalculatorTest, ZeroInput) {
     ASSERT_EQ(expected, actual);
  }
 
- TEST(CalculatorTest, ErrorThreePositiveIntegers) {
+ TEST(CalculatorTest, ThreePositiveIntegers) {
     StringCalc c;
     const std::string input = "1,2,3";
-    const int expected = -1;
+    const int expected = 6;
     int actual = c.Add(input);
     ASSERT_EQ(expected, actual);
  }

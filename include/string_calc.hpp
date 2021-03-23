@@ -14,7 +14,6 @@ public:
 private:
     bool hasNegatives(const std::string& str);
     std::vector<int> convertStringToIntVect(const std::string& str);
-    bool moreThanTwoOperands(const std::vector<int>& vec);
 };
 
 #endif

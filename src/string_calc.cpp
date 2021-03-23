@@ -34,11 +34,6 @@ std::vector<int> StringCalc::convertStringToIntVect(const std::string& str)
     return integers_vector;
 }
 
-bool StringCalc::moreThanTwoOperands(const std::vector<int>& vec)
-{
-    return (vec.size() > 2);
-}
-
 int StringCalc::Add(string numbers)
 {
     // zero for empty string
@@ -49,14 +44,9 @@ int StringCalc::Add(string numbers)
     if(hasNegatives(numbers))
         return -1;
 
-    std::vector<int> integers = convertStringToIntVect(numbers);
-
-    // -1 for more two operands
-    if(moreThanTwoOperands(integers))
-        return -1;
-
-    // add one or two operands
+    // add one or more operands
     int result = 0;
+    std::vector<int> integers = convertStringToIntVect(numbers);
     for(auto& in : integers)
         result += in;
     return result;

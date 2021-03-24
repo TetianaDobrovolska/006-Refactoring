@@ -61,3 +61,27 @@ TEST(CalculatorTest, MixedDelimiter) {
     int actual = c.Add("1\n2,3");
     ASSERT_EQ(actual, 6);
 }
+
+TEST(CalculatorTest, CustomDelimiter) {
+    StringCalc c;
+    int actual = c.Add("//;\n1;2");
+    ASSERT_EQ(actual,3);
+}
+
+TEST(CalculatorTest, CustomDelimiter2) {
+    StringCalc c;
+    int actual = c.Add("//§\n6;9");
+    ASSERT_EQ(actual,-1);
+}
+
+TEST(CalculatorTest, CustomDelimiter3) {
+    StringCalc c;
+    int actual = c.Add("//$\n25,6$34");
+    ASSERT_EQ(actual,65);
+}
+
+TEST(CalculatorTest, InvalidCustomDelimiterDefinition) {
+    StringCalc c;
+    int actual = c.Add("//;1;2");
+    ASSERT_EQ(actual,-1);
+}

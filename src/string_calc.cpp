@@ -35,14 +35,21 @@ int StringCalc::Add(const string &numbers)
     }
 
     string alternative_delimiters {"\n"};
-    regex custom_delimiter_section {"//(.)\n"};
+    regex custom_delimiter_section {"//(\\[(.+)\\]|.)\n"};
 
     string normalized_string = numbers;
     std::smatch match;
     if (regex_search(numbers, match, custom_delimiter_section)) {
-        if (match.size() == 2) {
+        auto newDelimiter = match[2].str();
+        if (newDelimiter.empty()) {
             alternative_delimiters += "|\\";
             alternative_delimiters += match[1];
+        } else {
+            alternative_delimiters += "|";
+            for (size_t i = 0; i < newDelimiter.size(); ++i) {
+                alternative_delimiters += "\\";
+                alternative_delimiters += newDelimiter[i];
+            }
         }
         normalized_string.erase(0, static_cast<size_t>(match[0].length()));
     }

@@ -93,3 +93,9 @@ TEST(CalculatorTest, InvalidMore1000Value) {
     int actual = c.Add("//q\n1001q7");
     ASSERT_EQ(actual,7);
 }
+
+TEST(CalculatorTest, FewSymbolsDelimiter) {
+    StringCalc c;
+    int actual = c.Add("//[***]\n1***2***3");
+    ASSERT_EQ(actual,6);
+}

@@ -125,14 +125,20 @@ TEST_F(StringCalcTest, TestStep6_allOver1000) {
 }
 
 TEST_F(StringCalcTest, TestStep7_stringAsSeparator) {
-    int actual = c.Add("//aaaa\n1002aaaa 1003aaaa 40");
+    int actual = c.Add("//[aaaa]\n1002aaaa 1003aaaa 40");
     ASSERT_EQ(actual, 40);
 }
 
 TEST_F(StringCalcTest, TestStep7_stringAsSeparator_exception_usedLongerText) {
-    ASSERT_THROW(c.Add("//aaaa\n 2aaaaa 3aaaa  1 aaaa  211aaaa 222"), std::invalid_argument);
+    ASSERT_THROW(c.Add("//[aaaa]\n 2aaaaa 3aaaa  1 aaaa  211aaaa 222"), std::invalid_argument);
 }
 
 TEST_F(StringCalcTest, TestStep7_stringAsSeparator_exception_usedShorterText) {
-    ASSERT_THROW(c.Add("//aaaa\n 2aaaa 3aa  1 aaaa  211aaaa 222"), std::invalid_argument);
+    ASSERT_THROW(c.Add("//[aaaa]\n 2aaaa 3aa  1 aaaa  211aaaa 222"), std::invalid_argument);
 }
+
+TEST_F(StringCalcTest, TestStep7_multipleSeparatorsDefinition) {
+    int actual = c.Add("//e[e1a]\n1002e 1003ee1a 40");
+    ASSERT_EQ(actual, 40);
+}
+

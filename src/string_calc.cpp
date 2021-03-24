@@ -19,6 +19,15 @@ StringCalc::~StringCalc()
 
 int StringCalc::Add(string numbers)
 {
+    ///// Algorithm description
+    // 1. Separate Delimiters definition and string for calculation by calling "parseDelimiter".
+    //    If no custom delimiter, defaultDelimiters is returned.
+    // 2. Get the nearest position of any delimiter by calling "nextDelimiterPosition"
+    //    If multiple delimiters are detected at same position, the longest one is set.
+    // 3. Get and parse the number from beginning to detected delimiter position (from step 2).
+    //    convertToIntHelper is used to handle ignorance or exceptions as requirements.
+    /////
+
     int result = 0;
     size_t pos = 0;
     string token;
@@ -83,9 +92,11 @@ size_t StringCalc::nextDelimiterPosition(string inputStr, vector<string> delimit
     size_t ret = string::npos;
     for (int i = 0; i < delimiters.size(); i++) {
         auto pos = inputStr.find(delimiters[i]);
-        if (pos < ret) {
+        if (pos <= ret) {
             ret = pos;
-            foundDelimiter = delimiters[i];
+            if (delimiters[i].length() > foundDelimiter.length()) {
+	        foundDelimiter = delimiters[i];
+            }
         }
     }
     return ret;
@@ -100,13 +111,43 @@ vector<string> StringCalc::parseDelimiter(string inputStr, string &stringForCalc
     if (inputStr.length() > 3 && inputStr[0] == '/' && inputStr[1] == '/') {
         auto pos = inputStr.find('\n');
         if (pos != string::npos) {
-            string delimiter = inputStr.substr(2, pos - 2);
+            string delimiterDefinitionStr = inputStr.substr(2, pos - 2);
             ret.clear();
-            ret.push_back(delimiter);
+
+            ret = parseDelimiterDefinition(delimiterDefinitionStr);
             stringForCalc = inputStr.substr(pos + 1, inputStr.length());
         }
     }
 
     return ret;
+}
+
+vector<string> StringCalc::parseDelimiterDefinition(string inputDelimiterDefinition)
+{
+    vector<string> delimiters;
+    string currentDelimiterString = "";
+    for (int i = 0; i < inputDelimiterDefinition.length(); i++) {
+        // If the current character is '[' and not at the end of the string
+        // If it is at the end of the string, treat it as a delimiter
+        // (we also can throw exception)
+        if (inputDelimiterDefinition[i] == '[' && i != inputDelimiterDefinition.length() - 1) {
+            string stringFromOpenBracket = inputDelimiterDefinition.substr(i + 1);
+            auto closeBracketPos = stringFromOpenBracket.find(']');
+            if (closeBracketPos != string::npos) {
+                currentDelimiterString = stringFromOpenBracket.substr(0, closeBracketPos);
+                i = closeBracketPos; // skip to next character after close bracket position
+            }
+            else {
+                // If cannot find close bracket, treat the current open bracket as a delimiter
+                // (we also can throw exception here)
+                currentDelimiterString = inputDelimiterDefinition[i];
+            }
+        }
+        else {
+            currentDelimiterString = inputDelimiterDefinition[i];
+        }
+        delimiters.push_back(currentDelimiterString);
+    }
+    return delimiters;
 }
 

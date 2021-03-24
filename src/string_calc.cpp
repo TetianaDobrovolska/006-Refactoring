@@ -41,14 +41,15 @@ int StringCalc::Add(const string &numbers)
     std::smatch match;
     if (regex_search(numbers, match, custom_delimiter_section)) {
         auto newDelimiter = match[2].str();
+        alternative_delimiters += "|";
         if (newDelimiter.empty()) {
-            alternative_delimiters += "|\\";
+            auto sym = match[1].str().at(0);
+            alternative_delimiters += isalpha(sym) ? "" : "\\";
             alternative_delimiters += match[1];
         } else {
-            alternative_delimiters += "|";
-            for (size_t i = 0; i < newDelimiter.size(); ++i) {
-                alternative_delimiters += "\\";
-                alternative_delimiters += newDelimiter[i];
+            for (const auto sym : newDelimiter) {
+                alternative_delimiters += isalpha(sym) ? "" : "\\";
+                alternative_delimiters += sym;
             }
         }
         normalized_string.erase(0, static_cast<size_t>(match[0].length()));

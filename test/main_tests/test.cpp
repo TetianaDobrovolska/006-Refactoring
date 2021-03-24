@@ -77,6 +77,12 @@ TEST(CalculatorTest, CustomDelimiter3) {
     ASSERT_EQ(actual,65);
 }
 
+TEST(CalculatorTest, CustomDelimiter4) {
+    StringCalc c;
+    int actual = c.Add("//S\n5,68S3\n12");
+    ASSERT_EQ(actual,88);
+}
+
 TEST(CalculatorTest, InvalidCustomDelimiterDefinition) {
     StringCalc c;
     EXPECT_THROW(c.Add("//;1;2"), std::invalid_argument);
@@ -98,4 +104,11 @@ TEST(CalculatorTest, FewSymbolsDelimiter) {
     StringCalc c;
     int actual = c.Add("//[***]\n1***2***3");
     ASSERT_EQ(actual,6);
+}
+
+
+TEST(CalculatorTest, FewSymbolsDelimiter2) {
+    StringCalc c;
+    int actual = c.Add("//[bwt]\n12bwt3000,5bwt17");
+    ASSERT_EQ(actual,34);
 }

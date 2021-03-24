@@ -13,7 +13,8 @@ public:
     int add(const std::string& numbers);
 
 private:
-    bool hasNegatives(const std::string& str) const;
+    bool hasPrefix(const std::string& str) const;
+    void validate(const std::string& str) const;
     std::string convertNewlinesToDelimiters(const std::string& str) const;
     bool usesCustomDelimiter(std::string& str);
     std::vector<int> convertStringToIntVect(const std::string& str);

@@ -17,6 +17,17 @@
  *  [done] new-line delimits three positive integers
  *  [done] user-defined separator delimits two positive integers
  *  [done] user-defined separator delimits three positive integers
+ *  [done] catch exception for invalid arguments: no prefix for user defined separator
+ *  [....] catch exception for invalid arguments: no slashes in prefix for user defined separator
+ *  [....] catch exception for invalid arguments: single slash in prefix for user defined separator
+ *  [....] catch exception for invalid arguments: no new-line in prefix for user defined separator
+ *  [....] catch exception for invalid arguments: no separator in prefix for user defined separator
+ *  [....] catch exception for invalid arguments: characters in digit sequence
+ *  [....] catch exception for invalid arguments: characters before separator
+ *  [....] catch exception for invalid arguments: characters after separator
+ *  [....] catch exception for invalid arguments: symbols in digit sequence
+ *  [....] catch exception for invalid arguments: symbols before separator
+ *  [....] catch exception for invalid arguments: symbols after separator
  *
  * Negative tests:
  *  [done] one negative integer
@@ -113,6 +124,12 @@ TEST(CalculatorTest, ZeroInput) {
     const int expected = 6;
     int actual = c.add(input);
     ASSERT_EQ(expected, actual);
+ }
+
+ TEST(CalculatorTest, InvalidPrefixNoPrefixForUserDefinedSeparator) {
+    StringCalc c;
+    const std::string input = "1;2;3";
+    ASSERT_THROW(c.add(input), std::invalid_argument);
  }
 
  TEST(CalculatorTest, ErrorOneNegativeInteger) {

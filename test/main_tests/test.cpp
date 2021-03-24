@@ -40,14 +40,12 @@ TEST(CalculatorTest, ThreeNumber) {
 
 TEST(CalculatorTest, Negative) {
     StringCalc c;
-    int actual = c.Add("-42");
-    ASSERT_EQ(actual, -1);
+    EXPECT_THROW(c.Add("-42"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, WrongArgument) {
     StringCalc c;
-    int actual = c.Add("Arg");
-    ASSERT_EQ(actual, -1);
+    EXPECT_THROW(c.Add("Arg"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, NewLineDelimiter) {
@@ -70,8 +68,7 @@ TEST(CalculatorTest, CustomDelimiter) {
 
 TEST(CalculatorTest, CustomDelimiter2) {
     StringCalc c;
-    int actual = c.Add("//§\n6;9");
-    ASSERT_EQ(actual,-1);
+    EXPECT_THROW(c.Add("//§\n6;9"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, CustomDelimiter3) {
@@ -82,6 +79,5 @@ TEST(CalculatorTest, CustomDelimiter3) {
 
 TEST(CalculatorTest, InvalidCustomDelimiterDefinition) {
     StringCalc c;
-    int actual = c.Add("//;1;2");
-    ASSERT_EQ(actual,-1);
+    EXPECT_THROW(c.Add("//;1;2"), std::invalid_argument);
 }

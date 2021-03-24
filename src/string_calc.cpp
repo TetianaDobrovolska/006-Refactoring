@@ -48,21 +48,18 @@ int StringCalc::Add(const string &numbers)
     }
 
     int sum = 0;
-    try {
-        const string delimiter(1, default_delimiter);
-        normalized_string = regex_replace(normalized_string, regex(alternative_delimiters), delimiter);
+    const string delimiter(1, default_delimiter);
+    normalized_string = regex_replace(normalized_string, regex(alternative_delimiters), delimiter);
 
-        auto tokens = split(normalized_string);
+    auto tokens = split(normalized_string);
 
-        for (auto token : tokens) {
-            auto number = stoi(token);
-            if (number < 0) {
-                return -1;
-            }
-            sum += number;
+    for (auto token : tokens) {
+        auto number = stoi(token);
+        if (number < 0) {
+            throw invalid_argument("negative");
         }
-    }  catch (...) {
-        return -1;
+        sum += number;
     }
+
     return sum;
 }

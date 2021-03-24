@@ -81,3 +81,15 @@ TEST(CalculatorTest, InvalidCustomDelimiterDefinition) {
     StringCalc c;
     EXPECT_THROW(c.Add("//;1;2"), std::invalid_argument);
 }
+
+TEST(CalculatorTest, Valid1000Value) {
+    StringCalc c;
+    int actual = c.Add("//.\n1000.662");
+    ASSERT_EQ(actual,1662);
+}
+
+TEST(CalculatorTest, InvalidMore1000Value) {
+    StringCalc c;
+    int actual = c.Add("//q\n1001q7");
+    ASSERT_EQ(actual,7);
+}

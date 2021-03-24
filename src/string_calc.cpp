@@ -58,7 +58,9 @@ int StringCalc::Add(const string &numbers)
         if (number < 0) {
             throw invalid_argument("negative");
         }
-        sum += number;
+        if (number < 1001) {
+            sum += number;
+        }
     }
 
     return sum;

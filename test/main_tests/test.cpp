@@ -9,33 +9,37 @@ TEST(CalculatorTest, TestName) {
 
 TEST(CalculatorTest, SampleTest) {
     StringCalc c;
-    int actual = c.Add("2,2");
-    ASSERT_EQ(actual, 4);
+    const int actual = c.Add("2,2");
+    const int expected = 4;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, SimpleTest) {
     StringCalc c;
-    int actual = c.Add("1,7");
-    ASSERT_EQ(actual, 8);
+    const int actual = c.Add("1,7");
+    const int expected = 8;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, EmptyString) {
     StringCalc c;
-    int actual = c.Add("");
-    ASSERT_EQ(actual, 0);
+    const int actual = c.Add("");
+    const int expected = 0;
+    ASSERT_EQ(actual, expected);
 }
-
 
 TEST(CalculatorTest, OneNumber) {
     StringCalc c;
-    int actual = c.Add("12");
-    ASSERT_EQ(actual, 12);
+    const int actual = c.Add("12");
+    const int expected = 12;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, ThreeNumber) {
     StringCalc c;
-    int actual = c.Add("0,1,2");
-    ASSERT_EQ(actual, 3);
+    const int actual = c.Add("0,1,2");
+    const int expected = 3;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, Negative) {
@@ -50,20 +54,23 @@ TEST(CalculatorTest, WrongArgument) {
 
 TEST(CalculatorTest, NewLineDelimiter) {
     StringCalc c;
-    int actual = c.Add("1\n2");
-    ASSERT_EQ(actual, 3);
+    const int actual = c.Add("1\n2");
+    const int expected = 3;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, MixedDelimiter) {
     StringCalc c;
-    int actual = c.Add("1\n2,3");
-    ASSERT_EQ(actual, 6);
+    const int actual = c.Add("1\n2,3");
+    const int expected = 6;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, CustomDelimiter) {
     StringCalc c;
-    int actual = c.Add("//;\n1;2");
-    ASSERT_EQ(actual,3);
+    const int actual = c.Add("//;\n1;2");
+    const int expected = 3;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, CustomDelimiter2) {
@@ -73,14 +80,16 @@ TEST(CalculatorTest, CustomDelimiter2) {
 
 TEST(CalculatorTest, CustomDelimiter3) {
     StringCalc c;
-    int actual = c.Add("//$\n25,6$34");
-    ASSERT_EQ(actual,65);
+    const int actual = c.Add("//$\n25,6$34");
+    const int expected = 65;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, CustomDelimiter4) {
     StringCalc c;
-    int actual = c.Add("//S\n5,68S3\n12");
-    ASSERT_EQ(actual,88);
+    const int actual = c.Add("//S\n5,68S3\n12");
+    const int expected = 88;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, InvalidCustomDelimiterDefinition) {
@@ -90,25 +99,29 @@ TEST(CalculatorTest, InvalidCustomDelimiterDefinition) {
 
 TEST(CalculatorTest, Valid1000Value) {
     StringCalc c;
-    int actual = c.Add("//.\n1000.662");
-    ASSERT_EQ(actual,1662);
+    const int actual = c.Add("//.\n1000.662");
+    const int expected = 1662;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, InvalidMore1000Value) {
     StringCalc c;
-    int actual = c.Add("//q\n1001q7");
-    ASSERT_EQ(actual,7);
+    const int actual = c.Add("//q\n1001q7");
+    const int expected = 7;
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(CalculatorTest, FewSymbolsDelimiter) {
     StringCalc c;
-    int actual = c.Add("//[***]\n1***2***3");
-    ASSERT_EQ(actual,6);
+    const int actual = c.Add("//[***]\n1***2***3");
+    const int expected = 6;
+    ASSERT_EQ(actual, expected);
 }
 
 
 TEST(CalculatorTest, FewSymbolsDelimiter2) {
     StringCalc c;
-    int actual = c.Add("//[bwt]\n12bwt3000,5bwt17");
-    ASSERT_EQ(actual,34);
+    const int actual = c.Add("//[bwt]\n12bwt3000,5bwt17");
+    const int expected = 34;
+    ASSERT_EQ(actual, expected);
 }

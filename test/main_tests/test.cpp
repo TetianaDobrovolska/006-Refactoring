@@ -1,4 +1,6 @@
-#include "monolopy.hpp"
+#include "gtest/gtest.h"
+#include "monopoly.hpp"
+#include<iostream>
 
 using namespace ::std;
 
@@ -36,6 +38,15 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
        ASSERT_EQ(x, expectedCompanies[i++]);
    }
    ASSERT_TRUE(i);   
+}
+
+TEST(LAB2, GetPlayerInfoCorrectInfo) {
+    string players[]{ "Peter","Ekaterina","Alexander" };
+    Monopoly monopoly(players, 3);
+    auto player = monopoly.GetPlayerInfo(1);
+
+    ASSERT_EQ(get<0>(player), "Peter");
+    ASSERT_EQ(get<1>(player), 6000);
 }
 
 TEST(LAB2, PlayerBuyNoOwnedCompanies)

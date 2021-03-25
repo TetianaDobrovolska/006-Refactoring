@@ -1,4 +1,4 @@
-#include "monolopy.hpp"
+#include "monopoly.hpp"
 #include <algorithm>
 
 using namespace ::std;
@@ -133,6 +133,5 @@ bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
 	*i = o;
 	return true;
 }
-
 
 

@@ -21,10 +21,12 @@ int StringCalc::Add(string numbers)
     std::vector<int> operands;
     std::stringstream ss(numbers);
     int sum = 0;
+    std::string delimeters = getSeparators(numbers);    
 
     for (int i; ss >> i;) {
         operands.push_back(i);    
-        if (ss.peek() == ',')
+        int val =  char(ss.peek());
+        if (delimeters.find(val) != std::string::npos || val == '/')
             ss.ignore();
 
         if(i < 0)
@@ -35,4 +37,16 @@ int StringCalc::Add(string numbers)
         sum+= operands[i];
 
 	return sum;
+}
+
+string StringCalc::getSeparators(string numbers)
+{
+    std::string delimeters = ",\n";
+    if((numbers.length() > 3) && (numbers.substr(0, 2) == "//"))
+    {
+        auto endDelimeterindex = numbers.find_first_of('\n');
+        delimeters = numbers.substr( 2, endDelimeterindex -2);
+    }
+
+    return delimeters+",\n";
 }

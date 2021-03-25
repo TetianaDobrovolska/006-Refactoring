@@ -49,3 +49,8 @@ TEST(CalculatorTest, NewLineInputSeparatorTest) {
     ASSERT_EQ(actual, 15);
 }
 
+TEST(CalculatorTest, MultipleDelimiter) {
+    StringCalc c;
+    int actual = c.Add("//$%\n1,2,3,4$5");
+    ASSERT_EQ(actual, 15);
+}

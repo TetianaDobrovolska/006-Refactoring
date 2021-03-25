@@ -11,6 +11,10 @@ public:
 	~StringCalc();
 	
 	int Add(std::string numbers);
+
+private:
+
+    std::string getSeparators(std::string numbers);
 };
 
 #endif

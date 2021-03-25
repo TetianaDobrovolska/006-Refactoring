@@ -3,20 +3,35 @@
 
 using namespace ::std;
 
-Monopoly::Monopoly(string names[10],int countPlaers)
+
+const int Monopoly::INITIAL_MONEY;
+const int Monopoly::NOT_OWNED;
+
+const int Monopoly::SELL_PRICE_AUTO;
+const int Monopoly::SELL_PRICE_FOOD;
+const int Monopoly::SELL_PRICE_TRAVEL;
+const int Monopoly::SELL_PRICE_CLOTHER;
+
+const int Monopoly::RENT_PRICE_AUTO;
+const int Monopoly::RENT_PRICE_TRAVEL;
+const int Monopoly::RENT_PRICE_CLOTHER;
+const int Monopoly::RENT_PRICE_PRISON;
+const int Monopoly::RENT_PRICE_BANK;
+
+Monopoly::Monopoly(string names[MAX_PLAYERS],int countPlaers)
 {
     for (int i = 0; i < countPlaers; i++)
     {
-        Players.push_back(make_tuple(names[i], 6000));
+        Players.push_back(make_tuple(names[i], INITIAL_MONEY));
     }
-    Fields.push_back(make_tuple("Ford", Monopoly::AUTO, 0, false));
-    Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, 0, false));
-    Fields.push_back(make_tuple("Lamoda", Monopoly::CLOTHER, 0, false));
-    Fields.push_back(make_tuple("Air Baltic", Monopoly::TRAVEL, 0, false));
-    Fields.push_back(make_tuple("Nordavia", Monopoly::TRAVEL, 0, false));
-    Fields.push_back(make_tuple("Prison", Monopoly::PRISON, 0, false));
-    Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, 0, false));
-    Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, 0, false));
+    Fields.push_back(make_tuple("Ford", Monopoly::AUTO, NOT_OWNED, false));
+    Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, NOT_OWNED, false));
+    Fields.push_back(make_tuple("Lamoda", Monopoly::CLOTHER, NOT_OWNED, false));
+    Fields.push_back(make_tuple("Air Baltic", Monopoly::TRAVEL, NOT_OWNED, false));
+    Fields.push_back(make_tuple("Nordavia", Monopoly::TRAVEL, NOT_OWNED, false));
+    Fields.push_back(make_tuple("Prison", Monopoly::PRISON, NOT_OWNED, false));
+    Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, NOT_OWNED, false));
+    Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, NOT_OWNED, false));
 }
 
 std::list<std::tuple<std::string, int>> * Monopoly::GetPlayersList()
@@ -47,25 +62,26 @@ bool Monopoly::Buy(int z, std::tuple<std::string, Type, int, bool> k)
     case AUTO:
         if (get<2>(k))
             return false;
-        p = make_tuple(get<0>(x), get<1>(x) - 500);
+
+        p = make_tuple(get<0>(x), get<1>(x) - SELL_PRICE_AUTO);
         k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
         break;
     case FOOD:
         if (get<2>(k))
             return false;
-        p = make_tuple(get<0>(x), get<1>(x) - 250);
+        p = make_tuple(get<0>(x), get<1>(x) - SELL_PRICE_FOOD);
         k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
         break;
     case TRAVEL:
         if (get<2>(k))
             return false;
-        p = make_tuple(get<0>(x), get<1>(x) - 700);
+        p = make_tuple(get<0>(x), get<1>(x) - SELL_PRICE_TRAVEL);
         k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
         break;
     case CLOTHER:
         if (get<2>(k))
             return false;
-        p = make_tuple(get<0>(x), get<1>(x) - 100);
+        p = make_tuple(get<0>(x), get<1>(x) - SELL_PRICE_CLOTHER);
         k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
         break;
     default:
@@ -97,8 +113,8 @@ bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
         if (!get<2>(c))
             return false;
         o = GetPlayerInfo(get<2>(c));
-        o = make_tuple(get<0>(o), get<1>(o) + 250);
-        z = make_tuple(get<0>(z), get<1>(z) - 250);
+        o = make_tuple(get<0>(o), get<1>(o) + RENT_PRICE_AUTO);
+        z = make_tuple(get<0>(z), get<1>(z) - RENT_PRICE_AUTO);
         break;
     case FOOD:
         if (!get<2>(c))
@@ -107,21 +123,21 @@ bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
         if (!get<2>(c))
             return false;
         o = GetPlayerInfo(get<2>(c));
-        o = make_tuple(get<0>(o), get<1>(o) + 250);
-        z = make_tuple(get<0>(z), get<1>(z) - 250);
+        o = make_tuple(get<0>(o), get<1>(o) + RENT_PRICE_TRAVEL);
+        z = make_tuple(get<0>(z), get<1>(z) - RENT_PRICE_TRAVEL);
         break;
     case CLOTHER:
         if (!get<2>(c))
             return false;
         o = GetPlayerInfo(get<2>(c));
-        o = make_tuple(get<0>(o), get<1>(o) + 250);
-        z = make_tuple(get<0>(z), get<1>(z) - 250);
+        o = make_tuple(get<0>(o), get<1>(o) + RENT_PRICE_CLOTHER);
+        z = make_tuple(get<0>(z), get<1>(z) - RENT_PRICE_CLOTHER);
         break;
     case PRISON:
-        z = make_tuple(get<0>(z), get<1>(z) - 1000);
+        z = make_tuple(get<0>(z), get<1>(z) - RENT_PRICE_PRISON);
         break;
     case BANK:
-        z = make_tuple(get<0>(z), get<1>(z) - 700);
+        z = make_tuple(get<0>(z), get<1>(z) - RENT_PRICE_BANK);
         break;
     default:
         return false;
@@ -133,6 +149,3 @@ bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
     *i = o;
     return true;
 }
-
-
-

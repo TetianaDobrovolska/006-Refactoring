@@ -12,21 +12,21 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
     int i = 0;
     for (auto c : *x) {
         ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());
-        ASSERT_EQ(get<1>(c), 6000);
+        ASSERT_EQ(get<1>(c), Monopoly::INITIAL_MONEY);
     }
     ASSERT_TRUE(i);
 }
 
 TEST(LAB2, GetFieldsListReturnCorrectList) {
     tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
-        make_tuple("Ford",Monopoly::AUTO ,0,false),
-        make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("Lamoda",Monopoly::CLOTHER,0,false),
-        make_tuple("Air Baltic",Monopoly::TRAVEL,0,false),
-        make_tuple("Nordavia",Monopoly::TRAVEL,0,false),
-        make_tuple("Prison",Monopoly::PRISON,0,false),
-        make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("TESLA",Monopoly::AUTO,0,false)
+        make_tuple("Ford",Monopoly::AUTO,Monopoly::NOT_OWNED,false),
+        make_tuple("MCDonald",Monopoly::FOOD,Monopoly::NOT_OWNED,false),
+        make_tuple("Lamoda",Monopoly::CLOTHER,Monopoly::NOT_OWNED,false),
+        make_tuple("Air Baltic",Monopoly::TRAVEL,Monopoly::NOT_OWNED,false),
+        make_tuple("Nordavia",Monopoly::TRAVEL,Monopoly::NOT_OWNED,false),
+        make_tuple("Prison",Monopoly::PRISON,Monopoly::NOT_OWNED,false),
+        make_tuple("MCDonald",Monopoly::FOOD,Monopoly::NOT_OWNED,false),
+        make_tuple("TESLA",Monopoly::AUTO,Monopoly::NOT_OWNED,false)
     };
     string players[]{ "Peter","Ekaterina","Alexander" };
 
@@ -49,7 +49,8 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
     monopoly.Buy(1, x);
 
     auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(get<1>(player), 5500);
+    int remainingMoney = Monopoly::INITIAL_MONEY - Monopoly::SELL_PRICE_AUTO;
+    ASSERT_EQ(get<1>(player), remainingMoney);
     x = monopoly.GetFieldByName("Ford");
     ASSERT_TRUE(get<2>(x) != 0);
 }
@@ -92,10 +93,13 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     x = monopoly.GetFieldByName("Ford");
     monopoly.Renta(2, x);
     auto player1 = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(get<1>(player1), 5750);
 
+    int remainingMoney1 = Monopoly::INITIAL_MONEY - Monopoly::SELL_PRICE_AUTO + Monopoly::RENT_PRICE_AUTO;
+    ASSERT_EQ(get<1>(player1), remainingMoney1);
+
+    int remainingMoney2 = Monopoly::INITIAL_MONEY - Monopoly::RENT_PRICE_AUTO;
     auto player2 = monopoly.GetPlayerInfo(2);
-    ASSERT_EQ(get<1>(player2), 5750);
+    ASSERT_EQ(get<1>(player2), remainingMoney2);
 }
 
 // fails since there is no logic to prevent the same player from renting twice
@@ -122,7 +126,8 @@ TEST(LAB2, PayBailToLeavePrison)
     auto x = monopoly.GetFieldByName("Prison");
     monopoly.Renta(1, x);
     auto player1 = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(get<1>(player1), 5000);
+    int remainingMoney = Monopoly::INITIAL_MONEY - Monopoly::RENT_PRICE_PRISON;
+    ASSERT_EQ(get<1>(player1), remainingMoney);
 }
 
 // fails since there is no logic to prevent the money to go negative and be used again

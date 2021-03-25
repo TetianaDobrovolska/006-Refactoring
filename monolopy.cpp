@@ -34,14 +34,14 @@ Monopoly::Monopoly(string names[MAX_PLAYERS],int countPlaers)
     Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, NOT_OWNED, false));
 }
 
-std::list<std::tuple<std::string, int>> * Monopoly::GetPlayersList()
+std::list<std::tuple<std::string, int>> Monopoly::GetPlayersList()
 {
-    return &Players;
+    return Players;
 }
 
-std::list<std::tuple<std::string, Monopoly::Type,int,bool>> * Monopoly::GetFieldsList()
+std::list<std::tuple<std::string, Monopoly::Type,int,bool>> Monopoly::GetFieldsList()
 {
-    return &Fields;
+    return Fields;
 }
 
 std::tuple<std::string, int> Monopoly::GetPlayerInfo(int m)

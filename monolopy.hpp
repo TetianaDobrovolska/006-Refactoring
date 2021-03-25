@@ -22,10 +22,8 @@ public:
     };
 
     Monopoly(std::string names[MAX_PLAYERS],int);
-    std::list<std::tuple<std::string,int>> *	GetPlayersList();
-    std::list<std::tuple<std::string, Type, int,bool>> * GetFieldsList();
-    std::list<std::tuple<std::string, Type, int, bool>> Fields;
-    std::list<std::tuple<std::string, int>> Players;
+    std::list<std::tuple<std::string,int>> GetPlayersList();
+    std::list<std::tuple<std::string, Type, int,bool>> GetFieldsList();
     std::tuple<std::string, int>  GetPlayerInfo(int);
     bool Buy(int p,std::tuple<std::string, Type, int, bool>);
     std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);
@@ -45,6 +43,9 @@ public:
     static const int RENT_PRICE_PRISON = 1000;
     static const int RENT_PRICE_BANK = 700;
 
+private:
+    std::list<std::tuple<std::string, Type, int, bool>> Fields;
+    std::list<std::tuple<std::string, int>> Players;
 };
 
 #endif

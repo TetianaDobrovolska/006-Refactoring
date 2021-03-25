@@ -35,24 +35,28 @@ int StringCalc::Add(const string &numbers)
     }
 
     string alternative_delimiters {"\n"};
-    regex custom_delimiter_section {"//(\\[(.+)\\]|.)\n"};
+    const regex custom_delimiter_section {"//(\\[(.+)\\]|.)\n"};
 
     string normalized_string = numbers;
     std::smatch match;
+    const size_t HEADER_SECTION_INDEX = 0;
+    const size_t DELIMITER_GROUP_INDEX = 1;
+    const size_t BRACKETS_GROUP_INDEX = 2;
+
     if (regex_search(numbers, match, custom_delimiter_section)) {
-        auto newDelimiter = match[2].str();
+        auto newDelimiter = match[BRACKETS_GROUP_INDEX].str();
         alternative_delimiters += "|";
         if (newDelimiter.empty()) {
-            auto sym = match[1].str().at(0);
+            auto sym = match[DELIMITER_GROUP_INDEX].str().at(0);
             alternative_delimiters += isalpha(sym) ? "" : "\\";
-            alternative_delimiters += match[1];
+            alternative_delimiters += match[DELIMITER_GROUP_INDEX];
         } else {
             for (const auto sym : newDelimiter) {
                 alternative_delimiters += isalpha(sym) ? "" : "\\";
                 alternative_delimiters += sym;
             }
         }
-        normalized_string.erase(0, static_cast<size_t>(match[0].length()));
+        normalized_string.erase(0, static_cast<size_t>(match[HEADER_SECTION_INDEX].length()));
     }
 
     int sum = 0;

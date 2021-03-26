@@ -28,6 +28,7 @@
  *  [....] catch exception for invalid arguments: symbols in digit sequence
  *  [....] catch exception for invalid arguments: symbols before separator
  *  [....] catch exception for invalid arguments: symbols after separator
+ *  [done] ignore operands above limit
  *
  * Negative tests:
  *  [done] one negative integer
@@ -94,6 +95,23 @@ TEST(CalculatorTest, ZeroInput) {
     ASSERT_EQ(expected, actual);
  }
 
+ TEST(CalculatorTest, CommaAndNewLineDelimitThreePositiveIntegers) {
+    StringCalc c;
+    const std::string input = "1,2\n3";
+    const int expected = 6;
+    int actual = c.add(input);
+    ASSERT_EQ(expected, actual);
+ }
+
+
+ TEST(CalculatorTest, NewLineDelimitsThreePositiveIntegers) {
+    StringCalc c;
+    const std::string input = "1\n2\n3";
+    const int expected = 6;
+    int actual = c.add(input);
+    ASSERT_EQ(expected, actual);
+ }
+
  TEST(CalculatorTest, UserDefinedSeparatorDelimitsTwoPositiveIntegers) {
     StringCalc c;
     const std::string input = "//;\n1;2";
@@ -110,26 +128,18 @@ TEST(CalculatorTest, ZeroInput) {
     ASSERT_EQ(expected, actual);
  }
 
- TEST(CalculatorTest, CommaAndNewLineDelimitThreePositiveIntegers) {
-    StringCalc c;
-    const std::string input = "1,2\n3";
-    const int expected = 6;
-    int actual = c.add(input);
-    ASSERT_EQ(expected, actual);
- }
-
- TEST(CalculatorTest, NewLineDelimitsThreePositiveIntegers) {
-    StringCalc c;
-    const std::string input = "1\n2\n3";
-    const int expected = 6;
-    int actual = c.add(input);
-    ASSERT_EQ(expected, actual);
- }
-
  TEST(CalculatorTest, InvalidPrefixNoPrefixForUserDefinedSeparator) {
     StringCalc c;
     const std::string input = "1;2;3";
     ASSERT_THROW(c.add(input), std::invalid_argument);
+ }
+
+ TEST(CalculatorTest, IgnoreOperandsAboveLimit) {
+    StringCalc c;
+    const std::string input = "1001,2";
+    const int expected = 2;
+    int actual = c.add(input);
+    ASSERT_EQ(expected, actual);
  }
 
  TEST(CalculatorTest, ErrorOneNegativeInteger) {

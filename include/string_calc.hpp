@@ -13,13 +13,15 @@ public:
     int add(const std::string& numbers);
 
 private:
-    bool hasPrefix(const std::string& str) const;
-    void validate(const std::string& str) const;
-    std::string convertNewlinesToDelimiters(const std::string& str) const;
-    bool usesCustomDelimiter(std::string& str);
+    void parsePrefix(std::string &str, std::string &custom_delimiter) const;
+    std::string validate(const std::string& str) const;
+    void convertPatternToDelimiter(const std::string& pattern, std::string &str) const;
     std::vector<int> convertStringToIntVect(const std::string& str);
 
     char _delimiter;
+    std::string _prefix_start;
+    std::string _prefix_end;
+    static const int OPERAND_UPPER_LIMIT = 1000;
 };
 
 #endif

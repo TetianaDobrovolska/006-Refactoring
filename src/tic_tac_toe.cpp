@@ -11,7 +11,7 @@ char cells[9] = { '-','-','-','-','-','-','-','-','-' };
 
 void show_cells()
 {
-    system("cls");
+    //system("cls");
 
     cout << "Cell numbers: \n";
     cout << "-" << 1 << "-" << "|" << "-" << 2 << "-" << "|" << "-" << 3 << "-" << endl;
@@ -24,39 +24,91 @@ void show_cells()
     cout << "-" << cells[6] << "-" << '|' << "-" << cells[7] << "-" << '|' << "-" << cells[8] << "-" << "\n" << endl;
 }
 
+bool is_out_of_range(int cell)
+{
+    return cell > 9 || cell < 1;
+}
+
+bool is_occupied(int cell)
+{
+    char status = cells[cell - 1];
+    return status == 'O' || status == 'X';
+}
+
+bool is_valid(int cell)
+{
+    if (is_out_of_range(cell) || is_occupied(cell)) {
+        cout << "Enter the number of the correct (1-9) or empty (---) cells to make a move:";
+        return false;
+    }
+    return true;
+}
+
 void make_move(int num)
 {
-    if (num == 1)
-        cout << PlayerName1;
-    else
-        cout << PlayerName2;
+    cout << ((num == 1) ? PlayerName1 : PlayerName2) << ", enter cell number, make your move:";
 
     int cell;
-    cout << ",enter cell number, make your move:";
-    cin >> cell;
-
-    while (cell > 9 || cell < 1 || cells[cell - 1] == 'O' || cells[cell - 1] == 'X') {
-        cout << "Enter the number of the correct (1-9) or empty (---) cells to make a move:";
+    do {
         cin >> cell;
-        cout << "\n";
-    }
+    } while (!is_valid(cell));
 
-    if (num == 1)
-        cells[cell - 1] = 'X';
-    else
-        cells[cell - 1] = 'O';
+    cells[cell - 1] = (num == 1) ? 'X' : 'O';
+
+    cout << "\n";
+}
+
+char check_horizontal_markers(int i)
+{
+    char a = cells[i * 3];
+    char b = cells[i * 3 + 1];
+    char c = cells[i * 3 + 2];
+
+    return (a == b && b == c) ? a : '-';
+}
+
+char check_vertical_markers(int i)
+{
+    char a = cells[i];
+    char b = cells[i + 3];
+    char c = cells[i + 6];
+
+    return (a == b && b == c) ? a : '-';
+}
+
+char check_diagonal_markers()
+{
+    if ((cells[2] == cells[4] && cells[4] == cells[6]) ||
+        (cells[0] == cells[4] && cells[4] == cells[8])) {
+        return cells[2];
+    }
+    else {
+        return '-';
+    }
+}
+
+char check_aligned_markers(char cells[], int i)
+{
+    char ret;
+
+    if((ret = check_horizontal_markers(i)) != '-')
+        return ret;
+    if((ret = check_vertical_markers(i)) != '-')
+        return ret;
+    if((ret = check_diagonal_markers()) != '-')
+        return ret;
+
+    return '-';
 }
 
 char check()
 {
-    for (int i = 0; i < 3; i++)
-        if (cells[i * 3] == cells[i * 3 + 1] && cells[i * 3 + 1] == cells[i * 3 + 2])
-            return cells[i];
-        else if (cells[i] == cells[i + 3] && cells[i + 3] == cells[i + 6])
-            return cells[i];
-        else if ((cells[2] == cells[4] && cells[4] == cells[6]) || (cells[0] == cells[4] && cells[4] == cells[8]))
-            return cells[i];
-    return '-';
+    char ret = '-';
+    for (int i = 0; i < 3; i++) {
+        if ((ret = check_aligned_markers(cells, i)) != '-')
+            break;
+    }
+    return ret;
 }
 
 void result()
@@ -80,8 +132,7 @@ int main(int argc, char** argv)
     show_cells();
 
     for (int move = 1; move <= 9; move++) {
-        if (move % 2) make_move(1);
-        else make_move(2);
+        make_move((move % 2) ? 1 : 2);
 
         show_cells();
 

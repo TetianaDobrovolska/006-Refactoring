@@ -5,6 +5,15 @@
 
 using namespace std;
 
+StringCalc::StringCalc()
+{
+}
+
+
+StringCalc::~StringCalc()
+{
+}
+
 vector<string> StringCalc::split(const std::string& s) const
 {
     vector<string> tokens;
@@ -22,9 +31,18 @@ vector<string> StringCalc::split(const std::string& s) const
     return tokens;
 }
 
+void StringCalc::parseDelimiters(const string input_delimiters, string &regex_delimiters, bool multichar) const
+{
+    for (const auto sym : input_delimiters) {
+        regex_delimiters += multichar ? "" : "|";
+        regex_delimiters += isalpha(sym) ? "" : "\\";
+        regex_delimiters += sym;
+    }
+}
+
 string StringCalc::processDelimiters(const string &input_string) const
 {
-    const regex custom_delimiter_section {"//(\\[(.+)\\]|.)\n"};
+    const regex custom_delimiter_section {"//(\\[(.+)\\]|.+)\n"};
     string processed_string = input_string;
     string alternative_delimiters {"\n"};
     std::smatch match;
@@ -36,17 +54,12 @@ string StringCalc::processDelimiters(const string &input_string) const
     };
 
     if (regex_search(input_string, match, custom_delimiter_section)) {
-        const auto newDelimiter = match[BRACKETS_GROUP_INDEX].str();
-        alternative_delimiters += "|";
-        if (newDelimiter.empty()) {
-            const auto sym = match[DELIMITER_GROUP_INDEX].str().at(0);
-            alternative_delimiters += isalpha(sym) ? "" : "\\";
-            alternative_delimiters += match[DELIMITER_GROUP_INDEX];
+        const auto multichar_delimiter = match[BRACKETS_GROUP_INDEX].str();
+        if (multichar_delimiter.empty()) {
+            parseDelimiters(match[DELIMITER_GROUP_INDEX], alternative_delimiters, false);
         } else {
-            for (const auto sym : newDelimiter) {
-                alternative_delimiters += isalpha(sym) ? "" : "\\";
-                alternative_delimiters += sym;
-            }
+            alternative_delimiters += "|";
+            parseDelimiters(multichar_delimiter, alternative_delimiters, true);
         }
         processed_string.erase(0, static_cast<size_t>(match[HEADER_SECTION_INDEX].length()));
     }
@@ -54,15 +67,6 @@ string StringCalc::processDelimiters(const string &input_string) const
     const string delimiter(1, default_delimiter);
     processed_string = regex_replace(processed_string, regex(alternative_delimiters), delimiter);
     return processed_string;
-}
-
-StringCalc::StringCalc()
-{
-}
-
-
-StringCalc::~StringCalc()
-{
 }
 
 int StringCalc::Add(const string &numbers) const

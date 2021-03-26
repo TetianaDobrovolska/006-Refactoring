@@ -16,6 +16,7 @@ public:
 private:
     std::vector<std::string> split(const std::string& s) const;
     std::string processDelimiters(const std::string& s) const;
+    void parseDelimiters(const std::string input_delimiters, std::string& regex_delimiters, bool multichar) const;
 
     const char default_delimiter = ',';
 };

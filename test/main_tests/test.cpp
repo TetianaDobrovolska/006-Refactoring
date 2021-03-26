@@ -102,6 +102,13 @@ TEST(CalculatorTest, CustomDelimiter4) {
     ASSERT_EQ(actual, expected);
 }
 
+TEST(CalculatorTest, CustomDelimiter5) {
+    StringCalc c;
+    const int actual = c.Add("//*%\n1%2*2");
+    const int expected = 5;
+    ASSERT_EQ(actual, expected);
+}
+
 TEST(CalculatorTest, InvalidCustomDelimiterDefinition) {
     StringCalc c;
     EXPECT_THROW(c.Add("//;1;2"), std::invalid_argument);

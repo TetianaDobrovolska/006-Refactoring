@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "constants.hpp"
 #include "monopoly.hpp"
 #include<iostream>
 
@@ -13,7 +14,7 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
     int i = 0;
     for (auto c : *x) {
         ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());
-        ASSERT_EQ(get<1>(c), 6000);
+        ASSERT_EQ(get<1>(c), InitialPlayerMoney);
     }
     ASSERT_TRUE(i);
 }
@@ -46,7 +47,7 @@ TEST(LAB2, GetPlayerInfoCorrectInfo) {
     auto player = monopoly.GetPlayerInfo(1);
 
     ASSERT_EQ(get<0>(player), "Peter");
-    ASSERT_EQ(get<1>(player), 6000);
+    ASSERT_EQ(get<1>(player), InitialPlayerMoney);
 }
 
 TEST(LAB2, PlayerBuyNoOwnedCompanies)
@@ -55,7 +56,7 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
 
     Monopoly monopoly(players, 3);
     auto x = monopoly.GetFieldByName("Ford");
-    monopoly.Buy(1, x);
+    monopoly.buy(1, x);
 
     auto player = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(get<1>(player), 5500);
@@ -63,15 +64,15 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
     ASSERT_TRUE(get<2>(x) != 0);
 }
 
-TEST(LAB2, RentaShouldBeCorrectTransferMoney)
+TEST(LAB2, RentalShouldBeCorrectTransferMoney)
 {
     string players[]{ "Peter","Ekaterina","Alexander" };
     Monopoly monopoly(players, 3);
     auto x = monopoly.GetFieldByName("Ford");
-    monopoly.Buy(1, x);
+    monopoly.buy(1, x);
 
     x = monopoly.GetFieldByName("Ford");
-    monopoly.Renta(2, x);
+    monopoly.rent(2, x);
     auto player1 = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(get<1>(player1), 5750);
 

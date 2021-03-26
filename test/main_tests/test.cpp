@@ -1,144 +1,65 @@
 #include "gtest/gtest.h"
 #include "string_calc.hpp"
 #include <iostream>
+#include <tuple>
 
 TEST(CalculatorTest, TestName) {
     EXPECT_EQ(1, 1);
     EXPECT_TRUE(true);
 }
 
-TEST(CalculatorTest, SampleTest) {
-    StringCalc c;
-    const int actual = c.Add("2,2");
-    const int expected = 4;
-    ASSERT_EQ(actual, expected);
+class ParametrizedTest : public testing::TestWithParam < std::tuple<std::string, int> >
+{
+public:
+    ~ParametrizedTest() override;
+};
+
+ParametrizedTest::~ParametrizedTest()
+{
+
 }
 
-TEST(CalculatorTest, SimpleTest) {
+TEST_P(ParametrizedTest, stringCalcTest)
+{
+    std::string expression = std::get<0>(GetParam());
+    int expected = std::get<1>(GetParam());
     StringCalc c;
-    const int actual = c.Add("1,7");
-    const int expected = 8;
-    ASSERT_EQ(actual, expected);
+    if (expected != -1) {
+        int actual = c.Add(expression);
+        ASSERT_EQ(actual, expected);
+    } else {
+        EXPECT_THROW(c.Add(expression), std::invalid_argument);
+    }
 }
 
-TEST(CalculatorTest, EmptyString) {
-    StringCalc c;
-    const int actual = c.Add("");
-    const int expected = 0;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, OneNumber) {
-    StringCalc c;
-    const int actual = c.Add("12");
-    const int expected = 12;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, ThreeNumber) {
-    StringCalc c;
-    const int actual = c.Add("0,1,2");
-    const int expected = 3;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, Negative) {
-    StringCalc c;
-    EXPECT_THROW(c.Add("-42"), std::invalid_argument);
-}
-
-TEST(CalculatorTest, WrongArgument) {
-    StringCalc c;
-    EXPECT_THROW(c.Add("Arg"), std::invalid_argument);
-}
-
-TEST(CalculatorTest, NewLineDelimiter) {
-    StringCalc c;
-    const int actual = c.Add("1\n2");
-    const int expected = 3;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, MixedDelimiter) {
-    StringCalc c;
-    const int actual = c.Add("1\n2,3");
-    const int expected = 6;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, UndefinedDelimiter) {
-    StringCalc c;
-    EXPECT_THROW(c.Add("67?89"), std::invalid_argument);
-}
-
-TEST(CalculatorTest, DotInArgument) {
-    StringCalc c;
-    EXPECT_THROW(c.Add("45.123"), std::invalid_argument);
-}
-
-TEST(CalculatorTest, CustomDelimiter) {
-    StringCalc c;
-    const int actual = c.Add("//;\n1;2");
-    const int expected = 3;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, CustomDelimiter2) {
-    StringCalc c;
-    EXPECT_THROW(c.Add("//§\n6;9"), std::invalid_argument);
-}
-
-TEST(CalculatorTest, CustomDelimiter3) {
-    StringCalc c;
-    const int actual = c.Add("//$\n25,6$34");
-    const int expected = 65;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, CustomDelimiter4) {
-    StringCalc c;
-    const int actual = c.Add("//S\n5,68S3\n12");
-    const int expected = 88;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, CustomDelimiter5) {
-    StringCalc c;
-    const int actual = c.Add("//*%\n1%2*2");
-    const int expected = 5;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, InvalidCustomDelimiterDefinition) {
-    StringCalc c;
-    EXPECT_THROW(c.Add("//;1;2"), std::invalid_argument);
-}
-
-TEST(CalculatorTest, Valid1000Value) {
-    StringCalc c;
-    const int actual = c.Add("//.\n1000.662");
-    const int expected = 1662;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, InvalidMore1000Value) {
-    StringCalc c;
-    const int actual = c.Add("//q\n1001q7");
-    const int expected = 7;
-    ASSERT_EQ(actual, expected);
-}
-
-TEST(CalculatorTest, FewSymbolsDelimiter) {
-    StringCalc c;
-    const int actual = c.Add("//[***]\n1***2***3");
-    const int expected = 6;
-    ASSERT_EQ(actual, expected);
-}
-
-
-TEST(CalculatorTest, FewSymbolsDelimiter2) {
-    StringCalc c;
-    const int actual = c.Add("//[bwt]\n12bwt3000,5bwt17");
-    const int expected = 34;
-    ASSERT_EQ(actual, expected);
-}
+INSTANTIATE_TEST_SUITE_P(TDDKata, ParametrizedTest,
+                         testing::Values(
+                             std::make_tuple("1,2", 3),
+                             std::make_tuple("2,2", 4),
+                             std::make_tuple("1,7", 8),
+                             std::make_tuple("1", 1),
+                             std::make_tuple("12", 12),
+                             std::make_tuple("", 0),
+                             std::make_tuple("25,2", 27),
+                             std::make_tuple("0,1,2", 3),
+                             std::make_tuple("2,3,4,5", 14),
+                             std::make_tuple("-2,3", -1),
+                             std::make_tuple("-2", -1),
+                             std::make_tuple("-42", -1),
+                             std::make_tuple("Arg", -1),
+                             std::make_tuple("67?89", -1),
+                             std::make_tuple("45.123", -1),
+                             std::make_tuple("1\n2", 3),
+                             std::make_tuple("1\n2,3", 6),
+                             std::make_tuple("//;\n1;2", 3),
+                             std::make_tuple("//;\n2;3",5),
+                             std::make_tuple("//$\n25,6$34", 65),
+                             std::make_tuple("//S\n5,68S3\n12", 88),
+                             std::make_tuple("//.\n1000.662", 1662),
+                             std::make_tuple("//q\n1001q7", 7),
+                             std::make_tuple("//§\n6;9", -1),
+                             std::make_tuple("//;1;2", -1),
+                             std::make_tuple("//[***]\n1***2***3", 6),
+                             std::make_tuple("//[bwt]\n12bwt3000,5bwt17", 34),
+                             std::make_tuple("//*%\n1%2*2",5)
+                             ));

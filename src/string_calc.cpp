@@ -13,6 +13,9 @@ vector<string> StringCalc::split(const std::string& s) const
 
     while (getline(tokenStream, token, default_delimiter))
     {
+        if (!all_of(token.begin(), token.end(), ::isdigit)) {
+            throw invalid_argument("not a number");
+        }
         tokens.push_back(token);
     }
 

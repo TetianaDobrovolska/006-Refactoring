@@ -66,6 +66,16 @@ TEST(CalculatorTest, MixedDelimiter) {
     ASSERT_EQ(actual, expected);
 }
 
+TEST(CalculatorTest, UndefinedDelimiter) {
+    StringCalc c;
+    EXPECT_THROW(c.Add("67?89"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, DotInArgument) {
+    StringCalc c;
+    EXPECT_THROW(c.Add("45.123"), std::invalid_argument);
+}
+
 TEST(CalculatorTest, CustomDelimiter) {
     StringCalc c;
     const int actual = c.Add("//;\n1;2");
@@ -75,7 +85,7 @@ TEST(CalculatorTest, CustomDelimiter) {
 
 TEST(CalculatorTest, CustomDelimiter2) {
     StringCalc c;
-    EXPECT_THROW(c.Add("//ยง\n6;9"), std::invalid_argument);
+    EXPECT_THROW(c.Add("//ง\n6;9"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, CustomDelimiter3) {

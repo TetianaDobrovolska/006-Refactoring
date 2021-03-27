@@ -1,43 +1,18 @@
 find_package(Threads REQUIRED)
 
-# Enable ExternalProject CMake module
-include(ExternalProject)
-
-# Download and install GoogleTest
-ExternalProject_Add(
-    gtest
-    URL https://github.com/google/googletest/archive/release-1.8.0.zip
-    PREFIX ${CMAKE_CURRENT_BINARY_DIR}/gtest
-    # Disable install step
-    INSTALL_COMMAND ""
-)
-
-# Get GTest source and binary directories from CMake project
-ExternalProject_Get_Property(gtest source_dir binary_dir)
-
-# Create a libgtest target to be used as a dependency by test programs
-add_library(libgtest IMPORTED STATIC GLOBAL)
-add_dependencies(libgtest gtest)
-
-# Set libgtest properties
-set_target_properties(libgtest PROPERTIES
-    "IMPORTED_LOCATION" "${binary_dir}/googlemock/gtest/libgtest.a"
-    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-)
-
-# Create a libgmock target to be used as a dependency by test programs
-add_library(libgmock IMPORTED STATIC GLOBAL)
-add_dependencies(libgmock gtest)
-
-# Set libgmock properties
-set_target_properties(libgmock PROPERTIES
-    "IMPORTED_LOCATION" "${binary_dir}/googlemock/libgmock.a"
-    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-)
-
-# I couldn't make it work with INTERFACE_INCLUDE_DIRECTORIES
-include_directories("${source_dir}/googletest/include"
-                    "${source_dir}/googlemock/include")
-
+find_package(GTest)
+if(GTest_FOUND)
+    find_library(GMOCK_LIBRARY gmock REQUIRED HINTS "${CMAKE_INSTALL_PREFIX}")
+    if(NOT ${GMOCK_LIBRARY} STREQUAL "GMOCK_LIBRARY-NOTFOUND")
+        add_library(GTest::GMock UNKNOWN IMPORTED)
+        set_target_properties(GTest::GMock PROPERTIES IMPORTED_LOCATION ${GMOCK_LIBRARY})
+        message("Google test/mock found at ${GMOCK_LIBRARY}.")
+        set(HAVE_GTEST ON)
+    else()
+        message(WARNING "Google test/mock not found.")
+    endif()
+else()
+    message(WARNING "Google test not found.")
+endif()
 
 add_subdirectory(main_tests)

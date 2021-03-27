@@ -8,5 +8,10 @@ enable_testing()
 
 set(BASE_DIR ${CMAKE_SOURCE_DIR})
 
+
+include_directories (
+  ${BASE_DIR}/include
+)
+
 add_subdirectory(src)
 add_subdirectory(test)

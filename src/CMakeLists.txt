@@ -2,19 +2,16 @@ project(tic_tac_toe)
 
 set(SRC
 	tic_tac_toe.cpp
+        tictactoe.cpp
 )
 
-add_executable(${PROJECT_NAME}
-    ${SRC}
+add_executable(game
+    tic_tac_toe.cpp
 )
 
 # Declare the library
-add_library(lib${PROJECT_NAME} STATIC
-    ${SRC}
+add_library(tictactoe STATIC
+    tictactoe.cpp
 )
 
-include_directories (
-  ${BASE_DIR}/include
-)
-
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+target_link_libraries(game tictactoe)

@@ -29,6 +29,8 @@
  *  [....] catch exception for invalid arguments: symbols before separator
  *  [....] catch exception for invalid arguments: symbols after separator
  *  [done] ignore operands above limit
+ *  [done] multi-character separator
+ *  [....] special regex characters in user-defined separator
  *
  * Negative tests:
  *  [done] one negative integer
@@ -138,6 +140,14 @@ TEST(CalculatorTest, ZeroInput) {
     StringCalc c;
     const std::string input = "1001,2";
     const int expected = 2;
+    int actual = c.add(input);
+    ASSERT_EQ(expected, actual);
+ }
+
+ TEST(CalculatorTest, MultiCharacterSeparator) {
+    StringCalc c;
+    const std::string input = "//[;;;]\n1;;;2;;;3";
+    const int expected = 6;
     int actual = c.add(input);
     ASSERT_EQ(expected, actual);
  }

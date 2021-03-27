@@ -22,28 +22,60 @@ StringCalc::~StringCalc()
  * @return: true, if prefixed; false otherwise
  *
  */
-void StringCalc::parsePrefix(std::string& str, std::string& custom_delimiter) const
+void StringCalc::parsePrefix(std::string& str, std::vector<std::string>& custom_delimiters) const
 {
-    std::string prefix_pattern = "^(" + _prefix_start + "." + _prefix_end + ")";
+    std::string prefix_pattern = "^(" + _prefix_start + ".*" + _prefix_end + ")";
     std::regex rx(prefix_pattern);
     std::smatch m;
     if(std::regex_search(str, m, rx))
     {
         size_t delim_start_index = _prefix_start.length();
         size_t delim_length = m.str().length() - _prefix_start.length() - _prefix_end.length();
-        custom_delimiter = m.str().substr(delim_start_index, delim_length);
+        std::string custom_delimiters_str = m.str().substr(delim_start_index, delim_length);
+        custom_delimiters = splitDelimiters(custom_delimiters_str);
         str = m.suffix();
     }
+}
+
+std::vector<std::string> StringCalc::splitDelimiters(const std::string& delimiters_str) const
+{
+    std::string delimiter_pattern = R"((\[[^\[\]\s]{2,}\])|([^\s\]\[]))";
+    std::regex rx(delimiter_pattern);
+    std::smatch matches;
+    std::regex_search(delimiters_str, matches, rx);
+
+    // convert to vector, so as to clean up unwanted matches
+    std::vector<std::string> delimiters;
+    for(size_t i = 0; i < matches.size(); i++)
+        delimiters.push_back(matches[i]);
+    std::sort(delimiters.begin(), delimiters.end());
+
+    // remove duplicates
+    delimiters.erase(std::unique(delimiters.begin(), delimiters.end()), delimiters.end());
+
+    // remove brackets at the begining and at the end
+    for(auto& i : delimiters)
+        i = i.length() > 3 ? i.substr(1, i.length() - 2) : i;
+
+    // remove empty matches
+    for (auto it = delimiters.begin(); it != delimiters.end();) {
+        if(it->empty())
+            it = delimiters.erase(it);
+        else
+            ++it;
+    }
+
+    return delimiters;
 }
 
 std::string StringCalc::validate(const std::string& str) const
 {
     std::string parsed = str;
-    std::string custom_delimiter;
-    parsePrefix(parsed, custom_delimiter);
+    std::vector<std::string> custom_delimiters;
+    parsePrefix(parsed, custom_delimiters);
     convertPatternToDelimiter("\n", parsed);
-    if(custom_delimiter.length() > 0)
-        convertPatternToDelimiter(custom_delimiter, parsed);
+    for(const auto& d : custom_delimiters)
+        convertPatternToDelimiter(d, parsed);
 
     /* Allowed characters: all digits, value_of_delimiter, and whitespace */
     std::string delimiter(1, _delimiter);

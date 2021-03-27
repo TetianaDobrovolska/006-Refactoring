@@ -13,9 +13,10 @@ public:
     int add(const std::string& numbers);
 
 private:
-    void parsePrefix(std::string &str, std::string &custom_delimiter) const;
+    void parsePrefix(std::string& str, std::vector<std::string>& custom_delimiters) const;
+    std::vector<std::string> splitDelimiters(const std::string& delimiters_str) const;
     std::string validate(const std::string& str) const;
-    void convertPatternToDelimiter(const std::string& pattern, std::string &str) const;
+    void convertPatternToDelimiter(const std::string& pattern, std::string& str) const;
     std::vector<int> convertStringToIntVect(const std::string& str);
 
     char _delimiter;

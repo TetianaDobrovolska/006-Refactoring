@@ -5,7 +5,16 @@
 #include <stdlib.h>
 using namespace std;
 
+const int ROW_COUNT = 3;
+const int NUM_OF_CELLS = ROW_COUNT * ROW_COUNT;
 
+const char CELL_EMPTY = '-';
+const char CELL_PLAYER1 = 'X';
+const char CELL_PLAYER2 = '0';
+
+const int MAX_NAME_LENGTH = 80;
+const int CELL_START_NUM = 1;
+const int COUNT_START_CHECK = 5;
 
 struct Player
 {
@@ -28,10 +37,22 @@ struct Player
 
 struct BoardGame {
     Player Player1, Player2;
-    char cells[9] = { '-','-','-','-','-','-','-','-','-' };
+    char cells[NUM_OF_CELLS];
+
+    void initCells() {
+        for (int i = 0; i < NUM_OF_CELLS; i++) cells[i] = CELL_EMPTY;
+    }
+
+    bool isCellNumInvalid(int inputCell) {
+        return (inputCell > NUM_OF_CELLS || inputCell < CELL_START_NUM);
+    }
+
+    bool isCellNotEmpty(int inputCell) {
+        return cells[inputCell - CELL_START_NUM] != CELL_EMPTY;
+    }
 
     void inputRequest() {
-        char PlayerName1[80], PlayerName2[80];
+        char PlayerName1[MAX_NAME_LENGTH], PlayerName2[MAX_NAME_LENGTH];
         do {
             cout << "Enter the name of the first player: ";
             std::cin >> PlayerName1;
@@ -41,11 +62,13 @@ struct BoardGame {
         } while (!strcmp(PlayerName1, PlayerName2));
     
         Player1.playerName = PlayerName1;
-        Player1.chessType = 'X';
-        Player1.turn = 1;
+        Player1.chessType = CELL_PLAYER1;
+        Player1.turn = CELL_START_NUM % 2;
         Player2.playerName = PlayerName2;
-        Player2.chessType = 'O';
-        Player2.turn = 0;
+        Player2.chessType = CELL_PLAYER2;
+        Player2.turn = CELL_START_NUM % 2;
+
+        initCells();
     }
 
     void show_cells() {
@@ -70,28 +93,28 @@ struct BoardGame {
         cout << player.playerName << ",enter cell number, make your move:";
         cin >> cell;
 
-        while (cell > 9 || cell < 1 || cells[cell - 1] == 'O' || cells[cell - 1] == 'X') {
+        while (isCellNumInvalid(cell) || isCellNotEmpty(cell)) {
             cout << "Enter the number of the correct (1-9) or empty (---) cells to make a move:";
 	    cin >> cell;
             cout << "\n";
         }
     
-        cells[cell - 1] = player.chessType;
+        cells[cell - CELL_START_NUM] = player.chessType;
     }
 
     void start() {
-        char win = '-'; 
+        char win = CELL_EMPTY; 
         show_cells();
-        for (int move = 1; move <= 9; move++) {
+        for (int move = CELL_START_NUM; move <= NUM_OF_CELLS; move++) {
             checkTurnAndMakeMove(move, Player1);
             checkTurnAndMakeMove(move, Player2);
 
             show_cells();
         
-            if (move >= 5)
+            if (move >= COUNT_START_CHECK)
             {
                 win = check();
-                if (win != '-')
+                if (win != CELL_EMPTY)
                     break;
             }
 
@@ -100,15 +123,30 @@ struct BoardGame {
         Player2.setWinResult(win);
     }
 
+    bool checkRow(int row) {
+        return cells[row * ROW_COUNT] == cells [row * ROW_COUNT + 1] && cells[row * ROW_COUNT] == cells[row * ROW_COUNT + 2];
+    }
+
+    bool checkCol(int col) {
+        return cells[col] == cells [col + ROW_COUNT] && cells[col] == cells[col + (ROW_COUNT * 2)];
+    }
+
+    bool checkTowCrossLines() {
+        bool topLeftBottomRightLine = (cells[0] == cells[ROW_COUNT + 1] && cells[0] == cells[NUM_OF_CELLS - 1]);
+        bool topRightBottomLeftLine = (cells[ROW_COUNT - 1] == cells[ROW_COUNT + 1] && cells[ROW_COUNT * 2]);
+        return topLeftBottomRightLine || topRightBottomLeftLine;
+    }
+
     char check()
     {
-        for (int i = 0; i < 3; i++) 
-            if (cells[i * 3] == cells[i * 3 + 1] && cells[i * 3 + 1] == cells[i * 3 + 2])
+        for (int i = 0; i < ROW_COUNT; i++) 
+            if (checkRow(i))
                 return cells[i]; 
-            else if (cells[i] == cells[i + 3] && cells[i + 3] == cells[i + 6]) 
+            else if (checkCol(i)) 
                 return cells[i];
-            else if ((cells[2] == cells[4] && cells[4] == cells[6]) || (cells[0] == cells[4] && cells[4] == cells[8]))
-                return cells[i]; 
+        
+        if (checkTowCrossLines())
+            return cells[ROW_COUNT + 1]; 
         return '-'; 
     }
 

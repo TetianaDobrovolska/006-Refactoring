@@ -3,8 +3,6 @@
 #include <limits>
 #include <sstream>
 
-const int StringCalc::ERR_INVALID_ARGS;
-
 void StringCalc::ParseDelimiterDirective(const std::string& numbers, std::function<void(int)> f)
 {
     // directive format: "//x\n" where x is the delimiter char
@@ -54,18 +52,18 @@ int StringCalc::Add(const std::string& numbers)
 {
     std::vector<int> operands;
     if (!ExtractOperands(numbers, operands)) {
-        return ERR_INVALID_ARGS;
+        throw std::invalid_argument("Invalid operand");
     }
 
     long sum = 0;
     for (int val : operands) {
         if (val < 0)
-            return ERR_INVALID_ARGS;
+            throw std::invalid_argument("Negative operand");
         sum += val;
     }
 
     if ((sum < 0) || (sum > static_cast<long>(std::numeric_limits<int>::max()))) {
-        return ERR_INVALID_ARGS;
+        throw std::invalid_argument("Operands have invalid size");
     }
     return static_cast<int>(sum);
 }

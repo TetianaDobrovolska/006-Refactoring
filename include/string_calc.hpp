@@ -4,14 +4,13 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <stdexcept>
 
 class StringCalc
 {
 public:
 
     int Add(const std::string& numbers);
-
-    static constexpr int ERR_INVALID_ARGS = -1;
 
     // optional
     //std::vector<char>& getAllowedDelimiters();

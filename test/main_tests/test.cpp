@@ -34,24 +34,17 @@ TEST_F(CalculatorTest, RegularOperands)
 
 TEST_F(CalculatorTest, InvalidString)
 {
-    int actual = c.Add("abc");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+    ASSERT_THROW(c.Add("abc"), std::invalid_argument);
 
     // note: skip this for now
-//    actual = c.Add(",1,2");
-//    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+//    ASSERT_THROW(c.Add(",1,2"), std::invalid_argument);
 }
 
 TEST_F(CalculatorTest, NegativeOperandsMultipleDigits)
 {
-    int actual = c.Add("-123");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
-
-    actual = c.Add("0,-123");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
-
-    actual = c.Add("123,-456");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+    ASSERT_THROW(c.Add("-123"), std::invalid_argument);
+    ASSERT_THROW(c.Add("0,-123"), std::invalid_argument);
+    ASSERT_THROW(c.Add("123,-456"), std::invalid_argument);
 }
 
 // NOTE: some escaped characters (\r, \t, \f, \n) and spaces are
@@ -74,14 +67,9 @@ TEST_F(CalculatorTest, MultipleOperandsAllDelimiters)
 
 TEST_F(CalculatorTest, InvalidMultipleOperands)
 {
-    int actual = c.Add("1,2,-3,4,5");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
-
-    actual = c.Add("1,2,xx,4,5");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
-
-    actual = c.Add("1,2, ,4,5");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+    ASSERT_THROW(c.Add("1,2,-3,4,5"), std::invalid_argument);
+    ASSERT_THROW(c.Add("1,2,xx,4,5"), std::invalid_argument);
+    ASSERT_THROW(c.Add("1,2, ,4,5"), std::invalid_argument);
 }
 
 TEST_F(CalculatorTest, CustomDelimiter)
@@ -92,16 +80,12 @@ TEST_F(CalculatorTest, CustomDelimiter)
 
 TEST_F(CalculatorTest, InvalidCustomDelimiterSequence)
 {
-    int actual = c.Add("/;\n1,2;3,4,5");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
-
-    actual = c.Add(";\n1,2;3,4,5");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+    ASSERT_THROW(c.Add("/;\n1,2;3,4,5"), std::invalid_argument);
+    ASSERT_THROW(c.Add(";\n1,2;3,4,5"), std::invalid_argument);
 
     // TBD is this to be considered a valid case? \n is a legal separator
     // if placed at the beginning of the string it shall be simply skipped by the parser
-    actual = c.Add("\n1,2;3,4,5");
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+    ASSERT_THROW(c.Add("\n1,2;3,4,5"), std::invalid_argument);
 }
 
 TEST_F(CalculatorTest, TooLargeOperand)
@@ -109,8 +93,7 @@ TEST_F(CalculatorTest, TooLargeOperand)
     long invalidIntValue = static_cast<long>(std::numeric_limits<int>::max()) + 10;
     std::string biggerThanInt = std::to_string(invalidIntValue);
 
-    int actual = c.Add(biggerThanInt);
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+    ASSERT_THROW(c.Add(biggerThanInt), std::invalid_argument);
 }
 
 TEST_F(CalculatorTest, TooLargeSum)
@@ -121,6 +104,5 @@ TEST_F(CalculatorTest, TooLargeSum)
     // e.g. 1073741828,1073741833 ==> 2147483661
     std::string tooLargeSum{std::to_string(operand1) + "," + std::to_string(operand2)};
 
-    int actual = c.Add(tooLargeSum);
-    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+    ASSERT_THROW(c.Add(tooLargeSum), std::invalid_argument);
 }

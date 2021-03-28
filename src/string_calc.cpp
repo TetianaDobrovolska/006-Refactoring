@@ -3,6 +3,8 @@
 #include <limits>
 #include <sstream>
 
+const int StringCalc::MAX_OPERAND_VALUE;
+
 void StringCalc::ParseDelimiterDirective(const std::string& numbers, std::function<void(int)> f)
 {
     // directive format: "//x\n" where x is the delimiter char
@@ -43,7 +45,8 @@ bool StringCalc::ExtractOperands(const std::string& numbers, std::vector<int>& o
         if (ss.fail()) {
             return false;
         }
-        operands.push_back(operand);
+
+        operands.push_back(operand <= MAX_OPERAND_VALUE ? operand : 0);
     }
     return true;
 }

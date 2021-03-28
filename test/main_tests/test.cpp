@@ -88,21 +88,11 @@ TEST_F(CalculatorTest, InvalidCustomDelimiterSequence)
     ASSERT_THROW(c.Add("\n1,2;3,4,5"), std::invalid_argument);
 }
 
-TEST_F(CalculatorTest, TooLargeOperand)
+TEST_F(CalculatorTest, OperandsGreaterThan1000)
 {
-    long invalidIntValue = static_cast<long>(std::numeric_limits<int>::max()) + 10;
-    std::string biggerThanInt = std::to_string(invalidIntValue);
+    int actual = c.Add("1,2,1000,3,4,5");
+    ASSERT_EQ(actual, 1015);
 
-    ASSERT_THROW(c.Add(biggerThanInt), std::invalid_argument);
-}
-
-TEST_F(CalculatorTest, TooLargeSum)
-{
-    const int halfInt = std::numeric_limits<int>::max() / 2;
-    const int operand1 = halfInt + 5;
-    const int operand2 = halfInt + 10;
-    // e.g. 1073741828,1073741833 ==> 2147483661
-    std::string tooLargeSum{std::to_string(operand1) + "," + std::to_string(operand2)};
-
-    ASSERT_THROW(c.Add(tooLargeSum), std::invalid_argument);
+    actual = c.Add("1,2,1001,3,4,1000,5");
+    ASSERT_EQ(actual, 1015);
 }

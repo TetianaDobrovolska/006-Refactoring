@@ -11,9 +11,7 @@ class StringCalc
 public:
 
     int Add(const std::string& numbers);
-
-    // optional
-    //std::vector<char>& getAllowedDelimiters();
+    static const int MAX_OPERAND_VALUE = 1000;
 
 private:
     void ParseDelimiterDirective(const std::string& numbers, std::function<void(int)> f);

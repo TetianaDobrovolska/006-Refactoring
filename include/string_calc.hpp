@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 
 class StringCalc
 {
@@ -16,9 +17,10 @@ public:
     //std::vector<char>& getAllowedDelimiters();
 
 private:
+    void ParseDelimiterDirective(const std::string& numbers, std::function<void(int)> f);
     bool ExtractOperands(const std::string& numbers, std::vector<int> &operands);
 
-    const std::vector<char> LEGAL_DELIMITERS {',', '\n'};
+    std::vector<char> m_delimiters {',', '\n'};
 };
 
 #endif

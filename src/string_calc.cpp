@@ -5,26 +5,42 @@
 
 const int StringCalc::ERR_INVALID_ARGS;
 
+void StringCalc::ParseDelimiterDirective(const std::string& numbers, std::function<void(int)> f)
+{
+    // directive format: "//x\n" where x is the delimiter char
+    if (numbers.length() < 4)
+        return;
+
+    std::string twoSlashes(numbers, 0, 2);
+
+    if (twoSlashes == "//" && numbers[3] == '\n') {
+        char delimiter = numbers[2];
+        f(delimiter);
+    }
+}
+
 bool StringCalc::ExtractOperands(const std::string& numbers, std::vector<int>& operands)
 {
+    // empty string returns 0
     if (numbers == "") {
-        return ERR_INVALID_ARGS;
+        operands.push_back(0);
+        return true;
     }
 
-    //TODO: remove spaces and check extra chars
-
     std::stringstream ss{numbers};
-    int operand;
+
+    ParseDelimiterDirective(numbers, [this, &ss](int i){ m_delimiters.push_back(i); ss.ignore(4); });
 
     while (!ss.eof()) {
         // skip the delimiters
         // note: some escaped characters (\r, \t, \f, \n) and spaces are automatically removed by
         // the std::stringstream extraction operator >>
-        for (char del : LEGAL_DELIMITERS) {
+        for (char del : m_delimiters) {
             while (ss.peek() == del)
                 ss.ignore();
         }
 
+        int operand;
         ss >> operand;
         if (ss.fail()) {
             return false;

@@ -84,6 +84,26 @@ TEST_F(CalculatorTest, InvalidMultipleOperands)
     ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 }
 
+TEST_F(CalculatorTest, CustomDelimiter)
+{
+    int actual = c.Add("//;\n1,2;3,4,5");
+    ASSERT_EQ(actual, 15);
+}
+
+TEST_F(CalculatorTest, InvalidCustomDelimiterSequence)
+{
+    int actual = c.Add("/;\n1,2;3,4,5");
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+
+    actual = c.Add(";\n1,2;3,4,5");
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+
+    // TBD is this to be considered a valid case? \n is a legal separator
+    // if placed at the beginning of the string it shall be simply skipped by the parser
+    actual = c.Add("\n1,2;3,4,5");
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
+}
+
 TEST_F(CalculatorTest, TooLargeOperand)
 {
     long invalidIntValue = static_cast<long>(std::numeric_limits<int>::max()) + 10;

@@ -3,17 +3,7 @@
 #include <limits>
 #include <sstream>
 
-StringCalc::StringCalc() : m_delimiter(',')
-{
-}
-
-StringCalc::StringCalc(char delimiter) : m_delimiter(delimiter)
-{
-}
-
-StringCalc::~StringCalc()
-{
-}
+const int StringCalc::ERR_INVALID_ARGS;
 
 bool StringCalc::ExtractOperands(const std::string& numbers, std::vector<int>& operands)
 {
@@ -27,8 +17,13 @@ bool StringCalc::ExtractOperands(const std::string& numbers, std::vector<int>& o
     int operand;
 
     while (!ss.eof()) {
-        while (ss.peek() == m_delimiter)
-            ss.ignore();
+        // skip the delimiters
+        // note: some escaped characters (\r, \t, \f, \n) and spaces are automatically removed by
+        // the std::stringstream extraction operator >>
+        for (char del : LEGAL_DELIMITERS) {
+            while (ss.peek() == del)
+                ss.ignore();
+        }
 
         ss >> operand;
         if (ss.fail()) {

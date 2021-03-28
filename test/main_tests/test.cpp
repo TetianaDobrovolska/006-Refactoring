@@ -3,8 +3,6 @@
 #include <iostream>
 #include <limits>
 
-#define ERR_INVALID_ARGS -1
-
 class CalculatorTest : public ::testing::Test {
 protected:
     StringCalc c;
@@ -37,23 +35,23 @@ TEST_F(CalculatorTest, RegularOperands)
 TEST_F(CalculatorTest, InvalidString)
 {
     int actual = c.Add("abc");
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 
     // note: skip this for now
 //    actual = c.Add(",1,2");
-//    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+//    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 }
 
 TEST_F(CalculatorTest, NegativeOperandsMultipleDigits)
 {
     int actual = c.Add("-123");
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 
     actual = c.Add("0,-123");
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 
     actual = c.Add("123,-456");
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 }
 
 // NOTE: some escaped characters (\r, \t, \f, \n) and spaces are
@@ -68,16 +66,22 @@ TEST_F(CalculatorTest, MultipleOperands)
     ASSERT_EQ(actual, 15);
 }
 
+TEST_F(CalculatorTest, MultipleOperandsAllDelimiters)
+{
+    int actual = c.Add("1,2\n3,4\n5");
+    ASSERT_EQ(actual, 15);
+}
+
 TEST_F(CalculatorTest, InvalidMultipleOperands)
 {
     int actual = c.Add("1,2,-3,4,5");
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 
     actual = c.Add("1,2,xx,4,5");
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 
     actual = c.Add("1,2, ,4,5");
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 }
 
 TEST_F(CalculatorTest, TooLargeOperand)
@@ -86,7 +90,7 @@ TEST_F(CalculatorTest, TooLargeOperand)
     std::string biggerThanInt = std::to_string(invalidIntValue);
 
     int actual = c.Add(biggerThanInt);
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 }
 
 TEST_F(CalculatorTest, TooLargeSum)
@@ -98,5 +102,5 @@ TEST_F(CalculatorTest, TooLargeSum)
     std::string tooLargeSum{std::to_string(operand1) + "," + std::to_string(operand2)};
 
     int actual = c.Add(tooLargeSum);
-    ASSERT_EQ(actual, ERR_INVALID_ARGS);
+    ASSERT_EQ(actual, StringCalc::ERR_INVALID_ARGS);
 }

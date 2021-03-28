@@ -4,22 +4,21 @@
 #include <string>
 #include <vector>
 
-#define ERR_INVALID_ARGS -1
-
 class StringCalc
 {
 public:
-    StringCalc();
-
-    StringCalc(char delimiter);
-
-    ~StringCalc();
 
     int Add(const std::string& numbers);
 
+    static constexpr int ERR_INVALID_ARGS = -1;
+
+    // optional
+    //std::vector<char>& getAllowedDelimiters();
+
 private:
     bool ExtractOperands(const std::string& numbers, std::vector<int> &operands);
-    char m_delimiter;
+
+    const std::vector<char> LEGAL_DELIMITERS {',', '\n'};
 };
 
 #endif

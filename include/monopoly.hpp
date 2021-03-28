@@ -25,6 +25,7 @@ public:
     std::tuple<std::string, int> getPlayerInfo(int playerIndex);
     std::tuple<std::string, Type, int, bool> getFieldByName(std::string field);
 
+private:
     std::list<std::tuple<std::string, Type, int, bool>> fields;
     std::list<std::tuple<std::string, int>> players;
 };

@@ -72,20 +72,17 @@ TEST_F(CalculatorTest, InvalidMultipleOperands)
     ASSERT_THROW(c.Add("1,2, ,4,5"), std::invalid_argument);
 }
 
-TEST_F(CalculatorTest, CustomDelimiter)
+TEST_F(CalculatorTest, MultipleCustomDelimiters)
 {
-    int actual = c.Add("//;\n1,2;3,4,5");
+    int actual = c.Add("//[;-+]\n1,2;3-4+5");
     ASSERT_EQ(actual, 15);
 }
 
-TEST_F(CalculatorTest, InvalidCustomDelimiterSequence)
+TEST_F(CalculatorTest, InvalidMultipleCustomDelimiters)
 {
-    ASSERT_THROW(c.Add("/;\n1,2;3,4,5"), std::invalid_argument);
-    ASSERT_THROW(c.Add(";\n1,2;3,4,5"), std::invalid_argument);
-
-    // TBD is this to be considered a valid case? \n is a legal separator
-    // if placed at the beginning of the string it shall be simply skipped by the parser
-    ASSERT_THROW(c.Add("\n1,2;3,4,5"), std::invalid_argument);
+    ASSERT_THROW(c.Add("//[]\n1,2;3-4+5"), std::invalid_argument);
+    ASSERT_THROW(c.Add("//[;-+\n1,2;3-4+5"), std::invalid_argument);
+    ASSERT_THROW(c.Add("//;-+\n1,2;3-4+5"), std::invalid_argument);
 }
 
 TEST_F(CalculatorTest, OperandsGreaterThan1000)

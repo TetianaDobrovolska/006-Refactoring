@@ -9,15 +9,16 @@
 class StringCalc
 {
 public:
-
     int Add(const std::string& numbers);
+
     static const int MAX_OPERAND_VALUE = 1000;
+    const std::vector<char> DEFAULT_DELIMITERS {',', '\n'};
 
 private:
-    void ParseDelimiterDirective(const std::string& numbers, std::function<void(int)> f);
+    void ParseDelimiterDirective(const std::string& numbers, std::stringstream& ss);
     bool ExtractOperands(const std::string& numbers, std::vector<int> &operands);
 
-    std::vector<char> m_delimiters {',', '\n'};
+    std::vector<char> m_delimiters {DEFAULT_DELIMITERS};
 };
 
 #endif

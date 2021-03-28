@@ -3,12 +3,12 @@
 
 using namespace ::std;
 
-TEST(LAB2, GetPlayersListReturnCorrectList) {
+TEST(MonopolyTest, GetPlayersListReturnCorrectList) {
     string players[]{ "Peter","Ekaterina","Alexander" };
    
     Monopoly monopoly(players,3);
 
-    list<tuple<string,int>>* x = monopoly.GetPlayersList();
+    list<tuple<string,int>>* x = monopoly.getPlayersList();
     int i = 0;
     for (auto c : *x) {
         ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());
@@ -17,11 +17,11 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
     ASSERT_TRUE(i);
 }
 
-TEST(LAB2, GetFieldsListReturnCorrectList) {
+TEST(MonopolyTest, GetFieldsListReturnCorrectList) {
     tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
         make_tuple("Ford",Monopoly::AUTO ,0,false),
         make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("Lamoda",Monopoly::CLOTHER,0,false),
+        make_tuple("Lamoda",Monopoly::CLOTHES,0,false),
         make_tuple("Air Baltic",Monopoly::TRAVEL,0,false),
         make_tuple("Nordavia",Monopoly::TRAVEL,0,false),
         make_tuple("Prison",Monopoly::PRISON,0,false),
@@ -31,7 +31,7 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
-   auto actualCompanies = monopoly.GetFieldsList();
+   auto actualCompanies = monopoly.getFieldsList();
    int i = 0;
    for (auto x : *actualCompanies)
    {
@@ -40,33 +40,33 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
    ASSERT_TRUE(i);   
 }
 
-TEST(LAB2, PlayerBuyNoOwnedCompanies)
+TEST(MonopolyTest, PlayerBuyNoOwnedCompanies)
 {
     string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
-    auto x = monopoly.GetFieldByName("Ford");
-    monopoly.Buy(1, x);
+    auto x = monopoly.getFieldByName("Ford");
+    monopoly.buy(1, x);
 
-    auto player = monopoly.GetPlayerInfo(1);
+    auto player = monopoly.getPlayerInfo(1);
     ASSERT_EQ(get<1>(player), 5500);
-    x = monopoly.GetFieldByName("Ford");
+    x = monopoly.getFieldByName("Ford");
     ASSERT_TRUE(get<2>(x) != 0);
 }
 
-TEST(LAB2, RentaShouldBeCorrectTransferMoney)
+TEST(MonopolyTest, RentShouldBeCorrectTransferMoney)
 {
     string players[]{ "Peter","Ekaterina","Alexander" };
     Monopoly monopoly(players, 3);
-    auto x = monopoly.GetFieldByName("Ford");
-    monopoly.Buy(1, x);
+    auto x = monopoly.getFieldByName("Ford");
+    monopoly.buy(1, x);
 
-    x = monopoly.GetFieldByName("Ford");
-    monopoly.Renta(2, x);
-    auto player1 = monopoly.GetPlayerInfo(1);
+    x = monopoly.getFieldByName("Ford");
+    monopoly.rent(2, x);
+    auto player1 = monopoly.getPlayerInfo(1);
     ASSERT_EQ(get<1>(player1), 5750);
 
-    auto player2 = monopoly.GetPlayerInfo(2);
+    auto player2 = monopoly.getPlayerInfo(2);
     ASSERT_EQ(get<1>(player2), 5750);    
 }
 

@@ -1,13 +1,13 @@
 #ifndef MONOPOLY_HPP
 #define MONOPOLY_HPP
 
-#include <list>
-#include <tuple>
 #include <string>
+#include <tuple>
+#include <vector>
 
 class Monopoly {
 public:
-    enum Type {
+    enum FieldType {
         AUTO,
         FOOD,
         TRAVEL,
@@ -16,18 +16,18 @@ public:
         BANK
 	};
 
-    Monopoly(std::string names[10], int countPlayers);
-    bool buy(int playerId, std::tuple<std::string, Type, int, bool> field);
-    bool rent(int playerId, std::tuple<std::string, Type, int, bool> field);
+    Monopoly(const std::vector<std::string>& names, const int& countPlayers);
+    bool buy(const int& buyerId, std::tuple<std::string, FieldType, int, bool>& field);
+    bool rent(const int& renterId, std::tuple<std::string, FieldType, int, bool>& field);
 
-    std::list<std::tuple<std::string,int>>* getPlayersList();
-    std::list<std::tuple<std::string, Type, int,bool>>* getFieldsList();
-    std::tuple<std::string, int> getPlayerInfo(int playerIndex);
-    std::tuple<std::string, Type, int, bool> getFieldByName(std::string field);
+    std::vector<std::tuple<std::string,int>> getPlayers() const;
+    std::vector<std::tuple<std::string, FieldType, int,bool>> getFields() const;
+    std::tuple<std::string, int> getPlayer(const int& index) const;
+    std::tuple<std::string, FieldType, int, bool> getFieldByName(std::string field);
 
 private:
-    std::list<std::tuple<std::string, Type, int, bool>> fields;
-    std::list<std::tuple<std::string, int>> players;
+    std::vector<std::tuple<std::string, FieldType, int, bool>> _fields;
+    std::vector<std::tuple<std::string, int>> _players;
 };
 
 #endif

@@ -1,4 +1,5 @@
-#include "monolopy.hpp"
+#include "gtest/gtest.h"
+#include "monopoly.hpp"
 
 using namespace ::std;
 
@@ -15,6 +16,7 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
     }
     ASSERT_TRUE(i);
 }
+
 TEST(LAB2, GetFieldsListReturnCorrectList) {
     tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
         make_tuple("Ford",Monopoly::AUTO ,0,false),

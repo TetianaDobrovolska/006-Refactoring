@@ -5,16 +5,7 @@
 
 using namespace std;
 
-StringCalc::StringCalc()
-{
-}
-
-
-StringCalc::~StringCalc()
-{
-}
-
-vector<string> StringCalc::split(const std::string& s) const
+vector<string> StringCalc::split(const std::string& s)
 {
     vector<string> tokens;
     string token;
@@ -31,7 +22,7 @@ vector<string> StringCalc::split(const std::string& s) const
     return tokens;
 }
 
-void StringCalc::parseDelimiters(const string input_delimiters, string &regex_delimiters, bool multichar) const
+void StringCalc::parseDelimiters(const string input_delimiters, string &regex_delimiters, bool multichar)
 {
     for (const auto sym : input_delimiters) {
         regex_delimiters += multichar ? "" : "|";
@@ -40,7 +31,7 @@ void StringCalc::parseDelimiters(const string input_delimiters, string &regex_de
     }
 }
 
-string StringCalc::processDelimiters(const string &input_string) const
+string StringCalc::processDelimiters(const string &input_string)
 {
     const regex custom_delimiter_section {"//(\\[(.+)\\]|.+)\n"};
     string processed_string = input_string;
@@ -53,7 +44,10 @@ string StringCalc::processDelimiters(const string &input_string) const
         BRACKETS_GROUP_INDEX
     };
 
-    if (regex_search(input_string, match, custom_delimiter_section)) {
+    if (regex_search(processed_string, match, custom_delimiter_section)) {
+        if (match[HEADER_SECTION_INDEX].first != processed_string.cbegin()) {
+            throw invalid_argument("wrong delimiters definition position");
+        }
         const auto multichar_delimiter = match[BRACKETS_GROUP_INDEX].str();
         if (multichar_delimiter.empty()) {
             parseDelimiters(match[DELIMITER_GROUP_INDEX], alternative_delimiters, false);
@@ -61,7 +55,7 @@ string StringCalc::processDelimiters(const string &input_string) const
             alternative_delimiters += "|";
             parseDelimiters(multichar_delimiter, alternative_delimiters, true);
         }
-        processed_string.erase(0, static_cast<size_t>(match[HEADER_SECTION_INDEX].length()));
+        processed_string.erase(match[HEADER_SECTION_INDEX].first, match[HEADER_SECTION_INDEX].second);
     }
 
     const string delimiter(1, default_delimiter);
@@ -69,7 +63,7 @@ string StringCalc::processDelimiters(const string &input_string) const
     return processed_string;
 }
 
-int StringCalc::Add(const string &numbers) const
+int StringCalc::Add(const string &numbers)
 {
     if (numbers.empty()) {
         return 0;

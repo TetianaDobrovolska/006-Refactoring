@@ -7,18 +7,17 @@
 class StringCalc
 {
 public:
-    StringCalc();
-
-	~StringCalc();
 	
-    int Add(const std::string& numbers) const;
+    static int Add(const std::string& numbers);
 
 private:
-    std::vector<std::string> split(const std::string& s) const;
-    std::string processDelimiters(const std::string& s) const;
-    void parseDelimiters(const std::string input_delimiters, std::string& regex_delimiters, bool multichar) const;
+    StringCalc() = delete;
+    ~StringCalc() = delete;
+    static std::vector<std::string> split(const std::string& s);
+    static std::string processDelimiters(const std::string& s);
+    static void parseDelimiters(const std::string input_delimiters, std::string& regex_delimiters, bool multichar);
 
-    const char default_delimiter = ',';
+    static const char default_delimiter = ',';
 };
 
 #endif

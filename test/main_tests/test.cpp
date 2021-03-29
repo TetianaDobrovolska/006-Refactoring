@@ -23,12 +23,11 @@ TEST_P(ParametrizedTest, stringCalcTest)
 {
     std::string expression = std::get<0>(GetParam());
     int expected = std::get<1>(GetParam());
-    StringCalc c;
     if (expected != -1) {
-        int actual = c.Add(expression);
+        int actual = StringCalc::Add(expression);
         ASSERT_EQ(actual, expected);
     } else {
-        EXPECT_THROW(c.Add(expression), std::invalid_argument);
+        EXPECT_THROW(StringCalc::Add(expression), std::invalid_argument);
     }
 }
 
@@ -61,5 +60,6 @@ INSTANTIATE_TEST_SUITE_P(TDDKata, ParametrizedTest,
                              std::make_tuple("//;1;2", -1),
                              std::make_tuple("//[***]\n1***2***3", 6),
                              std::make_tuple("//[bwt]\n12bwt3000,5bwt17", 34),
-                             std::make_tuple("//*%\n1%2*2",5)
+                             std::make_tuple("//*%\n1%2*2",5),
+                             std::make_tuple("5,6//*\n1,2,2",-1)
                              ));

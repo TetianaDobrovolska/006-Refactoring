@@ -35,14 +35,16 @@ Monopoly::Monopoly(string names[10],int countPlaers)
 	Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, PROPERTY_FREI, false));
 }
 
-std::list<std::tuple<std::string, int>> * Monopoly::GetPlayersList()
+std::list<std::tuple<std::string, int>> Monopoly::GetPlayersList()
 {
-	return &Players;
+    std::list<std::tuple<std::string, int>> copiedPlayersList(Players);
+    return copiedPlayersList;
 }
 
-std::list<std::tuple<std::string, Monopoly::Type,int,bool>> * Monopoly::GetFieldsList()
+std::list<std::tuple<std::string, Monopoly::Type,int,bool>> Monopoly::GetFieldsList()
 {
-	return &Fields;
+    std::list<std::tuple<std::string, Monopoly::Type,int,bool>> copiedFieldList(Fields);
+    return copiedFieldList;
 }
 
 std::tuple<std::string, int> Monopoly::GetPlayerInfo(int m)

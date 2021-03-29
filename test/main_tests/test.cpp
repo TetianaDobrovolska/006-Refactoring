@@ -8,14 +8,26 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
    
     Monopoly monopoly(players,3);
 
-    list<tuple<string,int>>* x = monopoly.GetPlayersList();
+    list<tuple<string,int>> x = monopoly.GetPlayersList();
     int i = 0;
-    for (auto c : *x) {
+    for (auto c : x) {
         ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());
         ASSERT_EQ(get<1>(c), 6000);
     }
     ASSERT_TRUE(i);
 }
+
+TEST(LAB2, GetPlayersList_Modify_ValueOfClassUnchanged) {
+
+    string players[]{ "Peter","Ekaterina","Alexander" };
+   
+    Monopoly monopoly(players,3);
+    list<tuple<string,int>> x = monopoly.GetPlayersList();
+    x.push_back(make_tuple("NewPlayer", 6000));
+    list<tuple<string,int>> y = monopoly.GetPlayersList();
+    ASSERT_TRUE(x.size() != y.size());
+}
+
 TEST(LAB2, GetFieldsListReturnCorrectList) {
     tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
         make_tuple("Ford",Monopoly::AUTO ,0,false),
@@ -32,11 +44,20 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     Monopoly monopoly(players, 3);
    auto actualCompanies = monopoly.GetFieldsList();
    int i = 0;
-   for (auto x : *actualCompanies)
+   for (auto x : actualCompanies)
    {
        ASSERT_EQ(x, expectedCompanies[i++]);
    }
    ASSERT_TRUE(i);   
+}
+
+TEST(LAB2, GetFieldsList_Modify_ValueOfClassUnchanged) {
+    string players[]{ "Peter","Ekaterina","Alexander" };
+    Monopoly monopoly(players, 3);
+   auto companiesList = monopoly.GetFieldsList();
+   companiesList.push_back(make_tuple("NEWCOMPANY",Monopoly::AUTO,0,false));
+   auto actualCompanies = monopoly.GetFieldsList();
+   ASSERT_TRUE(actualCompanies.size() != companiesList.size());
 }
 
 TEST(LAB2, PlayerBuyNoOwnedCompanies)

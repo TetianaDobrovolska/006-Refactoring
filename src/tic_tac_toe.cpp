@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 void show_cells(const TicTacToe& game)
 {
     system("cls");
@@ -26,10 +25,10 @@ void show_cells(const TicTacToe& game)
 }
 
 
-void result(const TicTacToe& game, char win) {
-    if (win == 'X')
+void result(const TicTacToe& game, TicTacToe::player_code win) {
+    if (win == TicTacToe::PLAYER1)
         cout << game.get_player_name1() << " you won congratulations " << game.get_player_name2() << " you lose..." << endl;
-    else if (win == 'O') cout << game.get_player_name2() << " you won congratulations  " << game.get_player_name1() << " you lose..." << endl;
+    else if (win == TicTacToe::PLAYER2) cout << game.get_player_name2() << " you won congratulations  " << game.get_player_name1() << " you lose..." << endl;
 }
 
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) {
@@ -38,23 +37,18 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) 
         cout << "Enter the name of the first player: ";
         std::cin >> PlayerName1;
 
-        cout << "Enter the name of the seecond player: ";
+        cout << "Enter the name of the second player: ";
         std::cin >> PlayerName2;
     } while (PlayerName1 == PlayerName2);
     
     TicTacToe game(PlayerName1, PlayerName2);
     show_cells(game);
 
-    char win = '-';
+    TicTacToe::player_code win = TicTacToe::DRAW;
 
-    for (int move = 1; move <= 9; move++) {
-        int player = move % 2;
-        if (player) {
-            cout << game.get_player_name1();
-        }
-        else {
-            cout << game.get_player_name2();
-        }
+    for (size_t move = 1; move <= TicTacToe::NUMBER_OF_CELLS; move++) {
+
+        cout << game.get_current_player_name();
 
         size_t cell;
         cout << ",enter cell number, make your move:";
@@ -65,14 +59,14 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) 
             cin >> cell;
             cout << "\n";
         }
-        game.make_move(player + 1, cell);
+        game.make_move(cell);
 
         show_cells(game);
         
         if (move >= 5)
         {
-            win = game.check();
-            if (win != '-')
+            win = game.winner();
+            if (win != TicTacToe::DRAW)
                 break;
         }
     }

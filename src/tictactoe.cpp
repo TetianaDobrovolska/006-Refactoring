@@ -50,9 +50,7 @@ char TicTacToe::check() const
         return winner_sign;
     }
     for (size_t i = 0; i < NUMBER_OF_ROWS; i++) {
-        if (horizontal_match(i, winner_sign)) {
-            break;
-        } else if (vertical_match(i, winner_sign)) {
+        if (horizontal_match(i, winner_sign) || vertical_match(i, winner_sign)) {
             break;
         }
     }

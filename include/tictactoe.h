@@ -19,7 +19,7 @@ public:
     bool check_cell(size_t cell) const;
     void make_move(size_t cell);
 
-    player_code winner();
+    player_code winner() const;
 
     const std::vector<char>& get_cells() const;
     const std::string& get_player_name1() const;
@@ -31,11 +31,15 @@ public:
     static const std::vector<char> player_sign;
 
 private:
-    char check();
     std::string m_player_name1, m_player_name2;
     std::vector<char> m_cells;
     player_code current_player = PLAYER1;
+
+    char check() const;
     void switch_player();
+    bool horizontal_match(size_t row, char& sym) const;
+    bool vertical_match(size_t column, char& sym) const;
+    bool diagonal_match(char& sym) const;
 };
 
 #endif // TICTACTOE_H

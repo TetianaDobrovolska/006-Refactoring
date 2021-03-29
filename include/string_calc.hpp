@@ -15,7 +15,7 @@ private:
     ~StringCalc() = delete;
     static std::vector<std::string> split(const std::string& s);
     static std::string processDelimiters(const std::string& s);
-    static void parseDelimiters(const std::string input_delimiters, std::string& regex_delimiters, bool multichar);
+    static void parseDelimiters(const std::string& input_delimiters, std::string& regex_delimiters, bool multichar);
 
     static const char default_delimiter = ',';
 };

@@ -22,7 +22,7 @@ vector<string> StringCalc::split(const std::string& s)
     return tokens;
 }
 
-void StringCalc::parseDelimiters(const string input_delimiters, string &regex_delimiters, bool multichar)
+void StringCalc::parseDelimiters(const string& input_delimiters, string &regex_delimiters, bool multichar)
 {
     for (const auto sym : input_delimiters) {
         regex_delimiters += multichar ? "" : "|";

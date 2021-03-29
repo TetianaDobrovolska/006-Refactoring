@@ -5,8 +5,23 @@
 #include <tuple>
 #include <string>
 
-class Monopoly
-{
+class Player {
+public:
+    Player();
+    Player(std::string name, int playerId, int budget);
+
+    std::string getName() const;
+    int getPlayerId() const;
+    void addMoney(int value);
+    void deductMoney(int value);
+    int getBudget() const;
+private:
+    std::string name;
+    int playerId;
+    int budget;
+};
+
+class Company {
 public:
     enum Type
     {
@@ -18,19 +33,39 @@ public:
         BANK
     };
 
+    Company(std::string name, Type companyType, int buyPrice, int rentaPrice);
+    std::string getName() const;
+    Type getType() const;
+    int getBuyPrice() const;
+    int getRentaPrice() const;
+    int getOwnerId() const;
+    void setOwnerId(int ownerId);
+
+private:
+    int buyPrice;
+    int rentaPrice;
+    std::string name;
+    Type companyType;
+    int ownerId;
+};
+
+class Monopoly
+{
+public:
+
     Monopoly(std::string names[10],int);
 
-    std::list<std::tuple<std::string,int>> GetPlayersList();
-    std::list<std::tuple<std::string, Type, int,bool>> GetFieldsList();
+    std::list<Player> GetPlayersList();
+    std::list<Company> GetFieldsList();
 
-    std::tuple<std::string, int>  GetPlayerInfo(int);	 
-    std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);
+    Player GetPlayerInfo(int);	 
+    Company GetFieldByName(std::string);
 
-    bool Buy(int p,std::tuple<std::string, Type, int, bool>);
-    bool Renta(int p, std::tuple<std::string, Type, int, bool>c);
+    bool Buy(int p, Company c);
+    bool Renta(int p, Company c);
 private: 
-    std::list<std::tuple<std::string, Type, int, bool>> Fields;
-    std::list<std::tuple<std::string, int>> Players;
+    std::list<Company> Fields;
+    std::list<Player> Players;
 	
 };
 

@@ -5,7 +5,7 @@ using namespace ::std;
 
 const int BEGIN_BUDGET = 6000;
 
-const int PROPERTY_FREI = 0;
+const int FREI_ID = 0;
 
 const int DEFAULT_AUTO_PRICE = 500;
 const int DEFAULT_AUTO_RENTA = 250;
@@ -19,137 +19,187 @@ const int DEFAULT_CLOTHER_RENTA = 250;
 const int PAYMENT_PRISON = 1000;
 const int PAYMENT_BANK = 700;
 
-Monopoly::Monopoly(string names[10],int countPlaers)
+Player::Player()
 {
-	for (int i = 0; i < countPlaers; i++)
-	{
-		Players.push_back(make_tuple(names[i], BEGIN_BUDGET));
-	}
-	Fields.push_back(make_tuple("Ford", Monopoly::AUTO, PROPERTY_FREI, false));
-	Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, PROPERTY_FREI, false));
-	Fields.push_back(make_tuple("Lamoda", Monopoly::CLOTHER, PROPERTY_FREI, false));
-	Fields.push_back(make_tuple("Air Baltic", Monopoly::TRAVEL, PROPERTY_FREI, false));
-	Fields.push_back(make_tuple("Nordavia", Monopoly::TRAVEL, PROPERTY_FREI, false));
-	Fields.push_back(make_tuple("Prison", Monopoly::PRISON, PROPERTY_FREI, false));
-	Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, PROPERTY_FREI, false));
-	Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, PROPERTY_FREI, false));
+    name = "";
+    playerId = FREI_ID;
+    budget = 0;
 }
 
-std::list<std::tuple<std::string, int>> Monopoly::GetPlayersList()
+Player::Player(std::string name, int playerId, int budget)
 {
-    std::list<std::tuple<std::string, int>> copiedPlayersList(Players);
+    this->name = name;
+    this->playerId = playerId;
+    this->budget = budget;
+}
+
+std::string Player::getName() const
+{
+    return name;
+}
+
+int Player::getPlayerId() const
+{
+    return playerId;
+}
+
+void Player::addMoney(int value)
+{
+    budget += value;
+}
+
+void Player::deductMoney(int value)
+{
+    budget = value >= budget ? 0 : budget - value;
+}
+
+int Player::getBudget() const
+{
+    return budget;
+}
+
+Company::Company(std::string name, Type companyType, int buyPrice, int rentaPrice)
+{
+    this->name = name;
+    this->companyType = companyType;
+    this->buyPrice = buyPrice;
+    this->rentaPrice = rentaPrice;
+    ownerId = FREI_ID;
+}
+
+std::string Company::getName() const
+{
+    return name;
+}
+
+Company::Type Company::getType() const
+{
+    return companyType;
+}
+
+int Company::getBuyPrice() const
+{
+    return buyPrice;
+}
+
+int Company::getRentaPrice() const
+{
+    return rentaPrice;
+}
+
+int Company::getOwnerId() const
+{
+    return ownerId;
+}
+
+void Company::setOwnerId(int ownerId)
+{
+    this->ownerId = ownerId;
+}
+
+Monopoly::Monopoly(string names[10],int countPlaers)
+{
+    for (int i = 0; i < countPlaers; i++)
+    {
+        Players.push_back(Player(names[i], i + 1, BEGIN_BUDGET));
+    }
+    Fields.push_back(Company("Ford", Company::AUTO, DEFAULT_AUTO_PRICE, DEFAULT_AUTO_RENTA));
+    Fields.push_back(Company("MCDonald", Company::FOOD, DEFAULT_FOOD_PRICE, DEFAULT_FOOD_RENTA));
+    Fields.push_back(Company("Lamoda", Company::CLOTHER, DEFAULT_CLOTHER_PRICE, DEFAULT_CLOTHER_RENTA));
+    Fields.push_back(Company("Air Baltic", Company::TRAVEL, DEFAULT_TRAVEL_PRICE, DEFAULT_TRAVEL_RENTA));
+    Fields.push_back(Company("Nordavia", Company::TRAVEL, DEFAULT_TRAVEL_PRICE, DEFAULT_TRAVEL_RENTA));
+    Fields.push_back(Company("Prison", Company::PRISON, PAYMENT_PRISON, PAYMENT_PRISON));
+    Fields.push_back(Company("MCDonald", Company::FOOD, DEFAULT_FOOD_PRICE, DEFAULT_FOOD_RENTA));
+    Fields.push_back(Company("TESLA", Company::AUTO, DEFAULT_AUTO_PRICE, DEFAULT_AUTO_RENTA));
+}
+
+std::list<Player> Monopoly::GetPlayersList()
+{
+    std::list<Player> copiedPlayersList(Players);
     return copiedPlayersList;
 }
 
-std::list<std::tuple<std::string, Monopoly::Type,int,bool>> Monopoly::GetFieldsList()
+std::list<Company> Monopoly::GetFieldsList()
 {
-    std::list<std::tuple<std::string, Monopoly::Type,int,bool>> copiedFieldList(Fields);
+    std::list<Company> copiedFieldList(Fields);
     return copiedFieldList;
 }
 
-std::tuple<std::string, int> Monopoly::GetPlayerInfo(int m)
+Player Monopoly::GetPlayerInfo(int m)
 {
-	list<std::tuple<std::string, int>>::iterator i = Players.begin();
-	advance(i, m - 1);
-	return *i;
+    list<Player>::iterator i = Players.begin();
+    advance(i, m - 1);
+    return *i;
 }
 
-bool Monopoly::Buy(int z, std::tuple<std::string, Type, int, bool> k)
+bool Monopoly::Buy(int z, Company k)
 {
-	auto x = GetPlayerInfo(z);
-	tuple<string, int> p;
-	list<tuple<std::string, Type, int, bool>>::iterator i;
-	list<tuple<string, int>>::iterator j = Players.begin();
-	switch (get<1>(k))
-	{
-	case AUTO:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - DEFAULT_AUTO_PRICE);
-		k = make_tuple(get<0>(k), get<1>(k), z, true);
-		break;
-	case FOOD:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - DEFAULT_AUTO_PRICE);
-		k = make_tuple(get<0>(k), get<1>(k), z, true);
-		break;
-	case TRAVEL:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - DEFAULT_TRAVEL_PRICE);
-		k = make_tuple(get<0>(k), get<1>(k), z, true);
-		break;
-	case CLOTHER:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - DEFAULT_CLOTHER_PRICE);
-		k = make_tuple(get<0>(k), get<1>(k), z, true);
-		break;
-	default:
-		return false;
-	};
-	i = find_if(Fields.begin(), Fields.end(), [k](auto x) { return get<0>(x) == get<0>(k); });
-	*i = k;
+    auto x = GetPlayerInfo(z);
+    
+    if (k.getOwnerId() != FREI_ID) return false;
+    
+    switch (k.getType())
+    {
+    case Company::AUTO:
+    case Company::FOOD:
+    case Company::TRAVEL:
+    case Company::CLOTHER:
+        x.deductMoney(k.getBuyPrice());
+        k.setOwnerId(x.getPlayerId());
+        break;
+    default:
+        return false;
+    };
+
+    list<Company>::iterator i;
+    i = find_if(Fields.begin(), Fields.end(), [k](auto c) { return c.getName() == k.getName(); });
+    *i = k;
+
+    list<Player>::iterator j = Players.begin();
     advance(j, z-1);
-	*j = p;
-	return true;
+    *j = x;
+    return true;
 }
 
-std::tuple<std::string, Monopoly::Type, int, bool>  Monopoly::GetFieldByName(std::string l)
+Company Monopoly::GetFieldByName(std::string l)
 {
-	std::list<std::tuple<std::string, Monopoly::Type, int, bool>>::iterator i = find_if(Fields.begin(), Fields.end(),[l] (std::tuple<std::string, Monopoly::Type, int, bool> x) {
-		return get<0>(x) == l;
-	});
-	return *i;
+    std::list<Company>::iterator i = find_if(Fields.begin(), Fields.end(),[l] (Company x) {
+        return x.getName() == l;
+    });
+    return *i;
 }
 
-bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
+bool Monopoly::Renta(int m, Company c)
 {
-	tuple<string, int> z = GetPlayerInfo(m);
-	tuple<string, int> o;
+    Player z = GetPlayerInfo(m);
+    Player o;
 
-	switch (get<1>(c))
-	{
-	case AUTO:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + DEFAULT_AUTO_RENTA);
-		z = make_tuple(get<0>(z), get<1>(z) - DEFAULT_AUTO_RENTA);
-		break;
-	case FOOD:
-		if (!get<2>(c))
-			return false;
-	case TRAVEL:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + DEFAULT_TRAVEL_RENTA);
-		z = make_tuple(get<0>(z), get<1>(z) - DEFAULT_TRAVEL_RENTA);
-		break;
-	case CLOTHER:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + DEFAULT_CLOTHER_RENTA);
-		z = make_tuple(get<0>(z), get<1>(z) - DEFAULT_CLOTHER_RENTA);
-		break;
-	case PRISON:
-		z = make_tuple(get<0>(z), get<1>(z) - PAYMENT_PRISON);
-		break;
-	case BANK:
-		z = make_tuple(get<0>(z), get<1>(z) - PAYMENT_BANK);
-		break;
-	default:
-		return false;
-	}
-	list<tuple<string, int>>::iterator i = Players.begin();
-	advance(i, m - 1);
-	*i = z;
-	i = find_if(Players.begin(), Players.end(), [o](auto x) { return get<0>(x) == get<0>(o); });
-	*i = o;
-	return true;
+    switch (c.getType())
+    {
+    case Company::AUTO:
+    case Company::FOOD:
+    case Company::TRAVEL:
+    case Company::CLOTHER:
+        if (c.getOwnerId() == FREI_ID)
+            return false;
+        o = GetPlayerInfo(c.getOwnerId());
+        o.addMoney(c.getRentaPrice());
+        z.deductMoney(c.getRentaPrice());
+        break;
+    case Company::PRISON:
+    case Company::BANK:
+        z.deductMoney(c.getRentaPrice());
+        break;
+    default:
+        return false;
+    }
+
+    list<Player>::iterator i = Players.begin();
+    advance(i, m - 1);
+    *i = z;
+    i = find_if(Players.begin(), Players.end(), [o](auto x) { return x.getPlayerId() == o.getPlayerId(); });
+    *i = o;
+    return true;
 }
 
 

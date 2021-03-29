@@ -7,26 +7,6 @@
 
 class Monopoly
 {
-public:
-	enum Type
-	{
-		AUTO,
-		FOOD,
-		TRAVEL,
-		CLOTHER,
-		PRISON,
-		BANK
-	};
-	Monopoly(std::string names[MAX_PLAYER], int);
-	std::list<std::tuple<std::string, int>>* GetPlayersList();
-	std::list<std::tuple<std::string, Type, int, bool>>* GetFieldsList();
-	std::list<std::tuple<std::string, Type, int, bool>> Fields;
-	std::list<std::tuple<std::string, int>> Players;
-	std::tuple<std::string, int>  GetPlayerInfo(int);
-	bool Buy(int p, std::tuple<std::string, Type, int, bool>);
-	std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);
-	bool Renta(int p, std::tuple<std::string, Type, int, bool>c);
-
 private:
 	static constexpr uint8_t MAX_PLAYER = 10U;
 	static constexpr uint8_t AVAILABLE = 0U;
@@ -51,6 +31,32 @@ private:
 	//static constexpr uint16_t BANK_BUY_PRICE = 0U;
 	static constexpr uint16_t BANK_RENTAL_CHARGE = 700U;
 
-};
+public:
+	enum class FieldType : uint8_t
+	{
+		AUTO,
+		FOOD,
+		TRAVEL,
+		CLOTHER,
+		PRISON,
+		BANK
+	};
+	using FieldTuple = std::tuple<std::string, Monopoly::FieldType, int, bool>;
+	using PlayerTuple = std::tuple<std::string, int>;
+	using PlayerList = std::list<PlayerTuple>;
+	using FieldList = std::list<FieldTuple>;
 
+	Monopoly(std::string names[MAX_PLAYER], int);
+	bool Buy(int playerIndex, FieldTuple field);
+	bool Renta(int playerIndex, FieldTuple field);
+	PlayerList* GetPlayersList();
+	FieldList* GetFieldsList();
+	FieldTuple GetFieldByName(std::string);
+	PlayerTuple  GetPlayerInfo(int);
+
+private:
+
+	FieldList _fields;
+	PlayerList _players;
+};
 #endif

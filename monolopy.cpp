@@ -7,130 +7,130 @@ Monopoly::Monopoly(string names[MAX_PLAYER], int countPlaers)
 {
 	for (int i = 0; i < countPlaers; i++)
 	{
-		Players.push_back(make_tuple(names[i], 6000));
+		_players.push_back(make_tuple(names[i], 6000));
 	}
-	Fields.push_back(make_tuple("Ford", Monopoly::AUTO, AVAILABLE, false));
-	Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, AVAILABLE, false));
-	Fields.push_back(make_tuple("Lamoda", Monopoly::CLOTHER, AVAILABLE, false));
-	Fields.push_back(make_tuple("Air Baltic", Monopoly::TRAVEL, AVAILABLE, false));
-	Fields.push_back(make_tuple("Nordavia", Monopoly::TRAVEL, AVAILABLE, false));
-	Fields.push_back(make_tuple("Prison", Monopoly::PRISON, AVAILABLE, false));
-	Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, AVAILABLE, false));
-	Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, AVAILABLE, false));
+	_fields.push_back(make_tuple("Ford", FieldType::AUTO, AVAILABLE, false));
+	_fields.push_back(make_tuple("MCDonald", FieldType::FOOD, AVAILABLE, false));
+	_fields.push_back(make_tuple("Lamoda", FieldType::CLOTHER, AVAILABLE, false));
+	_fields.push_back(make_tuple("Air Baltic", FieldType::TRAVEL, AVAILABLE, false));
+	_fields.push_back(make_tuple("Nordavia", FieldType::TRAVEL, AVAILABLE, false));
+	_fields.push_back(make_tuple("Prison", FieldType::PRISON, AVAILABLE, false));
+	_fields.push_back(make_tuple("MCDonald", FieldType::FOOD, AVAILABLE, false));
+	_fields.push_back(make_tuple("TESLA", FieldType::AUTO, AVAILABLE, false));
 }
 
 std::list<std::tuple<std::string, int>>* Monopoly::GetPlayersList()
 {
-	return &Players;
+	return &_players;
 }
 
-std::list<std::tuple<std::string, Monopoly::Type, int, bool>>* Monopoly::GetFieldsList()
+std::list<std::tuple<std::string, Monopoly::FieldType, int, bool>>* Monopoly::GetFieldsList()
 {
-	return &Fields;
+	return &_fields;
 }
 
-std::tuple<std::string, int> Monopoly::GetPlayerInfo(int m)
+Monopoly::PlayerTuple Monopoly::GetPlayerInfo(int playerIndex)
 {
-	list<std::tuple<std::string, int>>::iterator i = Players.begin();
-	advance(i, m - 1);
-	return *i;
+	PlayerList::iterator playerIterator = _players.begin();
+	advance(playerIterator, playerIndex - 1);
+	return *playerIterator;
 }
 
-bool Monopoly::Buy(int z, std::tuple<std::string, Type, int, bool> k)
+bool Monopoly::Buy(int playerIndex, FieldTuple field)
 {
-	auto x = GetPlayerInfo(z);
-	tuple<string, int> p;
-	list<tuple<std::string, Type, int, bool>>::iterator i;
-	list<tuple<string, int>>::iterator j = Players.begin();
-	switch (get<FIELD_TYPE_INDEX>(k))
+	auto player = GetPlayerInfo(playerIndex);
+	tuple<string, int> tempPlayer;
+	FieldList::iterator fieldIterator;
+	PlayerList::iterator playerIterator = _players.begin();
+	switch (get<FIELD_TYPE_INDEX>(field))
 	{
-	case AUTO:
-		if (get<FIELD_OWNERSHIP_INDEX>(k))
+	case FieldType::AUTO:
+		if (get<FIELD_OWNERSHIP_INDEX>(field))
 			return false;
-		p = make_tuple(get<PLAYER_NAME_INDEX>(x), get<PLAYER_MONEY_INDEX>(x) - AUTO_BUY_PRICE);
-		k = make_tuple(get<FIELD_NAME_INDEX>(k), get<FIELD_TYPE_INDEX>(k), z, get<FIELD_OWNERSHIP_INDEX>(k));
+		tempPlayer = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - AUTO_BUY_PRICE);
+		field = make_tuple(get<FIELD_NAME_INDEX>(field), get<FIELD_TYPE_INDEX>(field), playerIndex, get<FIELD_OWNERSHIP_INDEX>(field));
 		break;
-	case FOOD:
-		if (get<FIELD_OWNERSHIP_INDEX>(k))
+	case FieldType::FOOD:
+		if (get<FIELD_OWNERSHIP_INDEX>(field))
 			return false;
-		p = make_tuple(get<PLAYER_NAME_INDEX>(x), get<PLAYER_MONEY_INDEX>(x) - FOOD_BUY_PRICE);
-		k = make_tuple(get<FIELD_NAME_INDEX>(k), get<FIELD_TYPE_INDEX>(k), z, get<FIELD_OWNERSHIP_INDEX>(k));
+		tempPlayer = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - FOOD_BUY_PRICE);
+		field = make_tuple(get<FIELD_NAME_INDEX>(field), get<FIELD_TYPE_INDEX>(field), playerIndex, get<FIELD_OWNERSHIP_INDEX>(field));
 		break;
-	case TRAVEL:
-		if (get<FIELD_OWNERSHIP_INDEX>(k))
+	case FieldType::TRAVEL:
+		if (get<FIELD_OWNERSHIP_INDEX>(field))
 			return false;
-		p = make_tuple(get<PLAYER_NAME_INDEX>(x), get<PLAYER_MONEY_INDEX>(x) - TRAVEL_BUY_PRICE);
-		k = make_tuple(get<FIELD_NAME_INDEX>(k), get<FIELD_TYPE_INDEX>(k), z, get<FIELD_OWNERSHIP_INDEX>(k));
+		tempPlayer = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - TRAVEL_BUY_PRICE);
+		field = make_tuple(get<FIELD_NAME_INDEX>(field), get<FIELD_TYPE_INDEX>(field), playerIndex, get<FIELD_OWNERSHIP_INDEX>(field));
 		break;
-	case CLOTHER:
-		if (get<FIELD_OWNERSHIP_INDEX>(k))
+	case FieldType::CLOTHER:
+		if (get<FIELD_OWNERSHIP_INDEX>(field))
 			return false;
-		p = make_tuple(get<PLAYER_NAME_INDEX>(x), get<PLAYER_MONEY_INDEX>(x) - CLOTHER_BUY_PRICE);
-		k = make_tuple(get<FIELD_NAME_INDEX>(k), get<FIELD_TYPE_INDEX>(k), z, get<FIELD_OWNERSHIP_INDEX>(k));
+		tempPlayer = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - CLOTHER_BUY_PRICE);
+		field = make_tuple(get<FIELD_NAME_INDEX>(field), get<FIELD_TYPE_INDEX>(field), playerIndex, get<FIELD_OWNERSHIP_INDEX>(field));
 		break;
 	default:
 		return false;
 	};
-	i = find_if(Fields.begin(), Fields.end(), [k](auto x) { return get<PLAYER_NAME_INDEX>(x) == get<FIELD_NAME_INDEX>(k); });
-	*i = k;
-	advance(j, z - 1);
-	*j = p;
+	fieldIterator = find_if(_fields.begin(), _fields.end(), [field](auto player) { return get<PLAYER_NAME_INDEX>(player) == get<FIELD_NAME_INDEX>(field); });
+	*fieldIterator = field;
+	advance(playerIterator, playerIndex - 1);
+	*playerIterator = tempPlayer;
 	return true;
 }
 
-std::tuple<std::string, Monopoly::Type, int, bool>  Monopoly::GetFieldByName(std::string l)
+Monopoly::FieldTuple  Monopoly::GetFieldByName(std::string fieldName)
 {
-	std::list<std::tuple<std::string, Monopoly::Type, int, bool>>::iterator i = find_if(Fields.begin(), Fields.end(), [l](std::tuple<std::string, Monopoly::Type, int, bool> x) {
-		return get<FIELD_NAME_INDEX>(x) == l;
+	FieldList::iterator fieldListIterator = find_if(_fields.begin(), _fields.end(), [fieldName](FieldTuple field) {
+		return get<FIELD_NAME_INDEX>(field) == fieldName;
 		});
-	return *i;
+	return *fieldListIterator;
 }
 
-bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
+bool Monopoly::Renta(int playerIndex, FieldTuple field)
 {
-	tuple<string, int> z = GetPlayerInfo(m);
-	tuple<string, int> o;
+	tuple<string, int> player = GetPlayerInfo(playerIndex);
+	tuple<string, int> ownerPlayer;
 
-	switch (get<FIELD_TYPE_INDEX>(c))
+	switch (get<FIELD_TYPE_INDEX>(field))
 	{
-	case AUTO:
-		if (!get<FIELD_OWNERSHIP_INDEX>(c))
+	case FieldType::AUTO:
+		if (!get<FIELD_OWNERSHIP_INDEX>(field))
 			return false;
-		o = GetPlayerInfo(get<FIELD_OWNERSHIP_INDEX>(c));
-		o = make_tuple(get<PLAYER_NAME_INDEX>(o), get<PLAYER_MONEY_INDEX>(o) + AUTO_RENTAL_CHARGE);
-		z = make_tuple(get<PLAYER_NAME_INDEX>(z), get<PLAYER_MONEY_INDEX>(z) - AUTO_RENTAL_CHARGE);
+		ownerPlayer = GetPlayerInfo(get<FIELD_OWNERSHIP_INDEX>(field));
+		ownerPlayer = make_tuple(get<PLAYER_NAME_INDEX>(ownerPlayer), get<PLAYER_MONEY_INDEX>(ownerPlayer) + AUTO_RENTAL_CHARGE);
+		player = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - AUTO_RENTAL_CHARGE);
 		break;
-	case FOOD:
-		if (!get<FIELD_OWNERSHIP_INDEX>(c))
+	case FieldType::FOOD:
+		if (!get<FIELD_OWNERSHIP_INDEX>(field))
 			return false;
-	case TRAVEL:
-		if (!get<FIELD_OWNERSHIP_INDEX>(c))
+	case FieldType::TRAVEL:
+		if (!get<FIELD_OWNERSHIP_INDEX>(field))
 			return false;
-		o = GetPlayerInfo(get<FIELD_OWNERSHIP_INDEX>(c));
-		o = make_tuple(get<PLAYER_NAME_INDEX>(o), get<PLAYER_MONEY_INDEX>(o) + TRAVEL_RENTAL_CHARGE);
-		z = make_tuple(get<PLAYER_NAME_INDEX>(z), get<PLAYER_MONEY_INDEX>(z) - TRAVEL_RENTAL_CHARGE);
+		ownerPlayer = GetPlayerInfo(get<FIELD_OWNERSHIP_INDEX>(field));
+		ownerPlayer = make_tuple(get<PLAYER_NAME_INDEX>(ownerPlayer), get<PLAYER_MONEY_INDEX>(ownerPlayer) + TRAVEL_RENTAL_CHARGE);
+		player = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - TRAVEL_RENTAL_CHARGE);
 		break;
-	case CLOTHER:
-		if (!get<FIELD_OWNERSHIP_INDEX>(c))
+	case FieldType::CLOTHER:
+		if (!get<FIELD_OWNERSHIP_INDEX>(field))
 			return false;
-		o = GetPlayerInfo(get<FIELD_OWNERSHIP_INDEX>(c));
-		o = make_tuple(get<PLAYER_NAME_INDEX>(o), get<PLAYER_MONEY_INDEX>(o) + CLOTHER_RENTAL_CHARGE);
-		z = make_tuple(get<PLAYER_NAME_INDEX>(z), get<PLAYER_MONEY_INDEX>(z) - CLOTHER_RENTAL_CHARGE);
+		ownerPlayer = GetPlayerInfo(get<FIELD_OWNERSHIP_INDEX>(field));
+		ownerPlayer = make_tuple(get<PLAYER_NAME_INDEX>(ownerPlayer), get<PLAYER_MONEY_INDEX>(ownerPlayer) + CLOTHER_RENTAL_CHARGE);
+		player = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - CLOTHER_RENTAL_CHARGE);
 		break;
-	case PRISON:
-		z = make_tuple(get<PLAYER_NAME_INDEX>(z), get<PLAYER_MONEY_INDEX>(z) - PRISON_RENTAL_CHARGE);
+	case FieldType::PRISON:
+		player = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - PRISON_RENTAL_CHARGE);
 		break;
-	case BANK:
-		z = make_tuple(get<PLAYER_NAME_INDEX>(z), get<PLAYER_MONEY_INDEX>(z) - BANK_RENTAL_CHARGE);
+	case FieldType::BANK:
+		player = make_tuple(get<PLAYER_NAME_INDEX>(player), get<PLAYER_MONEY_INDEX>(player) - BANK_RENTAL_CHARGE);
 		break;
 	default:
 		return false;
 	}
-	list<tuple<string, int>>::iterator i = Players.begin();
-	advance(i, m - 1);
-	*i = z;
-	i = find_if(Players.begin(), Players.end(), [o](auto x) { return get<PLAYER_NAME_INDEX>(x) == get<PLAYER_NAME_INDEX>(o); });
-	*i = o;
+	PlayerList::iterator playerIterator = _players.begin();
+	advance(playerIterator, playerIndex - 1);
+	*playerIterator = player;
+	playerIterator = find_if(_players.begin(), _players.end(), [ownerPlayer](auto player) { return get<PLAYER_NAME_INDEX>(x) == get<PLAYER_NAME_INDEX>(ownerPlayer); });
+	*playerIterator = ownerPlayer;
 	return true;
 }
 

@@ -8,8 +8,31 @@
 
 using namespace std;
 
+
+void show_cells(const TicTacToe& game)
+{
+    system("cls");
+    auto cells = game.get_cells();
+
+    cout << "Cell numbers: \n";
+    cout << "-" << 1 << "-" << "|" << "-" << 2 << "-" << "|" << "-" << 3 << "-" << endl;
+    cout << "-" << 4 << "-" << "|" << "-" << 5 << "-" << "|" << "-" << 6 << "-" << endl;
+    cout << "-" << 7 << "-" << "|" << "-" << 8 << "-" << "|" << "-" << 9 << "-" << endl;
+
+    cout << "Current situation (--- empty):\n" << endl;
+    cout << "-" << cells[0] << "-" << '|' << "-" << cells[1] << "-" << '|' << "-" << cells[2] << "-" << endl;
+    cout << "-" << cells[3] << "-" << '|' << "-" << cells[4] << "-" << '|' << "-" << cells[5] << "-" << endl;
+    cout << "-" << cells[6] << "-" << '|' << "-" << cells[7] << "-" << '|' << "-" << cells[8] << "-" << "\n" << endl;
+}
+
+
+void result(const TicTacToe& game, char win) {
+    if (win == 'X')
+        cout << game.get_player_name1() << " you won congratulations " << game.get_player_name2() << " you lose..." << endl;
+    else if (win == 'O') cout << game.get_player_name2() << " you won congratulations  " << game.get_player_name1() << " you lose..." << endl;
+}
+
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) {
-    TicTacToe game;
     string PlayerName1, PlayerName2;
     do {
         cout << "Enter the name of the first player: ";
@@ -19,7 +42,10 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) 
         std::cin >> PlayerName2;
     } while (PlayerName1 == PlayerName2);
     
-    game.show_cells();
+    TicTacToe game(PlayerName1, PlayerName2);
+    show_cells(game);
+
+    char win = '-';
 
     for (int move = 1; move <= 9; move++) {
         int player = move % 2;
@@ -41,18 +67,17 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) 
         }
         game.make_move(player + 1, cell);
 
-        game.show_cells();
+        show_cells(game);
         
         if (move >= 5)
         {
-            game.win = game.check();
-            if (game.win != '-')
+            win = game.check();
+            if (win != '-')
                 break;
         }
-  
     }
 
-    game.result();
+    result(game, win);
    
     return 0;
 }

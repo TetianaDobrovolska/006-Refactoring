@@ -140,6 +140,9 @@ INSTANTIATE_TEST_SUITE_P(TicTacToeCellSuite, CellMoveTest,
 TEST_P(GameTest, TicTacToeTestGame) {
     for (const auto value : std::get<0>(GetParam())) {
         game.make_move(value);
+        if (TicTacToe::DRAW != game.winner()) {
+            break;
+        }
     }
 
     const auto winner = std::get<1>(GetParam());
@@ -149,10 +152,25 @@ TEST_P(GameTest, TicTacToeTestGame) {
 
 INSTANTIATE_TEST_SUITE_P(TicTacToeSuite, GameTest,
                          testing::Values(
+                             make_tuple(vector<size_t>{1,2,3,4,5,6,7,8,9}, TicTacToe::PLAYER1),
+                             make_tuple(vector<size_t>{1,2,3,4,5,6,9}, TicTacToe::PLAYER1),
+                             make_tuple(vector<size_t>{1,5,2,4,3}, TicTacToe::PLAYER1),
+                             make_tuple(vector<size_t>{4,1,5,8,6}, TicTacToe::PLAYER1),
+                             make_tuple(vector<size_t>{7,5,8,6,9}, TicTacToe::PLAYER1),
+                             make_tuple(vector<size_t>{1,2,4,5,7,9}, TicTacToe::PLAYER1),
+                             make_tuple(vector<size_t>{2,4,5,7,8}, TicTacToe::PLAYER1),
+                             make_tuple(vector<size_t>{3,2,6,5,9}, TicTacToe::PLAYER1),
+
+                             make_tuple(vector<size_t>{2,1,3,4,5,7,6,8,9}, TicTacToe::PLAYER2),
+                             make_tuple(vector<size_t>{9,2,4,5,7,8}, TicTacToe::PLAYER2),
+                             make_tuple(vector<size_t>{1,3,2,6,5,9}, TicTacToe::PLAYER2),
+                             make_tuple(vector<size_t>{8,1,5,2,4,3}, TicTacToe::PLAYER2),
+                             make_tuple(vector<size_t>{9,4,1,5,8,6}, TicTacToe::PLAYER2),
+                             make_tuple(vector<size_t>{1,7,5,8,6,9}, TicTacToe::PLAYER2),
+                             make_tuple(vector<size_t>{9,1,2,3,4,5,6,7,8}, TicTacToe::PLAYER2),
+                             make_tuple(vector<size_t>{2,3,4,5,6,7}, TicTacToe::PLAYER2),
+
                              make_tuple(vector<size_t>{5,6,7,8}, TicTacToe::DRAW),
                              make_tuple(vector<size_t>{5,1,3,7,4,6,2,8,9}, TicTacToe::DRAW),
-                             make_tuple(vector<size_t>{1,5,2,4,3}, TicTacToe::PLAYER1),
-                             make_tuple(vector<size_t>{1,2,3,4,5,6,7,8,9}, TicTacToe::PLAYER1),
-                             make_tuple(vector<size_t>{2,1,3,4,5,7,6,8,9}, TicTacToe::PLAYER2),
                              make_tuple(vector<size_t>{1,2,3,4,5}, TicTacToe::DRAW)
                              ));

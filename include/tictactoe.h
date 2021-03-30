@@ -16,8 +16,8 @@ public:
         PLAYER2
     };
 
-    bool check_cell(size_t cell) const;
-    void make_move(size_t cell);
+    bool check_cell(const size_t cell) const;
+    void make_move(const size_t cell);
 
     player_code winner() const;
 
@@ -37,8 +37,8 @@ private:
 
     char check() const;
     void switch_player();
-    bool horizontal_match(size_t row, char& sym) const;
-    bool vertical_match(size_t column, char& sym) const;
+    bool horizontal_match(const size_t row, char& sym) const;
+    bool vertical_match(const size_t column, char& sym) const;
     bool diagonal_match(char& sym) const;
 };
 

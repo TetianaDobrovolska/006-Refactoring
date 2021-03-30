@@ -26,7 +26,7 @@ TicTacToe::~TicTacToe()
 
 }
 
-bool TicTacToe::check_cell(size_t cell) const
+bool TicTacToe::check_cell(const size_t cell) const
 {
     const auto cell_value = m_cells[cell - INDEX_OFFSET];
     const bool check_failed = cell > NUMBER_OF_CELLS || cell < START_CELL_NUMBER || cell_value != player_sign[DRAW];
@@ -81,7 +81,7 @@ const string& TicTacToe::get_player_name2() const
     return m_player_name2;
 }
 
-const string &TicTacToe::get_current_player_name() const
+const string& TicTacToe::get_current_player_name() const
 {
     return current_player == PLAYER2 ? m_player_name2 : m_player_name1;
 }
@@ -91,24 +91,28 @@ void TicTacToe::switch_player()
     current_player = current_player == PLAYER1 ? PLAYER2 : PLAYER1;
 }
 
-bool TicTacToe::horizontal_match(size_t row, char &sym) const
+bool TicTacToe::horizontal_match(size_t row, char& sym) const
 {
-    const bool result = m_cells[row * NUMBER_OF_ROWS] == m_cells[row * NUMBER_OF_ROWS + 1] &&
-            m_cells[row * NUMBER_OF_ROWS + 1] == m_cells[row * NUMBER_OF_ROWS + 2];
-    if (result) {
+    const bool first_two_equal = m_cells[row * NUMBER_OF_ROWS] == m_cells[row * NUMBER_OF_ROWS + 1];
+    const bool last_two_equal = m_cells[row * NUMBER_OF_ROWS + 1] == m_cells[row * NUMBER_OF_ROWS + 2];
+    const bool matched = first_two_equal && last_two_equal;
+
+    if (matched) {
         sym = m_cells[row * NUMBER_OF_ROWS];
     }
-    return result;
+    return matched;
 }
 
 bool TicTacToe::vertical_match(size_t column, char& sym) const
 {
-    const bool result = m_cells[column] == m_cells[column + NUMBER_OF_ROWS] &&
-            m_cells[column + NUMBER_OF_ROWS] == m_cells[column + 2 * NUMBER_OF_ROWS];
-    if (result) {
+    const bool first_two_equal = m_cells[column] == m_cells[column + NUMBER_OF_ROWS];
+    const bool last_two_equal = m_cells[column + NUMBER_OF_ROWS] == m_cells[column + 2 * NUMBER_OF_ROWS];
+    const bool matched = first_two_equal && last_two_equal;
+
+    if (matched) {
         sym = m_cells[column];
     }
-    return result;
+    return matched;
 }
 
 bool TicTacToe::diagonal_match(char& sym) const
@@ -124,10 +128,13 @@ bool TicTacToe::diagonal_match(char& sym) const
         DOWN,
         RIGHT_DOWN
     };
-    const bool result = (m_cells[RIGHT_UP] == m_cells[CENTER] && m_cells[CENTER] == m_cells[LEFT_DOWN]) ||
-            (m_cells[LEFT_UP] == m_cells[CENTER] && m_cells[CENTER] == m_cells[RIGHT_DOWN]);
-    if (result) {
+    const bool rightup_equal_center = m_cells[RIGHT_UP] == m_cells[CENTER];
+    const bool leftdown_equal_center = m_cells[CENTER] == m_cells[LEFT_DOWN];
+    const bool leftup_equal_center = m_cells[LEFT_UP] == m_cells[CENTER];
+    const bool rightdown_equal_center = m_cells[CENTER] == m_cells[RIGHT_DOWN];
+    const bool matched = (rightup_equal_center && leftdown_equal_center) || (leftup_equal_center && rightdown_equal_center);
+    if (matched) {
         sym = m_cells[CENTER];
     }
-    return result;
+    return matched;
 }

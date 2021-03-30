@@ -1,8 +1,16 @@
 project(monopoly)
 
 set(SRC
-	monopoly.cpp
-	main.cpp
+       monopoly.cpp
+       player.cpp
+       organisation.cpp
+       auto.cpp
+       food.cpp
+       travel.cpp
+       clothes.cpp
+       bank.cpp
+       prison.cpp
+       main.cpp
 )
 
 add_executable(${PROJECT_NAME}

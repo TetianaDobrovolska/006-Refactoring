@@ -17,9 +17,12 @@ public:
 		QUEEN
 	};
 	ChessFigure(FigureType type,std::string coord);
+
 	bool Move(std::string nextCoord);
 	virtual ~ChessFigure();
+
 private:
+        bool isValidCoord(std::string coord);
 	FigureType type;
 	std::string currentCoord;
 };

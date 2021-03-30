@@ -7,24 +7,55 @@ class ChessFigure
 {
 	
 public:
-	enum FigureType
-	{
-		ROOK,
-		KNIGHT,
-		BISHOP,
-		PAWN,
-		KING,
-		QUEEN
-	};
-	ChessFigure(FigureType type,std::string coord);
+    ChessFigure(std::string coord);
 
-	bool Move(std::string nextCoord);
-	virtual ~ChessFigure();
+    virtual bool Move(std::string nextCoord) = 0;
+    virtual ~ChessFigure();
+protected:
+    bool isValidCoord(std::string coord);
+    std::string currentCoord;
+};
 
-private:
-        bool isValidCoord(std::string coord);
-	FigureType type;
-	std::string currentCoord;
+class RookFigure: public ChessFigure
+{
+public:
+    RookFigure(std::string coord);
+    bool Move(std::string nextCoord) override;
+};
+
+class KnightFigure: public ChessFigure
+{
+public:
+    KnightFigure(std::string coord);
+    bool Move(std::string nextCoord) override;
+};
+
+class BishopFigure: public ChessFigure
+{
+public:
+    BishopFigure(std::string coord);
+    bool Move(std::string nextCoord) override;
+};
+
+class PawnFigure: public ChessFigure
+{
+public:
+    PawnFigure(std::string coord);
+    bool Move(std::string nextCoord) override;
+};
+
+class KingFigure: public ChessFigure
+{
+public:
+    KingFigure(std::string coord);
+    bool Move(std::string nextCoord) override;
+};
+
+class QueenFigure: public ChessFigure
+{
+public:
+    QueenFigure(std::string coord);
+    bool Move(std::string nextCoord) override;
 };
 
 #endif

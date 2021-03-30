@@ -14,82 +14,46 @@ ChessFigure::~ChessFigure()
 {
 }
 
+bool ChessFigure::CheckMovementBoundary(const std::string& nextCoord)
+{
+    return (nextCoord[0] >= ChessFigure::FIRST_COL &&
+            nextCoord[0] <= ChessFigure::LAST_COL &&
+            nextCoord[1] >= ChessFigure::FIRST_ROW &&
+            nextCoord[1] <= ChessFigure::LAST_ROW);
+}
+
 bool ChessFigure::Move(string nextCoord)
 {
-	if (type == PAWN)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (nextCoord[0] != currentCoord[0] || nextCoord[1] <= currentCoord[1] || (nextCoord[1] - currentCoord[1] != 1 && (currentCoord[1] != '2' || nextCoord[1] != '4')))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-			
-	}
-	
-	else if (type == ROOK)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if ((nextCoord[0] != currentCoord[0]) && (nextCoord[1] != currentCoord[1]) || ((nextCoord[0] == currentCoord[0]) && (nextCoord[1] == currentCoord[1])))
-				return false;
-			else
-				return true;
+    if (!CheckMovementBoundary(nextCoord)) {
+        return false;
+    }
 
-		}
-		else return false;
-	}
-	else if (type == KNIGHT)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			int dx, dy;
-			dx = abs(nextCoord[0] - currentCoord[0]);
-			dy = abs(nextCoord[1] - currentCoord[1]);
-		    if (!(abs(nextCoord[0] - currentCoord[0]) == 1 && abs(nextCoord[1] - currentCoord[1]) == 2 || abs(nextCoord[0] - currentCoord[0]) == 2 && abs(nextCoord[1] - currentCoord[1]) == 1))
-			  return false;
-			else
-			return true;
-		}
-		else return false;
-	}
-	
-	else if (type == BISHOP)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1])))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-	}
-	
-	else if (type == KING)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) <= 1 && abs(nextCoord[1] - currentCoord[1]) <= 1))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-	}
-	else if (type == QUEEN)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1]) || nextCoord[0] == currentCoord[0] || nextCoord[1] == currentCoord[1]))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-	}
-	else
-		return false;
+    int colSteps = abs(nextCoord[0] - currentCoord[0]);
+    int rawSteps = abs(nextCoord[1] - currentCoord[1]);
+    bool colChanged = colSteps != 0;
+    bool rawChanged = rawSteps != 0;
+    bool orthogonalMove = colChanged && !rawChanged || !colChanged && rawChanged;
+    bool diagonalMove = colSteps == rawSteps;
+
+    switch (type) {
+    case PAWN:
+        if (colChanged || nextCoord[1] <= currentCoord[1] ||
+           (rawSteps != 1 && (currentCoord[1] != '2' || nextCoord[1] != '4')))
+            return false;
+        else
+            return true;
+
+    case ROOK:
+        return orthogonalMove;
+    case KNIGHT:
+        return (colSteps == 1 && rawSteps == 2 || colSteps == 2 && rawSteps == 1);
+    case BISHOP:
+        return diagonalMove;
+    case KING:
+        return (colSteps <= 1 && rawSteps <= 1);
+    case QUEEN:
+        return (diagonalMove || !colChanged || !rawChanged);
+    default:
+        return false;
+    }
 }

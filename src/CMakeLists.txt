@@ -12,6 +12,7 @@ add_executable(game
 # Declare the library
 add_library(tictactoe STATIC
     tictactoe.cpp
+    player.cpp
 )
 
 target_link_libraries(game tictactoe)

@@ -1,8 +1,10 @@
 #include "tictactoe.h"
 #include <stdexcept>
 #include <algorithm>
+#include <cassert>
 
 using namespace std;
+using namespace tictactoe;
 
 const vector<char> TicTacToe::player_sign {
     '-',
@@ -13,9 +15,10 @@ const vector<char> TicTacToe::player_sign {
 static const size_t INDEX_OFFSET = 1;
 static const size_t START_CELL_NUMBER = 1;
 
+
 TicTacToe::TicTacToe(const std::string& player1, const std::string& player2) :
-    m_player_name1(player1),
-    m_player_name2(player2),
+    m_players{new NullPlayer(), new Player(player_sign[PLAYER1], PLAYER1, player1), new Player(player_sign[PLAYER2], PLAYER2, player2)},
+    m_current_player(m_players[PLAYER1]),
     m_cells(NUMBER_OF_CELLS, player_sign[DRAW])
 {
 
@@ -23,7 +26,9 @@ TicTacToe::TicTacToe(const std::string& player1, const std::string& player2) :
 
 TicTacToe::~TicTacToe()
 {
-
+    for(auto player : m_players) {
+        delete player;
+    }
 }
 
 bool TicTacToe::check_cell(const size_t cell) const
@@ -38,7 +43,7 @@ void TicTacToe::make_move(size_t cell)
     if (!check_cell(cell)) {
         throw out_of_range("wrong cell");
     }
-    m_cells[cell - INDEX_OFFSET] = player_sign[current_player];
+    m_cells[cell - INDEX_OFFSET] = m_current_player->getSymbol();
     switch_player();
 }
 
@@ -59,11 +64,16 @@ char TicTacToe::check() const
     return winner_sign;
 }
 
-TicTacToe::player_code TicTacToe::winner() const
+const IPlayer& TicTacToe::winner() const
 {
     const auto sign = check();
-    const auto it = find(player_sign.cbegin(), player_sign.cend(), sign);
-    return static_cast<player_code>(it - player_sign.cbegin());
+    if (sign == player_sign[DRAW]) {
+        return *m_players[DRAW];
+    }
+    auto predicate = [=](IPlayer* player) { return !player->isNull() && player->getSymbol() == sign; };
+    const auto it = find_if(m_players.cbegin(), m_players.cend(), predicate);
+    assert(it != m_players.cend());
+    return **it;
 }
 
 const std::vector<char>& TicTacToe::get_cells() const
@@ -73,23 +83,23 @@ const std::vector<char>& TicTacToe::get_cells() const
 
 const string& TicTacToe::get_player_name1() const
 {
-    return m_player_name1;
+    return m_players[PLAYER1]->getName();
 }
 
 
 const string& TicTacToe::get_player_name2() const
 {
-    return m_player_name2;
+    return m_players[PLAYER2]->getName();
 }
 
 const string& TicTacToe::get_current_player_name() const
 {
-    return current_player == PLAYER2 ? m_player_name2 : m_player_name1;
+    return m_current_player->getName();
 }
 
 void TicTacToe::switch_player()
 {
-    current_player = current_player == PLAYER1 ? PLAYER2 : PLAYER1;
+    m_current_player = m_current_player->getId() == PLAYER1 ? m_players[PLAYER2] : m_players[PLAYER1];
 }
 
 bool TicTacToe::horizontal_match(size_t row, char& sym) const

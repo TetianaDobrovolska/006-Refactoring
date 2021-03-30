@@ -7,6 +7,7 @@
 #include "tictactoe.h"
 
 using namespace std;
+using namespace tictactoe;
 
 void show_cells(const TicTacToe& game)
 {
@@ -25,10 +26,14 @@ void show_cells(const TicTacToe& game)
 }
 
 
-void result(const TicTacToe& game, TicTacToe::player_code win) {
-    if (win == TicTacToe::PLAYER1)
+void result(const TicTacToe& game, const IPlayer& win) {
+    if (win.isNull()) {
+        cout << "Nobody won..." << endl;
+        return;
+    }
+    if (win.getId() == PLAYER1)
         cout << game.get_player_name1() << " you won congratulations " << game.get_player_name2() << " you lose..." << endl;
-    else if (win == TicTacToe::PLAYER2) cout << game.get_player_name2() << " you won congratulations  " << game.get_player_name1() << " you lose..." << endl;
+    else if (win.getId() == PLAYER2) cout << game.get_player_name2() << " you won congratulations  " << game.get_player_name1() << " you lose..." << endl;
 }
 
 int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) {
@@ -43,8 +48,6 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) 
     
     TicTacToe game(PlayerName1, PlayerName2);
     show_cells(game);
-
-    TicTacToe::player_code win = TicTacToe::DRAW;
 
     for (size_t move = 1; move <= TicTacToe::NUMBER_OF_CELLS; move++) {
 
@@ -65,13 +68,12 @@ int main(__attribute__((unused)) int argc, __attribute__((unused)) char** argv) 
         
         if (move >= 5)
         {
-            win = game.winner();
-            if (win != TicTacToe::DRAW)
+            if (!game.winner().isNull())
                 break;
         }
     }
 
-    result(game, win);
+    result(game, game.winner());
    
     return 0;
 }

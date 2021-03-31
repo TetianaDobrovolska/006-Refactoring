@@ -4,11 +4,10 @@
 
 using namespace std;
 
-ChessFigure::ChessFigure(ChessFigure::FigureType type, std::string coord) : type(type),
+ChessFigure::ChessFigure(const std::string& coord) :
 currentCoord(coord)
 {
 }
-
 
 ChessFigure::~ChessFigure()
 {
@@ -23,48 +22,51 @@ bool ChessFigure::check_coordinates(const char letter, const char number)
 
 bool ChessFigure::Move(string nextCoord)
 {
-    const char x = nextCoord.at(0);
-    const char y = nextCoord.at(1);
-    if (!check_coordinates(x, y)) {
+    const MoveData data {
+        nextCoord.at(0),
+        nextCoord.at(1),
+        abs(data.nextX - currentX()),
+        abs(data.nextY - currentY()),
+        data.nextX != currentX(),
+        data.nextY != currentY()
+    };
+
+    if (!check_coordinates(data.nextX, data.nextY)) {
         return false;
     }
 
-    const char current_x = currentCoord.at(0);
-    const char current_y = currentCoord.at(1);
+    return moveFigure(data);
+}
 
-    int dx = abs(x - current_x);
-    int dy = abs(y - current_y);
-    const bool diagonal_move = dx == dy;
-    const bool x_changed = x != current_x;
-    const bool y_changed = y != current_y;
+bool BishopFigure::moveFigure(const ChessFigure::MoveData &data)
+{
+    return data.isDiagonal();
+}
 
-	if (type == PAWN)
-	{
-        return !(x_changed || nextCoord[1] <= current_y || (y - current_y != 1 && (current_y != '2' || y != '4')));
-	}
-	
-	else if (type == ROOK)
-	{
-        return !((x_changed && y != current_y) || (!x_changed && !y_changed));
-	}
-	else if (type == KNIGHT)
-	{
-        return (dx == 1 && dy == 2) || (dx == 2 && dy == 1);
-    }
-	
-	else if (type == BISHOP)
-	{
-        return diagonal_move;
-	}
-	
-	else if (type == KING)
-	{
-        return dx <= 1 && dy <= 1;
-	}
-	else if (type == QUEEN)
-	{
-        return diagonal_move || !x_changed || !y_changed;
-	}
-	else
-		return false;
+bool KnightFigure::moveFigure(const ChessFigure::MoveData &data)
+{
+    return (data.dx == 1 && data.dy == 2) || (data.dx == 2 && data.dy == 1);
+}
+
+bool RookFigure::moveFigure(const ChessFigure::MoveData &data)
+{
+    return (data.isXchanged && !data.isYchanged) || (!data.isXchanged && data.isYchanged);
+}
+
+bool PawnFigure::moveFigure(const ChessFigure::MoveData &data)
+{
+    if (data.isXchanged) return false;
+    if (data.nextY <= currentY()) return false;
+
+    return (currentY() == '2' && data.nextY == '4') || data.nextY - currentY() == 1;
+}
+
+bool KingFigure::moveFigure(const ChessFigure::MoveData &data)
+{
+    return data.dx <= 1 && data.dy <= 1;
+}
+
+bool QueenFigure::moveFigure(const ChessFigure::MoveData &data)
+{
+    return data.isDiagonal() || !data.isXchanged || !data.isYchanged;
 }

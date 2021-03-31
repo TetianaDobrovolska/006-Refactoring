@@ -49,6 +49,10 @@ const Monopoly::PlayerVector* Monopoly::GetPlayers() const
 	return &_players;
 }
 
+const Monopoly::FieldList* Monopoly::GetFields() const
+{
+	return &_fields;
+}
 
 bool Monopoly::Buy(const std::string playerName, const std::string fieldName)
 {
@@ -83,6 +87,3 @@ bool Monopoly::Renta(const std::string playerName, const Field* field)
 
 	return true;
 }
-
-
-

@@ -5,28 +5,12 @@
 #include <tuple>
 #include <string>
 
-static constexpr uint8_t MAX_PLAYER = 10U;
-
-static constexpr uint16_t PLAYER_STARTING_MONEY = 6000U;
-
-static constexpr uint16_t AUTO_BUY_PRICE = 500U;
-static constexpr uint16_t AUTO_RENTAL_CHARGE = 250U;
-static constexpr uint16_t FOOD_BUY_PRICE = 250U;
-static constexpr uint16_t FOOD_RENTAL_CHARGE = 0U;
-static constexpr uint16_t TRAVEL_BUY_PRICE = 700U;
-static constexpr uint16_t TRAVEL_RENTAL_CHARGE = 250U;
-static constexpr uint16_t CLOTHER_BUY_PRICE = 100U;
-static constexpr uint16_t CLOTHER_RENTAL_CHARGE = 250U;
-static constexpr uint16_t PRISON_BUY_PRICE = std::numeric_limits<uint16_t>::max();
-static constexpr uint16_t PRISON_RENTAL_CHARGE = 1000U;
-static constexpr uint16_t BANK_BUY_PRICE = std::numeric_limits<uint16_t>::max();
-static constexpr uint16_t BANK_RENTAL_CHARGE = 700U;
-
 class Player;
 class Field;
 
 class Monopoly
 {
+	static constexpr uint8_t MAX_PLAYER = 10U;
 public:
 	using PlayerVector = std::vector<Player>;
 	using FieldList = std::list<Field*>;
@@ -35,8 +19,10 @@ public:
 
 	bool Renta(const std::string playerName, const Field* field);
 	const PlayerVector* GetPlayers() const;
+	const FieldList* GetFields() const;
 	bool Buy(const std::string playerName, const std::string fieldName);
 private:
+
 	Field* GetFieldByName(std::string fieldName) const;
 	Player* GetPlayerByName(std::string playerName) const;
 
@@ -56,6 +42,7 @@ public:
 	uint16_t getPlayerBalance() const { return _balance; };
 	void changePlayerBalance(uint16_t value) { _balance += value; };
 private:
+	static constexpr uint16_t PLAYER_STARTING_MONEY = 6000U;
 	const std::string _name;
 	uint16_t _balance;
 };
@@ -92,6 +79,9 @@ public:
 	virtual uint16_t getRentalCost() const override {
 		return AUTO_RENTAL_CHARGE;
 	}
+private:
+	static constexpr uint16_t AUTO_BUY_PRICE = 500U;
+	static constexpr uint16_t AUTO_RENTAL_CHARGE = 250U;
 };
 
 class Food : public Field
@@ -105,6 +95,9 @@ public:
 	virtual uint16_t getRentalCost() const override {
 		return FOOD_RENTAL_CHARGE;
 	}
+private:
+	static constexpr uint16_t FOOD_BUY_PRICE = 250U;
+	static constexpr uint16_t FOOD_RENTAL_CHARGE = 0U;
 };
 
 class Travel : public Field
@@ -118,6 +111,9 @@ public:
 	virtual uint16_t getRentalCost() const override {
 		return TRAVEL_RENTAL_CHARGE;
 	}
+private:
+	static constexpr uint16_t TRAVEL_BUY_PRICE = 700U;
+	static constexpr uint16_t TRAVEL_RENTAL_CHARGE = 250U;
 };
 
 class Clother : public Field
@@ -131,6 +127,9 @@ public:
 	virtual uint16_t getRentalCost() const override {
 		return CLOTHER_RENTAL_CHARGE;
 	}
+private:
+	static constexpr uint16_t CLOTHER_BUY_PRICE = 100U;
+	static constexpr uint16_t CLOTHER_RENTAL_CHARGE = 250U;
 };
 
 class Prison : public Field
@@ -144,6 +143,9 @@ public:
 	virtual uint16_t getRentalCost() const override {
 		return PRISON_RENTAL_CHARGE;
 	}
+private:
+	static constexpr uint16_t PRISON_BUY_PRICE = std::numeric_limits<uint16_t>::max();
+	static constexpr uint16_t PRISON_RENTAL_CHARGE = 1000U;
 };
 
 class Bank : public Field
@@ -157,5 +159,8 @@ public:
 	virtual uint16_t getRentalCost() const override {
 		return BANK_RENTAL_CHARGE;
 	}
+private:
+	static constexpr uint16_t BANK_BUY_PRICE = std::numeric_limits<uint16_t>::max();
+	static constexpr uint16_t BANK_RENTAL_CHARGE = 700U;
 };
 #endif

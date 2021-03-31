@@ -19,9 +19,11 @@ public:
 	ChessFigure(FigureType type,std::string coord);
 	bool Move(std::string nextCoord);
 	virtual ~ChessFigure();
+
 private:
 	FigureType type;
 	std::string currentCoord;
+    static bool check_coordinates(const char letter, const char number);
 };
 
 #endif

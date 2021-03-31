@@ -14,81 +14,56 @@ ChessFigure::~ChessFigure()
 {
 }
 
+bool ChessFigure::check_coordinates(const char letter, const char number)
+{
+    const bool letter_is_valid = letter >= 'A' && letter <= 'H';
+    const bool number_is_valid = number >= '1' && number <= '8';
+    return letter_is_valid && number_is_valid;
+}
+
 bool ChessFigure::Move(string nextCoord)
 {
+    const char x = nextCoord.at(0);
+    const char y = nextCoord.at(1);
+    if (!check_coordinates(x, y)) {
+        return false;
+    }
+
+    const char current_x = currentCoord.at(0);
+    const char current_y = currentCoord.at(1);
+
+    int dx = abs(x - current_x);
+    int dy = abs(y - current_y);
+    const bool diagonal_move = dx == dy;
+    const bool x_changed = x != current_x;
+    const bool y_changed = y != current_y;
+
 	if (type == PAWN)
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (nextCoord[0] != currentCoord[0] || nextCoord[1] <= currentCoord[1] || (nextCoord[1] - currentCoord[1] != 1 && (currentCoord[1] != '2' || nextCoord[1] != '4')))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-			
+        return !(x_changed || nextCoord[1] <= current_y || (y - current_y != 1 && (current_y != '2' || y != '4')));
 	}
 	
 	else if (type == ROOK)
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if ((nextCoord[0] != currentCoord[0]) && (nextCoord[1] != currentCoord[1]) || ((nextCoord[0] == currentCoord[0]) && (nextCoord[1] == currentCoord[1])))
-				return false;
-			else
-				return true;
-
-		}
-		else return false;
+        return !((x_changed && y != current_y) || (!x_changed && !y_changed));
 	}
 	else if (type == KNIGHT)
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			int dx, dy;
-			dx = abs(nextCoord[0] - currentCoord[0]);
-			dy = abs(nextCoord[1] - currentCoord[1]);
-		    if (!(abs(nextCoord[0] - currentCoord[0]) == 1 && abs(nextCoord[1] - currentCoord[1]) == 2 || abs(nextCoord[0] - currentCoord[0]) == 2 && abs(nextCoord[1] - currentCoord[1]) == 1))
-			  return false;
-			else
-			return true;
-		}
-		else return false;
-	}
+        return (dx == 1 && dy == 2) || (dx == 2 && dy == 1);
+    }
 	
 	else if (type == BISHOP)
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1])))
-				return false;
-			else
-				return true;
-		}
-		else return false;
+        return diagonal_move;
 	}
 	
 	else if (type == KING)
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) <= 1 && abs(nextCoord[1] - currentCoord[1]) <= 1))
-				return false;
-			else
-				return true;
-		}
-		else return false;
+        return dx <= 1 && dy <= 1;
 	}
 	else if (type == QUEEN)
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1]) || nextCoord[0] == currentCoord[0] || nextCoord[1] == currentCoord[1]))
-				return false;
-			else
-				return true;
-		}
-		else return false;
+        return diagonal_move || !x_changed || !y_changed;
 	}
 	else
 		return false;

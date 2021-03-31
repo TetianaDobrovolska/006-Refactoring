@@ -17,11 +17,51 @@ public:
 		QUEEN
 	};
 	ChessFigure(FigureType type,std::string coord);
-	bool Move(std::string nextCoord);
+    bool CheckValidCoordinate(std::string nextCoord);
+	virtual bool Move(std::string nextCoord);
 	virtual ~ChessFigure();
-private:
+protected:
 	FigureType type;
 	std::string currentCoord;
+};
+
+class Rook: ChessFigure
+{
+
+public:
+
+  bool Move(std::string nextCoord);
+
+};
+
+class Pawn: ChessFigure
+{
+public:
+    bool Move(std::string nextCoord);
+};
+
+class Knight: ChessFigure
+{
+public:
+    bool Move(std::string nextCoord);
+};
+
+class Bishop: ChessFigure
+{
+public:
+    bool Move(std::string nextCoord);
+};
+
+class King: ChessFigure
+{
+public:
+    bool Move(std::string nextCoord);
+};
+
+class Queen: ChessFigure
+{
+public:
+    bool Move(std::string nextCoord);
 };
 
 #endif

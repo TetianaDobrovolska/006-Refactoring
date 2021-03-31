@@ -1,0 +1,5 @@
+include/ChessFigure.hpp
+src/ChessFigure.cpp
+src/main.cpp
+test/main_tests/main.cpp
+test/main_tests/test.cpp

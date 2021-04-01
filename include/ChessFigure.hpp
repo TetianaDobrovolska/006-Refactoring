@@ -3,25 +3,16 @@
 
 #include <string>
 
-class ChessFigure
-{
-	
+class ChessFigure {
 public:
-	enum FigureType
-	{
-		ROOK,
-		KNIGHT,
-		BISHOP,
-		PAWN,
-		KING,
-		QUEEN
-	};
-	ChessFigure(FigureType type,std::string coord);
-	bool Move(std::string nextCoord);
+    virtual bool move(const std::string& nextCoord) = 0;
 	virtual ~ChessFigure();
-private:
-	FigureType type;
-	std::string currentCoord;
+
+protected:
+    ChessFigure(const std::string& coord);
+    virtual bool isValidMove(const std::string& nextCoord) = 0;
+
+    std::string _currentCoord;
 };
 
 #endif

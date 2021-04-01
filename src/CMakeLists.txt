@@ -2,6 +2,12 @@ project(Chess)
 
 set(SRC
 	main.cpp
+        pawn.cpp
+        knight.cpp
+        bishop.cpp
+        rook.cpp
+        queen.cpp
+        king.cpp
 	ChessFigure.cpp
 )
 

@@ -1,4 +1,6 @@
 #include "ChessFigure.hpp"
+#include "ChessFigureTypes.hpp"
+
 #include "gtest/gtest.h"
 
 TEST(TestCaseName, TestName) {
@@ -8,85 +10,85 @@ TEST(TestCaseName, TestName) {
 
 TEST(LAB2, RookShouldBeCorrectMove)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::ROOK,"E2");
-	EXPECT_TRUE(figure->Move("C2"));
+    ChessFigure *figure = new Rook("E2");
+    EXPECT_TRUE(figure->move("C2"));
 }
 
 TEST(LAB2, RookShouldBeIncorrectMove)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::ROOK, "E2");
-	EXPECT_FALSE(figure->Move("C5"));
+    ChessFigure *figure = new Rook("E2");
+    EXPECT_FALSE(figure->move("C5"));
 }
 TEST(LAB2, KnightShouldBeCorrectMove)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::KNIGHT, "B1");
-	EXPECT_TRUE(figure->Move("C3"));
+    ChessFigure *figure = new Knight("B1");
+    EXPECT_TRUE(figure->move("C3"));
 }
 TEST(LAB2, KnightShouldBeIncorrectMove)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::KNIGHT, "B1");
-	EXPECT_FALSE(figure->Move("C5"));
+    ChessFigure *figure = new Knight("B1");
+    EXPECT_FALSE(figure->move("C5"));
 }
 
 TEST(LAB2, BishopShouldBeCorrectMove)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::BISHOP, "C1");
-	EXPECT_TRUE(figure->Move("E3"));
+    ChessFigure *figure = new Bishop("C1");
+    EXPECT_TRUE(figure->move("E3"));
 }
 
 TEST(LAB2, BishopShouldBeIncorrectMove)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::BISHOP, "C1");
-	EXPECT_FALSE(figure->Move("C3"));
+    ChessFigure *figure = new Bishop("C1");
+    EXPECT_FALSE(figure->move("C3"));
 }
 TEST(LAB2, PawnShouldBeCorrectMove0)
 {
-	ChessFigure* figure = new ChessFigure(ChessFigure::PAWN, "E2");
-	EXPECT_TRUE(figure->Move("E3"));
+    ChessFigure* figure = new Pawn("E2");
+    EXPECT_TRUE(figure->move("E3"));
 }
 
 TEST(LAB2, PawnShouldBeCorrectMove1)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::PAWN, "E2");
-	EXPECT_TRUE(figure->Move("E4"));
+    ChessFigure *figure = new Pawn("E2");
+    EXPECT_TRUE(figure->move("E4"));
 }
 
 TEST(LAB2, PawnShouldBeCorrectMove2)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::PAWN, "E4");
-	EXPECT_TRUE(figure->Move("E5"));
+    ChessFigure *figure = new Pawn("E4");
+    EXPECT_TRUE(figure->move("E5"));
 }
 
 TEST(LAB2, PawnShouldBeIncorrectMove)
 {
-	ChessFigure *figure = new ChessFigure(ChessFigure::PAWN, "E2");
-	EXPECT_FALSE(figure->Move("C5"));
+    ChessFigure *figure = new Pawn("E2");
+    EXPECT_FALSE(figure->move("C5"));
 }
 TEST(LAB2, KingShouldBeCorrectMove)
 {
-	ChessFigure* figure = new ChessFigure(ChessFigure::KING, "E1");
-	EXPECT_TRUE(figure->Move("E2"));
+    ChessFigure* figure = new King("E1");
+    EXPECT_TRUE(figure->move("E2"));
 }
 TEST(LAB2, KingShouldBeIncorrectMove)
 {
-	ChessFigure* figure = new ChessFigure(ChessFigure::KING, "E1");
-	EXPECT_FALSE(figure->Move("E8"));
+    ChessFigure* figure = new King("E1");
+    EXPECT_FALSE(figure->move("E8"));
 }
 
 TEST(LAB2, QueenShouldBeCorrectMoveVertical)
 {
-	ChessFigure* figure = new ChessFigure(ChessFigure::QUEEN, "D1");
-	EXPECT_TRUE(figure->Move("D8"));
+    ChessFigure* figure = new Queen("D1");
+    EXPECT_TRUE(figure->move("D8"));
 }
 
 TEST(LAB2, QueenShouldBeCorrectMoveDiagonal)
 {
-	ChessFigure* figure = new ChessFigure(ChessFigure::QUEEN, "D1");
-	EXPECT_TRUE(figure->Move("H5"));
+    ChessFigure* figure = new Queen("D1");
+    EXPECT_TRUE(figure->move("H5"));
 }
 
 TEST(LAB2, QueenShouldBeIncorrectMove)
 {
-	ChessFigure* figure = new ChessFigure(ChessFigure::QUEEN, "D1");
-	EXPECT_FALSE(figure->Move("E3"));
+    ChessFigure* figure = new Queen("D1");
+    EXPECT_FALSE(figure->move("E3"));
 }

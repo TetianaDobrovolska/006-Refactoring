@@ -2,22 +2,26 @@
 
 Bishop::Bishop(const std::string& coord) : ChessFigure(coord) {}
 
-bool Bishop::move(const std::string& nextCoord) {
-    if (!isValidMove(nextCoord)) {
+bool Bishop::move(const TargetMove& targetMove) {
+    if (!isValidMove(targetMove)) {
         return false;
     }
 
-    _currentCoord = nextCoord;
+    _currentCoord = targetMove.target;
     return true;
 }
 
-bool Bishop::isValidMove(const std::string &nextCoord) {
-    if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-    {
-        if (!(abs(nextCoord[0] - _currentCoord[0]) == abs(nextCoord[1] - _currentCoord[1])))
-            return false;
-        else
-            return true;
-    }
-    else return false;
+bool Bishop::isValidMove(const TargetMove& targetMove) {
+    const std::string target = targetMove.target;
+    if(!isValidTarget(target))
+        return false;
+
+    if(targetMove.isKingCheckedAfterMove)
+        return false;
+
+    const bool isBlocked = targetMove.isBlockedLineOfSight ||
+                           targetMove.isOccupiedBySelf;
+    const bool isDiagonal = (abs(target[0] - _currentCoord[0])) == (abs(target[1] - _currentCoord[1]));
+
+    return isDiagonal && (!isBlocked);
 }

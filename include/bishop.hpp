@@ -6,9 +6,9 @@
 class Bishop : public ChessFigure {
 public:
     Bishop(const std::string& coord);
-    bool move(const std::string& nextCoord) override;
+    bool move(const TargetMove& targetMove) override;
 
 private:
-    bool isValidMove(const std::string &nextCoord) override;
+    bool isValidMove(const TargetMove& targetMove) override;
 };
 #endif // BISHOP_HPP

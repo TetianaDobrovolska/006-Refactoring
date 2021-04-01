@@ -2,22 +2,26 @@
 
 King::King(const std::string& coord) : ChessFigure(coord) {}
 
-bool King::move(const std::string& nextCoord) {
-    if (!isValidMove(nextCoord)) {
+bool King::move(const TargetMove& targetMove) {
+    if (!isValidMove(targetMove)) {
         return false;
     }
 
-    _currentCoord = nextCoord;
+    _currentCoord = targetMove.target;
     return true;
 }
 
-bool King::isValidMove(const std::string& nextCoord) {
-    if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-    {
-        if (!(abs(nextCoord[0] - _currentCoord[0]) <= 1 && abs(nextCoord[1] - _currentCoord[1]) <= 1))
-            return false;
-        else
-            return true;
-    }
-    else return false;
+bool King::isValidMove(const TargetMove& targetMove) {
+    const std::string target = targetMove.target;
+    if(!isValidTarget(target))
+    return false;
+
+    const uint8_t dx = abs(target[0] - _currentCoord[0]);
+    const uint8_t dy = abs(target[1] - _currentCoord[1]);
+    const bool isKingMove = ((dx <= 1) && (dy <= 1));
+    const bool isBlocked = targetMove.isGuarded ||
+                           targetMove.isOccupiedBySelf;
+    // TODO: account for draw (no move if all are guarded); requires state of all surrounding blocks (occupied? guarded?)
+
+    return isKingMove && !isBlocked;
 }

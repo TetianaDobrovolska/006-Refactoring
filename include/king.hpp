@@ -6,10 +6,10 @@
 class King : public ChessFigure {
 public:
     King(const std::string& coord);
-    bool move(const std::string& nextCoord) override;
+    bool move(const TargetMove& targetMove) override;
 
 private:
-    bool isValidMove(const std::string& nextCoord) override;
+    bool isValidMove(const TargetMove& targetMove) override;
 };
 
 #endif // KING_HPP

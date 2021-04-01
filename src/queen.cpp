@@ -2,22 +2,33 @@
 
 Queen::Queen(const std::string& coord) : ChessFigure(coord) {}
 
-bool Queen::move(const std::string& nextCoord) {
-    if (!isValidMove(nextCoord)) {
+bool Queen::move(const TargetMove& targetMove) {
+    if (!isValidMove(targetMove)) {
         return false;
     }
 
-    _currentCoord = nextCoord;
+    _currentCoord = targetMove.target;
     return true;
 }
 
-bool Queen::isValidMove(const std::string& nextCoord) {
-    if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-    {
-        if (!(abs(nextCoord[0] - _currentCoord[0]) == abs(nextCoord[1] - _currentCoord[1]) || nextCoord[0] == _currentCoord[0] || nextCoord[1] == _currentCoord[1]))
-            return false;
-        else
-            return true;
-    }
-    else return false;
+bool Queen::isValidMove(const TargetMove& targetMove) {
+    const std::string target = targetMove.target;
+    if(!isValidTarget(target))
+        return false;
+
+    if(targetMove.isKingCheckedAfterMove)
+        return false;
+
+    const uint8_t dx = abs(target[0] - _currentCoord[0]);
+    const uint8_t dy = abs(target[1] - _currentCoord[1]);
+    const bool isSameCol = (dx == 0);
+    const bool isSameRow = (dy == 0);
+    const bool isHorisontal = isSameRow && (!isSameCol);
+    const bool isVerticalal = (!isSameRow) && isSameCol;
+    const bool isDiagonal = (dx == dy);
+    const bool isQueenMove = (isHorisontal || isVerticalal || isDiagonal);
+    const bool isBlocked = targetMove.isBlockedLineOfSight ||
+                           targetMove.isOccupiedBySelf;
+
+    return isQueenMove && (!isBlocked);
 }

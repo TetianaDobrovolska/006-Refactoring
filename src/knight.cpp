@@ -2,24 +2,26 @@
 
 Knight::Knight(const std::string& coord) : ChessFigure(coord) {}
 
-bool Knight::move(const std::string& nextCoord) {
-    if (!isValidMove(nextCoord)) {
+bool Knight::move(const TargetMove &targetMove) {
+    if (!isValidMove(targetMove)) {
         return false;
     }
 
-    _currentCoord = nextCoord;
+    _currentCoord = targetMove.target;
     return true;
 }
 
-bool Knight::isValidMove(const std::string& nextCoord) {
-    if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8') {
-        int dx, dy;
-        dx = abs(nextCoord[0] - _currentCoord[0]);
-        dy = abs(nextCoord[1] - _currentCoord[1]);
-        if (!(abs(nextCoord[0] - _currentCoord[0]) == 1 && abs(nextCoord[1] - _currentCoord[1]) == 2 || abs(nextCoord[0] - _currentCoord[0]) == 2 && abs(nextCoord[1] - _currentCoord[1]) == 1))
-          return false;
-        else
-        return true;
-    }
-    else return false;
+bool Knight::isValidMove(const TargetMove& targetMove) {
+    const std::string target = targetMove.target;
+    if(!isValidTarget(target))
+        return false;
+
+    if(targetMove.isKingCheckedAfterMove)
+        return false;
+
+    const uint8_t dx = abs(target[0] - _currentCoord[0]);
+    const uint8_t dy = abs(target[1] - _currentCoord[1]);
+    const bool isKnightMove = (((dx == 1) && (dy == 2)) || ((dx == 2) && (dy == 1)));
+    const bool isBlocked = targetMove.isOccupiedBySelf;
+    return isKnightMove && (!isBlocked);
 }

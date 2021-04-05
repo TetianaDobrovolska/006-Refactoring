@@ -34,14 +34,13 @@ bool Pawn::isValidMove(const TargetMove& targetMove) {
     const bool movesTwoUp = (isAtInitPos &&
                             isDiffTwo &&
                             isFree);
-    const bool movesUp = (movesOneUp || movesTwoUp);
     const bool isAdjacentCol = (abs(targetLetter - currentLetter) == 1);
+    const bool movesUp = ((movesOneUp || movesTwoUp) && (!isAdjacentCol));
     const bool isDiagonal = (isAdjacentCol &&
                             movesOneUp);
     const bool occupiedByOpponent = targetMove.isOccupiedByOpponent;
     const bool capturesDiagonally = (isDiagonal &&
                                     occupiedByOpponent);
     // TODO: account for "en-passant" (requires last opponent's move)
-
     return (movesUp || capturesDiagonally);
 }

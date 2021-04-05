@@ -193,3 +193,38 @@ TEST(TestChessMove, Pawn2UpBlocked2)
     ChessFigure::TargetMove targetMove = {"E4", false, true, false, false, true};
     EXPECT_FALSE(figure->move(targetMove));
 }
+
+TEST(TestChessMove, Pawn2UpNotAtInitialPosition)
+{
+    ChessFigure *figure = new Pawn("E4");
+    ChessFigure::TargetMove targetMove = {"E6", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, Pawn3UpInvalid)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"E5", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, PawnDiagonalValid)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"D3", false, true, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, PawnDiagonalInvalidOccupiedBySelf)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"D3", true, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, PawnDiagonalInvalidNotOccupied)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"D3", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}

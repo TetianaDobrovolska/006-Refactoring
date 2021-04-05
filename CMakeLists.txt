@@ -21,5 +21,4 @@ if(CMAKE_COMPILER_IS_GNUCXX)
         EXECUTABLE ${PROJECT_TEST_NAME}
         EXCLUDE "include/*" "build/test/gtest/*" "src/main.cpp"
     )
-#    target_link_libraries(${PROJECT_TEST_NAME} gcovr)
 endif()

@@ -102,3 +102,94 @@ TEST(TestChessMove, QueenShouldBeIncorrectMove)
     ChessFigure::TargetMove targetMove = {"E3", false, false, false, false, false};
     EXPECT_FALSE(figure->move(targetMove));
 }
+
+TEST(TestChessMove, EmptyMoveString)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, ShortMoveString)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"A", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, PawnIncorrectString)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"X9", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, BishopIncorrectString)
+{
+    ChessFigure *figure = new Bishop("E2");
+    ChessFigure::TargetMove targetMove = {"X9", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, KnightIncorrectString)
+{
+    ChessFigure *figure = new Knight("E2");
+    ChessFigure::TargetMove targetMove = {"X9", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, RookIncorrectString)
+{
+    ChessFigure *figure = new Rook("E2");
+    ChessFigure::TargetMove targetMove = {"X9", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, QueenIncorrectString)
+{
+    ChessFigure *figure = new Queen("E2");
+    ChessFigure::TargetMove targetMove = {"X9", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, KingIncorrectString)
+{
+    ChessFigure *figure = new King("E2");
+    ChessFigure::TargetMove targetMove = {"X9", false, false, false, false, false};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, PawnPinned)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"E3", false, false, false, false, true};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, Pawn1UpBlocked1)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"E3", true, false, false, false, true};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, Pawn1UpBlocked2)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"E3", false, true, false, false, true};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, Pawn2UpBlocked1)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"E4", true, false, false, false, true};
+    EXPECT_FALSE(figure->move(targetMove));
+}
+
+TEST(TestChessMove, Pawn2UpBlocked2)
+{
+    ChessFigure *figure = new Pawn("E2");
+    ChessFigure::TargetMove targetMove = {"E4", false, true, false, false, true};
+    EXPECT_FALSE(figure->move(targetMove));
+}

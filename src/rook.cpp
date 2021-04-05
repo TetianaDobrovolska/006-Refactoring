@@ -14,7 +14,7 @@ bool Rook::move(const TargetMove& targetMove) {
 bool Rook::isValidMove(const TargetMove& targetMove) {
     const std::string target = targetMove.target;
     if(!isValidTarget(target))
-    return false;
+        return false;
 
     if(targetMove.isKingCheckedAfterMove)
         return false;

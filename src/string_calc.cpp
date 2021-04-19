@@ -16,7 +16,7 @@ StringCalc::~StringCalc()
 
 int convertToInt(string str) {
 	if ("" == str)
-		return -1;
+		throw std::invalid_argument("Invalid");
 	int number = 0;
 
 	for(auto ch : str) {
@@ -24,7 +24,7 @@ int convertToInt(string str) {
 		if((num >= 0)and(num <=9))
 			number = (number * 10) + num;
 		else
-			return -1;
+			throw std::invalid_argument("Invalid");
 	}
 	return number;
 }
@@ -57,7 +57,7 @@ int StringCalc::Add(string numbers)
 		if(num >=0)
 			result += num;
 		else 
-			result = -1;
+			throw std::invalid_argument("Invalid");
 	}
         
 	return result;

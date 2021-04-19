@@ -21,8 +21,7 @@ TEST(CalculatorTest, Sample2SymbolsTest) {
 
 TEST(CalculatorTest, SampleDigAndCharTest) {
 	StringCalc c;
- 	int actual = c.Add("1a,2");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("1a,2"), std::invalid_argument);
 }
  
 TEST(CalculatorTest, SampleOneOp1Test) {
@@ -39,37 +38,32 @@ TEST(CalculatorTest, SampleOneOp2Test) {
 
 TEST(CalculatorTest, SampleEmptyLineTest) {
 	StringCalc c;
- 	int actual = c.Add("");
+	int actual = c.Add("");
  	ASSERT_EQ(actual, 0);
 }
 
 TEST(CalculatorTest, SampleOneNegativeOpTest) {
 	StringCalc c;
- 	int actual = c.Add("-1");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("-1"), std::invalid_argument);
 }
 TEST(CalculatorTest, SampleFirstNegativeOpTest) {
 	StringCalc c;
- 	int actual = c.Add("-1,1");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("-1,1"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, SampleSecondNegativeOpTest) {
 	StringCalc c;
- 	int actual = c.Add("1,-1");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("1,-1"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, SampleNotNumbers1Test) {
 	StringCalc c;
- 	int actual = c.Add("a,b");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("a,b"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, SampleNotNumbers2Test) {
 	StringCalc c;
- 	int actual = c.Add("a");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("a"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, SampleThreeOpsTest) {
@@ -86,8 +80,7 @@ TEST(CalculatorTest, Sample4OpsTest) {
 
 TEST(CalculatorTest, SampleAdditionalSeparator1Test) {
 	StringCalc c;
- 	int actual = c.Add("1,,2");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("1,,2"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, SampleAdditionalSeparatorTest) {
@@ -103,8 +96,7 @@ TEST(CalculatorTest, SampleAdditionalSeparator2Test) {
 }
 TEST(CalculatorTest, SampleNotValidSeparatorTest) {
 	StringCalc c;
- 	int actual = c.Add("//;\n1%2");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("//;\n1%2"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, SampleValidSeparatorTest) {

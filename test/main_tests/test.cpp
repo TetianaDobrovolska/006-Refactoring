@@ -36,3 +36,9 @@ TEST(CalculatorTest, ZeroValue) {
     int actual = c.Add("0");
     ASSERT_EQ(actual, 0);
 }
+
+TEST(CalculatorTest, NewLineString) {
+    StringCalc c;
+    int actual = c.Add("3\n,2,2");
+    ASSERT_EQ(actual, 7);
+}

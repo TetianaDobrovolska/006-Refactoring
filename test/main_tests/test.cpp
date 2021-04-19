@@ -104,3 +104,14 @@ TEST(CalculatorTest, SampleValidSeparatorTest) {
  	int actual = c.Add("//;\n1,2\n3;4");
  	ASSERT_EQ(actual, 10);
 }
+
+TEST(CalculatorTest, SampleMaxNumberTest) {
+	StringCalc c;
+ 	int actual = c.Add("1000,2");
+ 	ASSERT_EQ(actual, 1002);
+}
+TEST(CalculatorTest, SampleMoreThanMaxNumberTest) {
+	StringCalc c;
+ 	int actual = c.Add("1001,2");
+ 	ASSERT_EQ(actual, 2);
+}

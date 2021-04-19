@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "string_calc.hpp"
 #include <iostream>
+#include <stdexcept>
 
  TEST(CalculatorTest, ZeroParams) {
     StringCalc c;
@@ -34,20 +35,17 @@
 
  TEST(CalculatorTest, AllowedOnlyPositive){
      StringCalc c;
-     int actual = c.Add("-2");
-     ASSERT_EQ(actual, -1);
+     ASSERT_THROW(c.Add("-2"), std::invalid_argument);
  }
 
  TEST(CalculatorTest, NotANumber){
      StringCalc c;
-     int actual = c.Add("a");
-     ASSERT_EQ(actual, -1);
+     ASSERT_THROW(c.Add("a"), std::invalid_argument);
  }
 
  TEST(CalculatorTest, WrongSeparator){
      StringCalc c;
-     int actual = c.Add("1 2");
-     ASSERT_EQ(actual, -1);
+     ASSERT_THROW(c.Add("1 2"), std::invalid_argument);
  }
 
  TEST(CalculatorTest, MixedSeparators){
@@ -70,20 +68,17 @@
 
  TEST(CalculatorTest, SpecialSeparatorsNegative1){
      StringCalc c;
-     int actual = c.Add("//;\n1;2,7");
-     ASSERT_EQ(actual, -1);
+     ASSERT_THROW(c.Add("//;\n1;2,7"), std::invalid_argument);
  }
 
  TEST(CalculatorTest, SpecialSeparatorsNegative2){
      StringCalc c;
-     int actual = c.Add("/;\n1;2;7");
-     ASSERT_EQ(actual, -1);
+     ASSERT_THROW(c.Add("/;\n1;2;7"), std::invalid_argument);
  }
 
  TEST(CalculatorTest, SpecialSeparatorsNegative3){
      StringCalc c;
-     int actual = c.Add("//;\n\n1;2;7");
-     ASSERT_EQ(actual, -1);
+     ASSERT_THROW(c.Add("//;\n\n1;2;7"), std::invalid_argument);
  }
 
  TEST(CalculatorTest, MoreThanTwoParams){

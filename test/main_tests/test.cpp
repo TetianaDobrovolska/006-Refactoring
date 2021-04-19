@@ -95,3 +95,20 @@ TEST(CalculatorTest, SampleAdditionalSeparatorTest) {
  	int actual = c.Add("1\n2");
  	ASSERT_EQ(actual, 3);
 }
+
+TEST(CalculatorTest, SampleAdditionalSeparator2Test) {
+	StringCalc c;
+ 	int actual = c.Add("//;\n1;2");
+ 	ASSERT_EQ(actual, 3);
+}
+TEST(CalculatorTest, SampleNotValidSeparatorTest) {
+	StringCalc c;
+ 	int actual = c.Add("//;\n1%2");
+ 	ASSERT_EQ(actual, -1);
+}
+
+TEST(CalculatorTest, SampleValidSeparatorTest) {
+	StringCalc c;
+ 	int actual = c.Add("//;\n1,2\n3;4");
+ 	ASSERT_EQ(actual, 10);
+}

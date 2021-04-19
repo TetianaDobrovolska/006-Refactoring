@@ -31,13 +31,21 @@ int convertToInt(string str) {
 
 int StringCalc::Add(string numbers)
 {
+	std::size_t comment_pos = numbers.find("//");
+	std::string delim = "";
+	if(0 == comment_pos) {
+		delim = numbers.substr(2,1);
+		numbers = numbers.substr(4);
+	}
 	if ("" == numbers)
 		return 0;
+	
 	std::vector<std::string> vect;
 	int result = 0;
 	
     std::string item;
-	std::regex re("[\n,]");
+	std::regex re("[\n,"+delim+"]");
+	
 	std::sregex_token_iterator first{numbers.begin(), numbers.end(), re, -1}, last;
 	std::vector<std::string> tokens{first, last};
 	for (auto t : tokens) {

@@ -78,6 +78,18 @@
      ASSERT_EQ(actual, 10);
  }
 
+ TEST(CalculatorTest, SpecialSeparatorsValid3){
+     StringCalc c;
+     int actual = c.Add("//[***]\n1***2***7");
+     ASSERT_EQ(actual, 10);
+ }
+
+ TEST(CalculatorTest, SpecialSeparatorsValid4){
+     StringCalc c;
+     int actual = c.Add("//[;ab]\n1;ab2;ab7");
+     ASSERT_EQ(actual, 10);
+ }
+
  TEST(CalculatorTest, SpecialSeparatorsNegative1){
      StringCalc c;
      ASSERT_THROW(c.Add("//;\n1;2,7"), std::invalid_argument);
@@ -91,6 +103,11 @@
  TEST(CalculatorTest, SpecialSeparatorsNegative3){
      StringCalc c;
      ASSERT_THROW(c.Add("//;\n\n1;2;7"), std::invalid_argument);
+ }
+
+ TEST(CalculatorTest, SpecialSeparatorsNegative4){
+     StringCalc c;
+     ASSERT_THROW(c.Add("//[***\n1***2***7"), std::invalid_argument);
  }
 
  TEST(CalculatorTest, MoreThanTwoParams){

@@ -17,8 +17,14 @@
 
  TEST(CalculatorTest, UpperBoundOneParam){
      StringCalc c;
-     int actual = c.Add("1000000");
-     ASSERT_EQ(actual, 1'000'000);
+     int actual = c.Add("1000");
+     ASSERT_EQ(actual, 1'000);
+ }
+
+ TEST(CalculatorTest, OutUpperBoundOneParam){
+     StringCalc c;
+     int actual = c.Add("1001");
+     ASSERT_EQ(actual, 0);
  }
 
  TEST(CalculatorTest, LowerBoundTwoParams){
@@ -29,8 +35,14 @@
 
  TEST(CalculatorTest, UpperBoundTwoParams){
      StringCalc c;
-     int actual = c.Add("1000000,1000000");
-     ASSERT_EQ(actual, 2'000'000);
+     int actual = c.Add("1000,1000");
+     ASSERT_EQ(actual, 2'000);
+ }
+
+ TEST(CalculatorTest, OutUpperBoundTwoParams){
+     StringCalc c;
+     int actual = c.Add("1001,1000");
+     ASSERT_EQ(actual, 1'000);
  }
 
  TEST(CalculatorTest, AllowedOnlyPositive){
@@ -102,6 +114,12 @@
  TEST(CalculatorTest, RandomTest3){
      StringCalc c;
      int actual = c.Add("123,23,1,2,3\n10");
+     ASSERT_EQ(actual, 162);
+ }
+
+ TEST(CalculatorTest, RandomTest4){
+     StringCalc c;
+     int actual = c.Add("123,23,1,2,3\n10,1001");
      ASSERT_EQ(actual, 162);
  }
 

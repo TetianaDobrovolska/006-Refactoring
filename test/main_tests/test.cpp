@@ -56,6 +56,36 @@
      ASSERT_EQ(actual, 10);
  }
 
+ TEST(CalculatorTest, SpecialSeparatorsValid1){
+     StringCalc c;
+     int actual = c.Add("//;\n1;2");
+     ASSERT_EQ(actual, 3);
+ }
+
+ TEST(CalculatorTest, SpecialSeparatorsValid2){
+     StringCalc c;
+     int actual = c.Add("//;\n1;2;7");
+     ASSERT_EQ(actual, 10);
+ }
+
+ TEST(CalculatorTest, SpecialSeparatorsNegative1){
+     StringCalc c;
+     int actual = c.Add("//;\n1;2,7");
+     ASSERT_EQ(actual, -1);
+ }
+
+ TEST(CalculatorTest, SpecialSeparatorsNegative2){
+     StringCalc c;
+     int actual = c.Add("/;\n1;2;7");
+     ASSERT_EQ(actual, -1);
+ }
+
+ TEST(CalculatorTest, SpecialSeparatorsNegative3){
+     StringCalc c;
+     int actual = c.Add("//;\n\n1;2;7");
+     ASSERT_EQ(actual, -1);
+ }
+
  TEST(CalculatorTest, MoreThanTwoParams){
      StringCalc c;
      int actual = c.Add("1,2,3,4");

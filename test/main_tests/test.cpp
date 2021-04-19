@@ -13,10 +13,10 @@ TEST(CalculatorTest, EmptyString) {
     ASSERT_EQ(actual, 0);
 }
 
-TEST(CalculatorTest, ErrorString) {
+TEST(CalculatorTest, LongString) {
     StringCalc c;
-    int actual = c.Add("123");
-    ASSERT_EQ(actual, -1);
+    int actual = c.Add("123456789");
+    ASSERT_EQ(actual, 45);
 }
 
 TEST(CalculatorTest, SampleTest) {

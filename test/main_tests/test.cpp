@@ -104,3 +104,15 @@ TEST(CalculatorTest, SumFiveElWrongArg) {
 
  }
 
+
+
+
+TEST(CalculatorTest, SumFiveNewLine) {
+
+ 	StringCalc c;
+
+ 	int actual = c.Add("5,100\n20,5\n1");
+
+ 	ASSERT_EQ(actual, 131);
+
+ }

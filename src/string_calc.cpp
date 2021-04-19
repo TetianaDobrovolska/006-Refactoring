@@ -39,7 +39,7 @@ int StringCalc::Add(string numbers)
 	int num = 0;
 	numbers += ",";
 
-	regex expr("[-0-9]*(?=\n|,)[0-9]*|[-0-9]*(?=\n|,)[-0-9]*|[0-9]*(?=\n|,)[-0-9]*|[0-9]*(?=\n|,)[0-9]*");
+	regex expr("-?([0-9]*)(?=\n|,)-?([0-9]*)");
 	regex_token_iterator<string::iterator> iter (numbers.begin(), numbers.end(), expr);
 	regex_token_iterator<string::iterator> end;
 	while (iter != end) {

@@ -59,6 +59,6 @@
  TEST(CalculatorTest, RandomTest){
      StringCalc c;
      int actual = c.Add("100,20,3");
-     ASSERT_EQ(actual, 123);
+     ASSERT_EQ(actual, 123  );
  }
 

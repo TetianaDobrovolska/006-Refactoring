@@ -35,7 +35,7 @@ CalcArgs StringCalc::parse(std::string str){
 
     int nextNumber = 0;
     std::istringstream is(str);
-    std::vector<char> separators = allowed;
+    std::vector<std::string> separators = allowed;
 
     char prefix = is.peek();
     if(prefix == EOF){
@@ -48,12 +48,20 @@ CalcArgs StringCalc::parse(std::string str){
         if(prefix != '/'){
             return {{}, false};
         }
-        is.get(prefix);
-        separators = {prefix};
-        is.get(prefix);
-        if(prefix != '\n'){
-            return {{}, false};
+
+        std::string token;
+        std::getline(is, token, '\n');
+        if(token.size() == 1){
+            separators = {token};
+        } else {
+            if(*token.begin() == '[' && token.back() == ']'){
+                token = token.substr(1, token.size() - 2);
+                separators = {token};
+            } else {
+                return {{}, false};
+            }
         }
+
     }
     while(true){
         if(!std::isdigit(is.peek())){
@@ -75,12 +83,27 @@ CalcArgs StringCalc::parse(std::string str){
             result.second = true;
             return result;
         }
-        char c = is.peek();
-        if(find(separators.begin(), separators.end(), c) == separators.end()){
+
+        std::string val = "";
+        char c;
+        if(separators[0].size() == 1){
+            c = is.peek();
+            val.push_back(c);
+            is.get();
+        } else {
+            for(uint i = 0; i < separators[0].size(); ++i){
+                c = is.peek();
+                if(c != separators[0][i]){
+                    return {{}, false};
+                }
+                is.get();
+            }
+            val = separators[0];
+        }
+        if(find(separators.begin(), separators.end(), val) == separators.end()){
             result.second = false;
             return result;
         }
-        is.get();
     }
 
 }

@@ -57,7 +57,8 @@ CalcArgs StringCalc::parse(std::string str){
             result.second = true;
             return result;
         }
-        if(is.peek() != ','){
+        char c = is.peek();
+        if(find(allowed.begin(), allowed.end(), c) == allowed.end()){
             result.second = false;
             return result;
         }

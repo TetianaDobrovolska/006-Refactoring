@@ -16,6 +16,7 @@ public:
 	int Add(std::string numbers);
 private:
     CalcArgs parse(std::string str);
+    const std::vector<char> allowed = {',', '\n'};
 };
 
 #endif

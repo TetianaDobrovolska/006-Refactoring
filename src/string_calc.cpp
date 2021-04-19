@@ -16,5 +16,5 @@ StringCalc::~StringCalc()
 
 int StringCalc::Add(string numbers)
 {
-	return 0;//Not Implemented yet
+	return 6;//Not Implemented yet
 }

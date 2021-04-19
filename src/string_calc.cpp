@@ -67,7 +67,9 @@ CalcArgs StringCalc::parse(std::string str){
             return result;
         }
 
-        result.first.push_back(nextNumber);
+        if(nextNumber <= 1000){
+            result.first.push_back(nextNumber);
+        }
 
         if(is.peek() == EOF){
             result.second = true;

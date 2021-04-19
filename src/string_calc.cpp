@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <algorithm>
+#include <regex>
 
 
 
@@ -29,32 +30,27 @@ StringCalc::~StringCalc()
 
 
 
+
 int StringCalc::Add(string numbers)
 
 {
 
-	string delimiter = ",\n";
-
-	size_t pos = 0;
 	int sum = 0;
 	int num = 0;
+	numbers += ",";
 
-	do {
-		if (numbers.find(delimiter[0]) < numbers.find(delimiter[1])) {
-			pos = numbers.find(delimiter[0]);
-		}
-		else {
-			pos = numbers.find(delimiter[1]);
-		}
-		num = atoi(numbers.substr(0, pos).c_str());
+	regex expr("[-0-9]*(?=\n|,)[0-9]*|[-0-9]*(?=\n|,)[-0-9]*|[0-9]*(?=\n|,)[-0-9]*|[0-9]*(?=\n|,)[0-9]*");
+	regex_token_iterator<string::iterator> iter (numbers.begin(), numbers.end(), expr);
+	regex_token_iterator<string::iterator> end;
+	while (iter != end) {
+		num = atoi(iter->str().substr(0, iter->str().length()).c_str());
 		if (num < 0) {
-			sum = -1; 
+			sum = -1;
 			break;
 		}
 		sum += num;
-		numbers.erase(0, pos + 1);
-	} while (pos != string::npos);
-
+		++iter;
+	}
 
 	return sum;
 

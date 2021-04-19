@@ -72,13 +72,24 @@ TEST(CalculatorTest, StringWrongArg) {
 
  	StringCalc c;
 
- 	int actual = c.Add("2,-1");
+ 	int actual = c.Add("5,-1");
 
  	ASSERT_EQ(actual, -1);
 
  }
 
 
+
+
+TEST(CalculatorTest, StringWrongArgFirst) {
+
+ 	StringCalc c;
+
+ 	int actual = c.Add("-2,10");
+
+ 	ASSERT_EQ(actual, -1);
+
+ }
 
 
 TEST(CalculatorTest, SumFiveEL) {
@@ -107,12 +118,40 @@ TEST(CalculatorTest, SumFiveElWrongArg) {
 
 
 
+
 TEST(CalculatorTest, SumFiveNewLine) {
+
+ 	StringCalc c;
+
+ 	int actual = c.Add("5\n100\n20,5\n1");
+
+ 	ASSERT_EQ(actual, 131);
+
+ }
+
+
+
+
+TEST(CalculatorTest, SumFiveNewLineComma) {
 
  	StringCalc c;
 
  	int actual = c.Add("5,100\n20,5\n1");
 
  	ASSERT_EQ(actual, 131);
+
+ }
+
+
+
+
+
+TEST(CalculatorTest, SumFiveNewLineCommaWrongArgument) {
+
+ 	StringCalc c;
+
+ 	int actual = c.Add("5,100\n20,5\n1,-1000");
+
+ 	ASSERT_EQ(actual, -1);
 
  }

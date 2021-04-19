@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <regex>
+#include <iostream>
 
 using namespace std;
 
@@ -33,12 +34,34 @@ int convertToInt(string str) {
 
 int StringCalc::Add(string numbers)
 {
-	std::size_t comment_pos = numbers.find("//");
+	std::size_t comment_pos_begin = numbers.find("//[");
 	std::string delim = "";
-	if(0 == comment_pos) {
-		delim = numbers.substr(2,1);
-		numbers = numbers.substr(4);
+	std::string delimSpecial = "";
+	if(0 == comment_pos_begin) {
+		std::size_t comment_pos_end = numbers.find("]\n");
+		if (comment_pos_end != std::string::npos) {
+			delim = numbers.substr(3, comment_pos_end - 3);
+			std::string delimetrChar = delim.substr(0,1);
+			delimSpecial = "\\"+delimetrChar+"{"+std::to_string(delim.length())+"}";
+			numbers = numbers.substr(comment_pos_end + 2);
+
+		}
+		else {
+			delim = numbers.substr(2,1);
+			numbers = numbers.substr(4);
+		}
 	}
+	else {
+		std::size_t comment_pos = numbers.find("//");
+		if(0 == comment_pos) {
+			delim = numbers.substr(2,1);
+			numbers = numbers.substr(4);
+			if("]" == delim){
+				delimSpecial = "\\"+delim+"{"+std::to_string(delim.length())+"}";
+			}
+		}
+	}
+	
 	if ("" == numbers)
 		return 0;
 	
@@ -46,7 +69,10 @@ int StringCalc::Add(string numbers)
 	int result = 0;
 	
     std::string item;
-	std::regex re("[\n,"+delim+"]");
+	if ("" == delimSpecial)
+		delimSpecial = "[\n,"+delim+"]";
+		
+	std::regex re(delimSpecial);
 	
 	std::sregex_token_iterator first{numbers.begin(), numbers.end(), re, -1}, last;
 	std::vector<std::string> tokens{first, last};

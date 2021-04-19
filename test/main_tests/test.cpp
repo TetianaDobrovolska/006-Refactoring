@@ -115,3 +115,57 @@ TEST(CalculatorTest, SampleMoreThanMaxNumberTest) {
  	int actual = c.Add("1001,2");
  	ASSERT_EQ(actual, 2);
 }
+
+TEST(CalculatorTest, SampleCrazyTest) {
+	StringCalc c;
+ 	int actual = c.Add("//[***]\n1***2***3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleCrazy2Test) {
+	StringCalc c;
+ 	int actual = c.Add("//[&&]\n1&&2&&3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleCrazy3Test) {
+	StringCalc c;
+ 	int actual = c.Add("//[--]\n1--2--3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleCrazy4Test) {
+	StringCalc c;
+ 	int actual = c.Add("//[aaa]\n1aaa2aaa3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleSeparatorOpenBracketTest) {
+	StringCalc c;
+ 	int actual = c.Add("//[\n1[2[3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleSeparatorCloseBracketTest) {
+	StringCalc c;
+ 	int actual = c.Add("//[]]\n1]2]3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleSeparatorClose1BracketTest) {
+	StringCalc c;
+ 	int actual = c.Add("//]\n1]2]3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleSeparatorOpen2BracketTest) {
+	StringCalc c;
+ 	int actual = c.Add("//[[[]\n1[[2[[3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleSeparatorOpen1BracketTest) {
+	StringCalc c;
+ 	int actual = c.Add("//[[]\n1[2[3");
+ 	ASSERT_EQ(actual, 6);
+}

@@ -53,12 +53,18 @@
  TEST(CalculatorTest, MoreThanTwoParams){
      StringCalc c;
      int actual = c.Add("1,2,3,4");
-     ASSERT_EQ(actual, -1);
+     ASSERT_EQ(actual, 10);
  }
 
- TEST(CalculatorTest, RandomTest){
+ TEST(CalculatorTest, RandomTest1){
      StringCalc c;
      int actual = c.Add("100,20,3");
-     ASSERT_EQ(actual, 123  );
+     ASSERT_EQ(actual, 123);
+ }
+
+ TEST(CalculatorTest, RandomTest2){
+     StringCalc c;
+     int actual = c.Add("123,23,1,2,3");
+     ASSERT_EQ(actual, 152);
  }
 

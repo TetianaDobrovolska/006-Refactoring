@@ -38,10 +38,7 @@ int StringCalc::Add(string numbers)
 		vect.push_back(item);
 	}
 	
-	if(vect.size() > 2)
-		result = -1;
-
-    for (std::size_t i = 0; i < vect.size() and result != -1; i++) {
+	for (std::size_t i = 0; i < vect.size() and result != -1; i++) {
 		int num = convertToInt(vect[i]);
 		if(num >=0)
 			result += num;

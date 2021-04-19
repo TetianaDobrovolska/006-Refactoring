@@ -72,8 +72,14 @@ TEST(CalculatorTest, SampleNotNumbers2Test) {
  	ASSERT_EQ(actual, -1);
 }
 
-TEST(CalculatorTest, SampleMoreThanTwoOpsTest) {
+TEST(CalculatorTest, SampleThreeOpsTest) {
 	StringCalc c;
  	int actual = c.Add("1,2,3");
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, Sample4OpsTest) {
+	StringCalc c;
+ 	int actual = c.Add("1,2,3,4");
+ 	ASSERT_EQ(actual, 10);
 }

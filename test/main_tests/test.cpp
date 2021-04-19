@@ -50,6 +50,12 @@
      ASSERT_EQ(actual, -1);
  }
 
+ TEST(CalculatorTest, MixedSeparators){
+     StringCalc c;
+     int actual = c.Add("1,2\n3\n4");
+     ASSERT_EQ(actual, 10);
+ }
+
  TEST(CalculatorTest, MoreThanTwoParams){
      StringCalc c;
      int actual = c.Add("1,2,3,4");
@@ -66,5 +72,11 @@
      StringCalc c;
      int actual = c.Add("123,23,1,2,3");
      ASSERT_EQ(actual, 152);
+ }
+
+ TEST(CalculatorTest, RandomTest3){
+     StringCalc c;
+     int actual = c.Add("123,23,1,2,3\n10");
+     ASSERT_EQ(actual, 162);
  }
 

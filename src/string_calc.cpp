@@ -22,7 +22,7 @@ int StringCalc::Add(string numbers)
     int out = 0;
     auto result = parse(numbers);
     if (!result.second){
-        return -1;
+        throw std::invalid_argument("Wrong arguments");
     }
     for (auto number : result.first) {
         out += number;

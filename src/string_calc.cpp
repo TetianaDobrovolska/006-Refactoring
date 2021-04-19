@@ -50,12 +50,9 @@ CalcArgs StringCalc::parse(std::string str){
             result.second = false;
             return result;
         }
-        if (result.first.size() < 3){
-            result.first.push_back(nextNumber);
-        } else {
-            result.second = false;
-            return result;
-        }
+
+        result.first.push_back(nextNumber);
+
         if(is.peek() == EOF){
             result.second = true;
             return result;

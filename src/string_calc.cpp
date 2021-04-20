@@ -8,6 +8,7 @@ namespace
 {
 
 constexpr int kInvalidValue = -1;
+constexpr int kMaxNumber = 1000;
 
 }
 
@@ -71,7 +72,8 @@ int StringCalc::Add(const std::string& numbers)
             const std::string tmp = numbers.substr(begin, end - begin);
             if (!isDigit(tmp))
                 throw kInvalidValue;
-            sum += std::stoi(tmp);
+            int num = std::stoi(tmp);
+            sum += kMaxNumber >= num  ? num : 0;
             begin = end + 1;
         }
         return sum;

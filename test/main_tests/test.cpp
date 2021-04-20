@@ -121,3 +121,9 @@ TEST(CalculatorTest, InvalidDelims3) {
     int actual = c.Add("//;\n4;5*1");
     ASSERT_THROW(actual, std::exception);
 }
+
+TEST(CalculatorTest, BigNumber) {
+    StringCalc c;
+    int actual = c.Add("1001,2");
+    ASSERT_EQ(actual, 2);
+}

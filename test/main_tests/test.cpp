@@ -78,3 +78,45 @@ TEST(CalculatorTest, MixedDefaultDelim) {
     int actual = c.Add("1\n3,5");
     ASSERT_EQ(actual, 9);
 }
+
+TEST(CalculatorTest, ExpandDelim) {
+    StringCalc c;
+    int actual = c.Add("//*\n4*1");
+    ASSERT_EQ(actual, 5);
+}
+
+TEST(CalculatorTest, DefaultAndExpandDelims) {
+    StringCalc c;
+    int actual = c.Add("//*\n4*1,2");
+    ASSERT_EQ(actual, 7);
+}
+
+TEST(CalculatorTest, DefaultAndExpandDelims2) {
+    StringCalc c;
+    int actual = c.Add("//*\n4*1\n1");
+    ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, DefaultAndExpandDelims3) {
+    StringCalc c;
+    int actual = c.Add("//*\n4*1\n1,3");
+    ASSERT_EQ(actual, 9);
+}
+
+TEST(CalculatorTest, InvalidDelims) {
+    StringCalc c;
+    int actual = c.Add("//4,5");
+    ASSERT_EQ(actual, -1);
+}
+
+TEST(CalculatorTest, InvalidDelims2) {
+    StringCalc c;
+    int actual = c.Add("/4,5");
+    ASSERT_EQ(actual, -1);
+}
+
+TEST(CalculatorTest, InvalidDelims3) {
+    StringCalc c;
+    int actual = c.Add("//;\n4;5*1");
+    ASSERT_EQ(actual, -1);
+}

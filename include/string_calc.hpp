@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-using CalcArgs = std::pair<std::vector<int>, bool>;
-
 class StringCalc
 {
 public:
@@ -13,10 +11,16 @@ public:
 
 	~StringCalc();
 	
-	int Add(std::string numbers);
+    int Add(const std::string &numbers);
 private:
-    CalcArgs parse(std::string str);
-    const std::vector<std::string> allowed = {",", "\n"};
+    std::vector<std::string> parse(const std::string& str);
+    void parsePrefix(const std::string& str);
+    bool validate(const int& number);
+    bool validate(const std::string& number);
+
+    std::string char_delims = ",\n";
+    std::string str_delim = "";
+    std::string digits = "0123456789";
 };
 
 #endif

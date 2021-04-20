@@ -20,11 +20,10 @@ TEST(CalculatorTest, SampleTest) {
 
  	StringCalc c;
 
- 	int actual = c.Add("1,2");
-
- 	ASSERT_EQ(actual, 3);
+ 	ASSERT_EQ(c.Add("1,2"), 3);
 
  }
+
 
 
 
@@ -33,11 +32,10 @@ TEST(CalculatorTest, EmptyString) {
 
  	StringCalc c;
 
- 	int actual = c.Add("");
-
- 	ASSERT_EQ(actual, 0);
+ 	ASSERT_EQ(c.Add(""), 0);
 
  }
+
 
 
 
@@ -46,11 +44,10 @@ TEST(CalculatorTest, Symbol0) {
 
  	StringCalc c;
 
- 	int actual = c.Add("0");
-
- 	ASSERT_EQ(actual, 0);
+ 	ASSERT_EQ(c.Add("0"), 0);
 
  }
+
 
 
 
@@ -59,11 +56,10 @@ TEST(CalculatorTest, Symbol1) {
 
  	StringCalc c;
 
- 	int actual = c.Add("1");
-
- 	ASSERT_EQ(actual, 1);
+ 	ASSERT_EQ(c.Add("1"), 1);
 
  }
+
 
 
 
@@ -72,11 +68,10 @@ TEST(CalculatorTest, StringWrongArg) {
 
  	StringCalc c;
 
- 	int actual = c.Add("5,-1");
-
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("5,-1"), std::invalid_argument);
 
  }
+
 
 
 
@@ -85,22 +80,20 @@ TEST(CalculatorTest, StringWrongArgFirst) {
 
  	StringCalc c;
 
- 	int actual = c.Add("-2,10");
-
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("-2,10"), std::invalid_argument);
 
  }
+
 
 
 TEST(CalculatorTest, SumFiveEL) {
 
  	StringCalc c;
 
- 	int actual = c.Add("5,100,20,5,1");
-
- 	ASSERT_EQ(actual, 131);
+ 	ASSERT_EQ(c.Add("5,100,20,5,1"), 131);
 
  }
+
 
 
 
@@ -109,11 +102,13 @@ TEST(CalculatorTest, SumFiveElWrongArg) {
 
  	StringCalc c;
 
- 	int actual = c.Add("5,100,-10,5,1");
+ 	ASSERT_THROW(c.Add("5,100,-10,5,1"), std::invalid_argument);
 
- 	ASSERT_EQ(actual, -1);
+
 
  }
+
+
 
 
 
@@ -123,11 +118,10 @@ TEST(CalculatorTest, SumFiveNewLine) {
 
  	StringCalc c;
 
- 	int actual = c.Add("5\n100\n20,5\n1");
-
- 	ASSERT_EQ(actual, 131);
+ 	ASSERT_EQ(c.Add("5\n100\n20,5\n1"), 131);
 
  }
+
 
 
 
@@ -136,11 +130,11 @@ TEST(CalculatorTest, SumFiveNewLineComma) {
 
  	StringCalc c;
 
- 	int actual = c.Add("5,100\n20,5\n1");
-
- 	ASSERT_EQ(actual, 131);
+ 	ASSERT_EQ(c.Add("5,100\n20,5\n1"), 131);
 
  }
+
+
 
 
 
@@ -150,8 +144,43 @@ TEST(CalculatorTest, SumFiveNewLineCommaWrongArgument) {
 
  	StringCalc c;
 
- 	int actual = c.Add("5,100\n20,5\n1,-1000");
-
- 	ASSERT_EQ(actual, -1);
+ 	ASSERT_THROW(c.Add("5,100\n20,5\n1,-1000"), std::invalid_argument);
 
  }
+
+
+
+TEST(CalculatorTest, CheckSum) {
+
+ 	StringCalc c;
+
+ 	ASSERT_EQ( c.Add("1001,2\n1200"), 2);
+
+ }
+
+
+
+
+
+
+
+TEST(CalculatorTest, CheckSumThousand) {
+
+ 	StringCalc c;
+
+ 	ASSERT_EQ(c.Add("1000,2\n999"), 2001);
+
+
+
+ }
+
+
+
+TEST(CalculatorTest, InvalidArgument) {
+
+ 	StringCalc c;	
+
+ 	ASSERT_THROW(c.Add("5,100\n20,1,-1"), std::invalid_argument);
+
+
+}

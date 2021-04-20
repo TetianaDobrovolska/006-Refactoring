@@ -19,6 +19,7 @@ StringCalc::~StringCalc()
 int StringCalc::Add(string numbers)
 {
 	int sum_of_elems = 0;
+	std::replace(numbers.begin(), numbers.end(), '\n', ',');
 	if(!numbers.empty()){
 		vector<int> vect;
 		static const regex regular("\\d+");

@@ -42,3 +42,15 @@ TEST(CalculatorTest, SampleThreePlusDigit) {
  	int actual = c.Add("1,2,30");
  	ASSERT_EQ(actual, 33);
 }
+
+TEST(CalculatorTest, SampleSlashDelimeter) {
+ 	StringCalc c;
+ 	int actual = c.Add("1\n2");
+ 	ASSERT_EQ(actual, 3);
+}
+
+TEST(CalculatorTest, SampleSlashAndStandartDelimeters) {
+ 	StringCalc c;
+ 	int actual = c.Add("1\n2,3");
+ 	ASSERT_EQ(actual, 6);
+}

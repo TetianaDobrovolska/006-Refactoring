@@ -13,10 +13,10 @@ TEST(CalculatorTest, EmptyString) {
     ASSERT_EQ(actual, 0);
 }
 
-TEST(CalculatorTest, LongString) {
+TEST(CalculatorTest, OneDigit) {
     StringCalc c;
-    int actual = c.Add("123456789");
-    ASSERT_EQ(actual, 45);
+    int actual = c.Add("1");
+    ASSERT_EQ(actual, 1);
 }
 
 TEST(CalculatorTest, SampleTest) {
@@ -25,10 +25,28 @@ TEST(CalculatorTest, SampleTest) {
     ASSERT_EQ(actual, 4);
 }
 
+TEST(CalculatorTest, SampleTest2) {
+    StringCalc c;
+    int actual = c.Add("1,10");
+    ASSERT_EQ(actual, 11);
+}
+
+TEST(CalculatorTest, SampleTest3) {
+    StringCalc c;
+    int actual = c.Add("120,1");
+    ASSERT_EQ(actual, 121);
+}
+
+TEST(CalculatorTest, LongString) {
+    StringCalc c;
+    int actual = c.Add("100,20,3");
+    ASSERT_EQ(actual, 123);
+}
+
 TEST(CalculatorTest, NegativeValue) {
     StringCalc c;
     int actual = c.Add("-2,1");
-    ASSERT_EQ(actual, 3);
+    ASSERT_EQ(actual, -1);
 }
 
 TEST(CalculatorTest, ZeroValue) {
@@ -37,8 +55,26 @@ TEST(CalculatorTest, ZeroValue) {
     ASSERT_EQ(actual, 0);
 }
 
+TEST(CalculatorTest, AlfaValue) {
+    StringCalc c;
+    int actual = c.Add("a,1");
+    ASSERT_EQ(actual, -1);
+}
+
+TEST(CalculatorTest, AlfaValue2) {
+    StringCalc c;
+    int actual = c.Add("0,c");
+    ASSERT_EQ(actual, -1);
+}
+
 TEST(CalculatorTest, NewLineString) {
     StringCalc c;
-    int actual = c.Add("3\n,2,2");
-    ASSERT_EQ(actual, 7);
+    int actual = c.Add("3\n2");
+    ASSERT_EQ(actual, 5);
+}
+
+TEST(CalculatorTest, MixedDefaultDelim) {
+    StringCalc c;
+    int actual = c.Add("1\n3,5");
+    ASSERT_EQ(actual, 9);
 }

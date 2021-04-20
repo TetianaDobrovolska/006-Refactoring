@@ -57,7 +57,7 @@
 
  TEST(CalculatorTest, WrongSeparator){
      StringCalc c;
-     ASSERT_THROW(c.Add("1 2"), std::invalid_argument);
+     ASSERT_THROW(c.Add("1-2"), std::invalid_argument);
  }
 
  TEST(CalculatorTest, MixedSeparators){
@@ -92,7 +92,8 @@
 
  TEST(CalculatorTest, SpecialSeparatorsNegative1){
      StringCalc c;
-     ASSERT_THROW(c.Add("//;\n1;2,7"), std::invalid_argument);
+     int actual = c.Add("//;\n1;2,7");
+     ASSERT_EQ(actual, 10);
  }
 
  TEST(CalculatorTest, SpecialSeparatorsNegative2){

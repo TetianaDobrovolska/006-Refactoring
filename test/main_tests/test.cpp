@@ -13,3 +13,20 @@ TEST(CalculatorTest, SampleTest) {
  	ASSERT_EQ(actual, 4);
 }
 
+TEST(CalculatorTest, SampleOneDigit) {
+ 	StringCalc c;
+ 	int actual = c.Add("1");
+ 	ASSERT_EQ(actual, 1);
+}
+
+TEST(CalculatorTest, SampleLongOneDigit) {
+ 	StringCalc c;
+ 	int actual = c.Add("1223");
+ 	ASSERT_EQ(actual, 1223);
+}
+
+TEST(CalculatorTest, SampleEmptyString) {
+ 	StringCalc c;
+ 	int actual = c.Add("");
+ 	ASSERT_EQ(actual, 0);
+}

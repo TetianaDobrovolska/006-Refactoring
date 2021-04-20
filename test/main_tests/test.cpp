@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "string_calc.hpp"
+#include <exception>
 #include <iostream>
 
 TEST(CalculatorTest, TestName) {
@@ -46,7 +47,7 @@ TEST(CalculatorTest, LongString) {
 TEST(CalculatorTest, NegativeValue) {
     StringCalc c;
     int actual = c.Add("-2,1");
-    ASSERT_EQ(actual, -1);
+    ASSERT_THROW(actual, std::exception);
 }
 
 TEST(CalculatorTest, ZeroValue) {
@@ -58,13 +59,13 @@ TEST(CalculatorTest, ZeroValue) {
 TEST(CalculatorTest, AlfaValue) {
     StringCalc c;
     int actual = c.Add("a,1");
-    ASSERT_EQ(actual, -1);
+    ASSERT_THROW(actual, std::exception);
 }
 
 TEST(CalculatorTest, AlfaValue2) {
     StringCalc c;
     int actual = c.Add("0,c");
-    ASSERT_EQ(actual, -1);
+    ASSERT_THROW(actual, std::exception);
 }
 
 TEST(CalculatorTest, NewLineString) {
@@ -106,17 +107,17 @@ TEST(CalculatorTest, DefaultAndExpandDelims3) {
 TEST(CalculatorTest, InvalidDelims) {
     StringCalc c;
     int actual = c.Add("//4,5");
-    ASSERT_EQ(actual, -1);
+    ASSERT_THROW(actual, std::exception);
 }
 
 TEST(CalculatorTest, InvalidDelims2) {
     StringCalc c;
     int actual = c.Add("/4,5");
-    ASSERT_EQ(actual, -1);
+    ASSERT_THROW(actual, std::exception);
 }
 
 TEST(CalculatorTest, InvalidDelims3) {
     StringCalc c;
     int actual = c.Add("//;\n4;5*1");
-    ASSERT_EQ(actual, -1);
+    ASSERT_THROW(actual, std::exception);
 }

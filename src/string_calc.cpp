@@ -14,7 +14,7 @@ StringCalc::~StringCalc()
 }
 
 
-int StringCalc::Add(string numbers)
+int StringCalc::Add(const std::string& numbers)
 {
 	return 0;//Not Implemented yet
 }

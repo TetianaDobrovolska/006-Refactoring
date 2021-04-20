@@ -10,7 +10,7 @@ public:
 
 	~StringCalc();
 	
-	int Add(std::string numbers);
+    int Add(const std::string& numbers);
 };
 
 #endif

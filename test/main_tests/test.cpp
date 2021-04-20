@@ -30,3 +30,15 @@ TEST(CalculatorTest, SampleEmptyString) {
  	int actual = c.Add("");
  	ASSERT_EQ(actual, 0);
 }
+
+TEST(CalculatorTest, SampleThreeDigit) {
+ 	StringCalc c;
+ 	int actual = c.Add("1,2,3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleThreePlusDigit) {
+ 	StringCalc c;
+ 	int actual = c.Add("1,2,30");
+ 	ASSERT_EQ(actual, 33);
+}

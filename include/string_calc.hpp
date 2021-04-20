@@ -14,6 +14,9 @@ public:
 	int Add(const std::string& numbers);
 
 private:
+	std::string::size_type findFirstDelim(const std::string& str,
+																				std::vector<std::string>& delims,
+																				size_t offset);
 	bool isDigit(const std::string& str);
 };
 

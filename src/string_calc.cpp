@@ -16,20 +16,59 @@ bool StringCalc::isDigit(const std::string& str)
                        [](char ch){ return std::isdigit(ch); });
 }
 
+std::string::size_type StringCalc::findFirstDelim(const std::string& str,
+                                                  std::vector<std::string>& delims,
+                                                  size_t offset)
+{
+    if (offset >= str.size())
+    {
+        return std::string::npos;
+    }
+
+    std::string::size_type pos = str.size();
+    for (size_t i = 0; i < delims.size(); ++i)
+    {
+        size_t tmp = str.find_first_of(delims[i], offset);
+        if (std::string::npos != tmp && tmp < pos)
+        {
+            pos = tmp;
+        }
+    }
+    return pos;
+}
 
 int StringCalc::Add(const std::string& numbers)
 {
-    const std::string delims { ",\n" };
-
-    size_t begin, end = 0;
-    int sum = 0;
-    while (std::string::npos != (begin = numbers.find_first_not_of(delims, end)))
+    if (numbers.empty())
     {
-        end = numbers.find_first_of(delims, begin + 1);
+        return 0;
+    }
+    std::vector<std::string> delims = {",", "\n"};
+
+    size_t begin = 0, end = 0;
+    if ("//" == numbers.substr(0, 2))
+    {
+        const size_t startDelim = 2;
+        const size_t endDelim = numbers.find_first_of("\n", startDelim);
+        if (std::string::npos == endDelim)
+        {
+            return kInvalidValue;
+        }
+        for (size_t i = startDelim; i < endDelim; ++i)
+        {
+            delims.emplace_back(std::string(1, numbers[i]));
+        }
+        begin = endDelim + 1;
+    }
+
+    int sum = 0;
+    while (std::string::npos != (end = findFirstDelim(numbers, delims, begin)))
+    {
         const std::string tmp = numbers.substr(begin, end - begin);
         if (!isDigit(tmp))
             return kInvalidValue;
         sum += std::stoi(tmp);
+        begin = end + 1;
     }
     return sum;
 }

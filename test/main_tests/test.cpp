@@ -183,4 +183,26 @@ TEST(CalculatorTest, InvalidArgument) {
  	ASSERT_THROW(c.Add("5,100\n20,1,-1"), std::invalid_argument);
 
 
+
 }
+
+
+TEST(CalculatorTest, SumFiveNewLineDelimiterMoreThanOne) {
+
+ 	StringCalc c;
+
+ 	ASSERT_EQ(c.Add("//:::\n5,100*20/5:::1"), 131);
+
+ }
+
+
+
+
+
+TEST(CalculatorTest, SumWithoutSlashDelimiter) {
+
+ 	StringCalc c;
+
+ 	ASSERT_EQ(c.Add("(:::5:,10020::5,1"), 6);
+
+ }

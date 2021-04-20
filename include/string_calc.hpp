@@ -11,6 +11,9 @@ public:
 	~StringCalc();
 	
 	int Add(std::string numbers);
+	
+private:
+	std::string Normalization(std::string str);
 };
 
 #endif

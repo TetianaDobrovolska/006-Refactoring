@@ -54,3 +54,15 @@ TEST(CalculatorTest, SampleSlashAndStandartDelimeters) {
  	int actual = c.Add("1\n2,3");
  	ASSERT_EQ(actual, 6);
 }
+
+TEST(CalculatorTest, SampleAdditionalSeparator) {
+	StringCalc c;
+ 	int actual = c.Add("//;\n1;2\n3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, Sample) {
+ 	StringCalc c;
+ 	int actual = c.Add("1\nb,a");
+ 	ASSERT_EQ(actual, 6);
+}

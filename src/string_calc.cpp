@@ -1,6 +1,8 @@
 #include "string_calc.hpp"
 
 #include <algorithm>
+#include <exception>
+#include <iostream>
 
 namespace
 {
@@ -39,36 +41,43 @@ std::string::size_type StringCalc::findFirstDelim(const std::string& str,
 
 int StringCalc::Add(const std::string& numbers)
 {
-    if (numbers.empty())
+    try
     {
-        return 0;
-    }
-    std::vector<std::string> delims = {",", "\n"};
-
-    size_t begin = 0, end = 0;
-    if ("//" == numbers.substr(0, 2))
-    {
-        const size_t startDelim = 2;
-        const size_t endDelim = numbers.find_first_of("\n", startDelim);
-        if (std::string::npos == endDelim)
+        if (numbers.empty())
         {
-            return kInvalidValue;
+            return 0;
         }
-        for (size_t i = startDelim; i < endDelim; ++i)
-        {
-            delims.emplace_back(std::string(1, numbers[i]));
-        }
-        begin = endDelim + 1;
-    }
+        std::vector<std::string> delims = {",", "\n"};
 
-    int sum = 0;
-    while (std::string::npos != (end = findFirstDelim(numbers, delims, begin)))
-    {
-        const std::string tmp = numbers.substr(begin, end - begin);
-        if (!isDigit(tmp))
-            return kInvalidValue;
-        sum += std::stoi(tmp);
-        begin = end + 1;
+        size_t begin = 0, end = 0;
+        if ("//" == numbers.substr(0, 2))
+        {
+            const size_t startDelim = 2;
+            const size_t endDelim = numbers.find_first_of("\n", startDelim);
+            if (std::string::npos == endDelim)
+            {
+                throw kInvalidValue;
+            }
+            for (size_t i = startDelim; i < endDelim; ++i)
+            {
+                delims.emplace_back(std::string(1, numbers[i]));
+            }
+            begin = endDelim + 1;
+        }
+
+        int sum = 0;
+        while (std::string::npos != (end = findFirstDelim(numbers, delims, begin)))
+        {
+            const std::string tmp = numbers.substr(begin, end - begin);
+            if (!isDigit(tmp))
+                throw kInvalidValue;
+            sum += std::stoi(tmp);
+            begin = end + 1;
+        }
+        return sum;
     }
-    return sum;
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 }

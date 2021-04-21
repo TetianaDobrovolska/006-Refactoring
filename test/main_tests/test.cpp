@@ -102,3 +102,27 @@ TEST(CalculatorTest, Test16) {
  	int actual = c.Add("9,5a");
  	ASSERT_EQ(actual, -1);
 }
+
+TEST(CalculatorTest, Test17) {
+ 	StringCalc c;
+ 	int actual = c.Add("-7");
+ 	ASSERT_EQ(actual, -1);
+}
+
+TEST(CalculatorTest, Test18) {
+ 	StringCalc c;
+ 	int actual = c.Add("8,7,5,10");
+ 	ASSERT_EQ(actual, 30);
+}
+
+TEST(CalculatorTest, Test19) {
+ 	StringCalc c;
+ 	int actual = c.Add("8,7,,10");
+ 	ASSERT_EQ(actual, -1);
+}
+
+TEST(CalculatorTest, Test20) {
+ 	StringCalc c;
+ 	int actual = c.Add("30,4,206,10");
+ 	ASSERT_EQ(actual, 250);
+}

@@ -38,7 +38,7 @@ int StringCalc::Add(const string& numbers)
 
 
 bool ParseInputString(const string& source_string, vector<int>& arguments) {
-	size_t string_size = source_string.size();
+	const size_t string_size = source_string.size();
 
 	if (string_size == 0)
 	{
@@ -48,7 +48,6 @@ bool ParseInputString(const string& source_string, vector<int>& arguments) {
 
 	string part_of_string;
 	int position = 0;
-	int divider_count = 0;
 
 	for (const auto& later : source_string) {
 		if (later != ',')
@@ -66,19 +65,14 @@ bool ParseInputString(const string& source_string, vector<int>& arguments) {
 				return 1;
 			}
 		}
+		else if (part_of_string.empty())
+		{
+			return 0;
+		}
 		else
 		{
-			divider_count++;
-
-			if (arguments.size() < 2 && divider_count < 2 && !part_of_string.empty())
-			{
-				arguments.push_back(stoi(part_of_string));
-				part_of_string = "";
-			}
-			else
-			{
-				return 0;
-			}
+			arguments.push_back(stoi(part_of_string));
+			part_of_string = "";
 		}
 		position++;
 	}

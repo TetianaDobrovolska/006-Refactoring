@@ -2,14 +2,83 @@
 #include "string_calc.hpp"
 #include <iostream>
 
-TEST(CalculatorTest, TestName) {
+class CalculatorTest : public ::testing::Test
+{
+  protected:
+  void SetUp()
+  {
+    res = new StringCalc;
+  }
+
+  void TearDown()
+  {
+    delete res;
+  }
+
+  StringCalc *res;
+};
+
+TEST_F(CalculatorTest, Test1) {
   EXPECT_EQ(1, 1);
   EXPECT_TRUE(true);
 }
 
-// TEST(CalculatorTest, SampleTest) {
-// 	StringCalc c;
-// 	int actual = c.Add("2,2");
-// 	ASSERT_EQ(actual, 4);
-// }
+TEST_F(CalculatorTest, Test2) {
+	int actual = res->Add("2,2");
+	EXPECT_EQ(actual, 4);
+}
 
+TEST_F(CalculatorTest, Test3) {
+	int actual = res->Add("5,2");
+	EXPECT_EQ(actual, 7);
+}
+
+TEST_F(CalculatorTest, Test4) {
+	int actual = res->Add("");
+	EXPECT_EQ(actual, 0);
+}
+
+TEST_F(CalculatorTest, Test5) {
+	int actual = res->Add("0");
+	EXPECT_EQ(actual, 0);
+}
+
+TEST_F(CalculatorTest, Test6) {
+	int actual = res->Add("5");
+	EXPECT_EQ(actual, 5);
+}
+
+TEST_F(CalculatorTest, Test7) {
+	int actual = res->Add("-3");
+	EXPECT_EQ(actual, -1);
+}
+
+TEST_F(CalculatorTest, Test8) {
+	int actual = res->Add("^&*");
+	EXPECT_EQ(actual, -1);
+}
+
+TEST_F(CalculatorTest, Test9) {
+	int actual = res->Add(",");
+	EXPECT_EQ(actual, -1);
+}
+
+TEST_F(CalculatorTest, Test10) {
+	int actual = res->Add("5,");
+	EXPECT_EQ(actual, -1);
+}
+
+TEST_F(CalculatorTest, Test11) {
+	int actual = res->Add(",9");
+	EXPECT_EQ(actual, -1);
+}
+
+TEST_F(CalculatorTest, Test12) {
+	int actual = res->Add("2,4,");
+	EXPECT_EQ(actual, -1);
+}
+
+TEST_F(CalculatorTest, Test13) {
+	int actual = res->Add("22,44");
+	EXPECT_EQ(actual, 66);
+}

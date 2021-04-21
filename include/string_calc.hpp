@@ -5,11 +5,14 @@
 
 class StringCalc
 {
+private:
+	bool checkStringValidity(const std::string &);
+
 public:
 	StringCalc();
 
 	~StringCalc();
-	
+
 	int Add(std::string numbers);
 };
 

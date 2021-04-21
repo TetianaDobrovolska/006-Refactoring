@@ -32,3 +32,19 @@ TEST(CalculatorTest, AddNotANumber) {
 	ASSERT_EQ(actual, -1);
 }
 
+TEST(CalculatorTest, AddThreeANumbers) {
+	StringCalc c;
+	int actual = c.Add("2,4,1");
+	ASSERT_EQ(actual, 7);
+}
+
+TEST(CalculatorTest, AddFiftyANumbers) {
+	std::string input = "1";
+	for (auto i = 2; i <= 50; ++i) {
+		input = input + ',' + std::to_string(i);
+	}
+	StringCalc c;
+	int actual = c.Add(input);
+	ASSERT_EQ(actual, 1275);
+}
+

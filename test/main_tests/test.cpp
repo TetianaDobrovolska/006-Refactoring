@@ -3,14 +3,14 @@
 #include <iostream>
 
 TEST(CalculatorTest, TestName) {
-  EXPECT_EQ(1, 1);
-  EXPECT_TRUE(true);
+    EXPECT_EQ(1, 1);
+    EXPECT_TRUE(true);
 }
 
 TEST(CalculatorTest, SampleTest) {
- 	StringCalc c;
+    StringCalc c;
  	int actual = c.Add("2,2");
- 	ASSERT_EQ(actual, 4);
+ 	EXPECT_EQ(actual, 4);
 }
 
 TEST(CalculatorTest, SampleOneDigit) {
@@ -61,8 +61,52 @@ TEST(CalculatorTest, SampleAdditionalSeparator) {
  	ASSERT_EQ(actual, 6);
 }
 
-TEST(CalculatorTest, Sample) {
+TEST(CalculatorTest, SampleInvalid) {
  	StringCalc c;
- 	int actual = c.Add("1\nb,a");
- 	ASSERT_EQ(actual, 6);
+ 	ASSERT_THROW(c.Add("1\nb,a"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidSecond) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add("b"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidThird) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add("1, 2,,,"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidFourth) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add(",,,"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidFifth) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add("%%%"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidSixth) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add("|"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidSeventh) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add(","), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidEighth) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add("1,2,3,<<<<"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidNinth) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add("1,"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleInvalidTenth) {
+ 	StringCalc c;
+ 	ASSERT_THROW(c.Add("1,2..."), std::invalid_argument);
 }

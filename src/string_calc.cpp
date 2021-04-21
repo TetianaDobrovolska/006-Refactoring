@@ -18,7 +18,9 @@ std::string StringCalc::Normalization(std::string str)
 {
     size_t slash_pos = str.find("//");
 	const std::regex alphabet("[A-Za-z]+");
-	if(std::regex_search(str, alphabet)) { str = "-"; return str;}
+	const std::regex numbers("[[]\\d,+]");
+	std::cout << str[str.length()-1] << "  ~  " << !isdigit(str.length()-1) << "  HAHAHAHAHAHA" << std::endl;
+	if(std::regex_search(str, alphabet)) { throw std::invalid_argument("Wrong arguments");}
 	if(0 == slash_pos){
 		std::string delimeter = "";
 		char r;
@@ -34,6 +36,14 @@ std::string StringCalc::Normalization(std::string str)
 	}
 	else {
 		replace(str.begin(), str.end(), '\n', ',');
+	}
+	for(int i = 0; i < str.length(); i++){
+		const std::regex notNumber("([0-9]+(%{2,}|\\|{2,}|,[^\\w\\s])+)+\
+									|((%{2,}|\\|{2,}|,[^\\w\\s])+)+");
+		bool regexResult = std::regex_search(str, notNumber);
+		if(regexResult || !isdigit(str[0]) || !isdigit(str[str.length()-1])) { 
+			throw std::invalid_argument("Wrong arguments");
+		}
 	}
     return str;
 }

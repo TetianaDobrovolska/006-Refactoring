@@ -68,3 +68,9 @@ TEST(CalculatorTest, AddIncorectFormatWithCustomDelimiters) {
 	StringCalc c;
 	EXPECT_THROW(c.Add("\n1;2,3"), std::invalid_argument);
 }
+
+TEST(CalculatorTest, AddThousandAndOneNumber) {
+	StringCalc c;
+	int actual = c.Add("1001,1");
+	ASSERT_EQ(actual, 1);
+}

@@ -5,63 +5,35 @@
 #include <iostream>
 
 
+using namespace std;
 
-TEST(CalculatorTest, TestName) {
+class CheckSumMultipleParametersTests :public ::testing::TestWithParam<std::tuple<int, std::string>> {
+protected:
+   StringCalc c;
+};
 
-  EXPECT_EQ(1, 1);
-
-  EXPECT_TRUE(true);
-
+TEST_P(CheckSumMultipleParametersTests, CheckSum) {
+    int expected = std::get<0>(GetParam());
+    std::string numberstring = std::get<1>(GetParam());
+    ASSERT_EQ(expected, c.Add(numberstring));
 }
 
-
-
-TEST(CalculatorTest, SampleTest) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("1,2"), 3);
-
- }
-
-
-
-
-
-TEST(CalculatorTest, EmptyString) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add(""), 0);
-
- }
-
-
-
-
-
-TEST(CalculatorTest, Symbol0) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("0"), 0);
-
- }
-
-
-
-
-
-TEST(CalculatorTest, Symbol1) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("1"), 1);
-
- }
-
-
-
+INSTANTIATE_TEST_CASE_P(
+       CheckSumTests,
+       CheckSumMultipleParametersTests,
+        ::testing::Values(
+                std::make_tuple(3, "1,2"),
+                std::make_tuple(0, ""),
+                std::make_tuple(0, "0"),
+                std::make_tuple(1, "1"),
+                std::make_tuple(131, "5,100,20,5,1"),
+                std::make_tuple(131, "5\n100\n20,5\n1"),
+                std::make_tuple(131, "5,100,20,5\n1"),
+                std::make_tuple(2, "1001,2\n1200"),
+                std::make_tuple(2001, "1000,2\n999"),
+                std::make_tuple(131, "//:::\n5,100*20/5:::1"),
+                std::make_tuple(11, ":::5,121::5,1")
+));
 
 
 TEST(CalculatorTest, StringWrongArg) {
@@ -86,17 +58,6 @@ TEST(CalculatorTest, StringWrongArgFirst) {
 
 
 
-TEST(CalculatorTest, SumFiveEL) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("5,100,20,5,1"), 131);
-
- }
-
-
-
-
 
 TEST(CalculatorTest, SumFiveElWrongArg) {
 
@@ -110,67 +71,11 @@ TEST(CalculatorTest, SumFiveElWrongArg) {
 
 
 
-
-
-
-
-TEST(CalculatorTest, SumFiveNewLine) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("5\n100\n20,5\n1"), 131);
-
- }
-
-
-
-
-
-TEST(CalculatorTest, SumFiveNewLineComma) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("5,100\n20,5\n1"), 131);
-
- }
-
-
-
-
-
-
-
 TEST(CalculatorTest, SumFiveNewLineCommaWrongArgument) {
 
  	StringCalc c;
 
  	ASSERT_THROW(c.Add("5,100\n20,5\n1,-1000"), std::invalid_argument);
-
- }
-
-
-
-TEST(CalculatorTest, CheckSum) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ( c.Add("1001,2\n1200"), 2);
-
- }
-
-
-
-
-
-
-
-TEST(CalculatorTest, CheckSumThousand) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("1000,2\n999"), 2001);
-
-
 
  }
 
@@ -186,23 +91,3 @@ TEST(CalculatorTest, InvalidArgument) {
 
 }
 
-
-TEST(CalculatorTest, SumFiveNewLineDelimiterMoreThanOne) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("//:::\n5,100*20/5:::1"), 131);
-
- }
-
-
-
-
-
-TEST(CalculatorTest, SumWithoutSlashDelimiter) {
-
- 	StringCalc c;
-
- 	ASSERT_EQ(c.Add("(:::5:,10020::5,1"), 6);
-
- }

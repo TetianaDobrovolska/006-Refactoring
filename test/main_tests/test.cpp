@@ -22,14 +22,12 @@ TEST(CalculatorTest, AddTwoNumbers) {
 
 TEST(CalculatorTest, AddNegativeNumber) {
 	StringCalc c;
-	int actual = c.Add("-666");
-	ASSERT_EQ(actual, -1);
+	EXPECT_THROW(c.Add("-666"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, AddNotANumber) {
 	StringCalc c;
-	int actual = c.Add("k");
-	ASSERT_EQ(actual, -1);
+	EXPECT_THROW(c.Add("-k"), std::invalid_argument);
 }
 
 TEST(CalculatorTest, AddThreeANumbers) {
@@ -68,6 +66,5 @@ TEST(CalculatorTest, AddWithCustomDelimiters) {
 
 TEST(CalculatorTest, AddIncorectFormatWithCustomDelimiters) {
 	StringCalc c;
-	int actual = c.Add("\n1;2,3");
-	ASSERT_EQ(actual, -1);
+	EXPECT_THROW(c.Add("\n1;2,3"), std::invalid_argument);
 }

@@ -74,3 +74,14 @@ TEST(CalculatorTest, AddThousandAndOneNumber) {
 	int actual = c.Add("1001,1");
 	ASSERT_EQ(actual, 1);
 }
+
+TEST(CalculatorTest, AddWithLongCustomDelimiter) {
+	StringCalc c;
+	int actual = c.Add("//[@#$]\n1@#$2,3\n4");
+	ASSERT_EQ(actual, 10);
+}
+
+TEST(CalculatorTest, AddWithInvalidLongCustomDelimiter) {
+	StringCalc c;
+	EXPECT_THROW(c.Add("//[@#$]\n1@2#3$4"), std::invalid_argument);
+}

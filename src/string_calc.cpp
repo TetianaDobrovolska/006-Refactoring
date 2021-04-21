@@ -12,12 +12,6 @@ using namespace std;
 
 
 
-int const UPPER_LIMIT = 1000;
-
-int const LOWER_LIMIT = 0;
-
-
-
 StringCalc::StringCalc()
 
 {
@@ -45,6 +39,7 @@ int StringCalc::Add(string numbers)
 	int sum = 0;
 
 	int num = 0;
+	string numstr = "";
 
 	
 
@@ -54,9 +49,10 @@ int StringCalc::Add(string numbers)
 
 	regex_token_iterator<string::iterator> end;
 
-	while (iter != end) {
+	for ( ;iter != end; iter++ ) {
+		numstr = iter->str().substr(0, iter->str().length());
 
-		num = atoi(iter->str().substr(0, iter->str().length()).c_str());
+		num = atoi(numstr.c_str());
 
 		if (LOWER_LIMIT < 0) {
 
@@ -69,8 +65,6 @@ int StringCalc::Add(string numbers)
 			sum += num;
 
 		}
-
-		++iter;
 
 	}
 

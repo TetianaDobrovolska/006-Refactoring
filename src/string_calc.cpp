@@ -13,7 +13,7 @@ StringCalc::~StringCalc()
 {
 }
 
-bool StringCalc::checkStringValidity(const string &str)
+void StringCalc::checkStringValidity(const string &str)
 {
 	const char validSymbols[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ','};
 	
@@ -28,53 +28,22 @@ bool StringCalc::checkStringValidity(const string &str)
 		}
 
 		if (!found)
-			return false;		
+			throw std::invalid_argument("Invalid argument");		
 	}
-	return true;	
 }
 
-
-int StringCalc::Add(string numbers)
+void StringCalc::checkCustomDeliminary(std::string &numbers)
 {
-	if(numbers.size() == 0)
-		return 0;
-
 	if((numbers.find("//") == 0) && (numbers.find("\n") == 3))
 	{
 		char customDeliminary = numbers[2];
 		numbers.erase(0, 4);
 		std::replace(numbers.begin(), numbers.end(), customDeliminary, ',');
 	}
-	
-	std::replace(numbers.begin(), numbers.end(), '\n', ',');
+}
 
-	if (checkStringValidity(numbers) == false)
-		throw std::invalid_argument("Invalid argument");
-
-	vector<int> delimetersPositions;
-	int lastIndex = numbers.size() -1;
-
-	if((numbers[0] != ',') && (numbers[lastIndex] != ','))
-	{
-		for (size_t i = 0; i < numbers.size(); i++)
-		{
-			if(numbers[i] == ',')
-			{
-				if(numbers[i+1] != ',')
-					delimetersPositions.push_back(i);
-				else
-					throw std::invalid_argument("Invalid argument");;
-			}
-		}
-	}
-	else
-		throw std::invalid_argument("Invalid argument");;
-		
-	if (delimetersPositions.empty())
-	{
-		return std::stoi(numbers);
-	}
-
+int StringCalc::sumValues(const std::string &numbers, const std::vector<int> &delimetersPositions)
+{
 	vector<int> nums;
 	string tmp;
 
@@ -100,9 +69,54 @@ int StringCalc::Add(string numbers)
 	{
 		summ +=i;
 	}
+
+	return summ;
+}
+
+void StringCalc::calculateDelimetersPosition(const std::string &numbers, std::vector<int> &delimetersPositions)
+{
+	int lastIndex = numbers.size() -1;
+
+	if((numbers[0] != ',') && (numbers[lastIndex] != ','))
+	{
+		for (size_t i = 0; i < numbers.size(); i++)
+		{
+			if(numbers[i] == ',')
+			{
+				if(numbers[i+1] != ',')
+					delimetersPositions.push_back(i);
+				else
+					throw std::invalid_argument("Invalid argument");
+			}
+		}
+	}
+	else
+		throw std::invalid_argument("Invalid argument");
+			
+}
+
+
+int StringCalc::Add(string numbers)
+{
+	if(numbers.size() == 0)
+		return 0;
+
+	checkCustomDeliminary(numbers);
 	
-//	int a = std::stoi(numbers.substr(0, delimetersPositions[0]));
-//	int b = std::stoi(numbers.substr(delimetersPositions[0]+1));
+	std::replace(numbers.begin(), numbers.end(), '\n', ',');
+
+	checkStringValidity(numbers);
+
+	vector<int> delimetersPositions;
+
+	calculateDelimetersPosition(numbers, delimetersPositions);
+
+	if (delimetersPositions.empty())
+	{
+		return std::stoi(numbers);
+	}
+
+	int summ = sumValues(numbers, delimetersPositions);
 
 	return summ;
 }

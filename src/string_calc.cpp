@@ -34,11 +34,17 @@ void StringCalc::checkStringValidity(const string &str)
 
 void StringCalc::checkCustomDeliminary(std::string &numbers)
 {
-	if((numbers.find("//") == 0) && (numbers.find("\n") == 3))
+	auto endIndex = numbers.find("\n");
+
+	if((numbers.find("//") == 0) && (endIndex != std::string::npos))
 	{
-		char customDeliminary = numbers[2];
-		numbers.erase(0, 4);
-		std::replace(numbers.begin(), numbers.end(), customDeliminary, ',');
+		string customDeliminary = numbers.substr(2, endIndex - 2);
+		//char customDeliminary = numbers[2];
+		numbers.erase(0, endIndex + 1);
+		while(int pos = numbers.find(customDeliminary) != std::string::npos)
+		{
+			numbers.replace(pos, customDeliminary.length(), ",");
+		}
 	}
 }
 

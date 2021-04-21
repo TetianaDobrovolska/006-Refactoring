@@ -114,8 +114,8 @@ TEST_F(CalculatorTest, Test19) {
 }
 
 TEST_F(CalculatorTest, Test20) {
-	EXPECT_THROW(res->Add("//%1%2,3\n4"), std::invalid_argument);
-	//EXPECT_EQ(actual, -1);
+	int actual = res->Add("//%1%2,3\n4");
+	EXPECT_EQ(actual, 4);
 }
 
 TEST_F(CalculatorTest, Test21) {
@@ -126,4 +126,9 @@ TEST_F(CalculatorTest, Test21) {
 TEST_F(CalculatorTest, Test22) {
 	int actual = res->Add("2222,3333");
 	EXPECT_EQ(actual, 0);
+}
+
+TEST_F(CalculatorTest, Test23) {
+	int actual = res->Add("//%$!\n1%$!2,3\n4");
+	EXPECT_EQ(actual, 10);
 }

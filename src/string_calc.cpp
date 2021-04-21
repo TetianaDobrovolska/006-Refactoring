@@ -18,8 +18,6 @@ std::string StringCalc::Normalization(std::string str)
 {
     size_t slash_pos = str.find("//");
 	const std::regex alphabet("[A-Za-z]+");
-	const std::regex numbers("[[]\\d,+]");
-	std::cout << str[str.length()-1] << "  ~  " << !isdigit(str.length()-1) << "  HAHAHAHAHAHA" << std::endl;
 	if(std::regex_search(str, alphabet)) { throw std::invalid_argument("Wrong arguments");}
 	if(0 == slash_pos){
 		std::string delimeter = "";
@@ -62,7 +60,8 @@ int StringCalc::Add(std::string numbers)
     	std::string t = *num;
     	int elem = atoi( t.c_str() );
 		i = numbers.find(",", i+1);
-		vect.push_back(elem);
+		if(1000 > elem) { vect.push_back(elem);}
+		else { vect.push_back(0);}
 	}
 	sum_of_elems = std::accumulate(vect.begin(), vect.end(), 0);
 	return sum_of_elems;

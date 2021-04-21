@@ -22,7 +22,7 @@ TEST(CalculatorTest, SampleOneDigit) {
 TEST(CalculatorTest, SampleLongOneDigit) {
  	StringCalc c;
  	int actual = c.Add("1223");
- 	ASSERT_EQ(actual, 1223);
+ 	ASSERT_EQ(actual, 0);
 }
 
 TEST(CalculatorTest, SampleEmptyString) {
@@ -109,4 +109,22 @@ TEST(CalculatorTest, SampleInvalidNinth) {
 TEST(CalculatorTest, SampleInvalidTenth) {
  	StringCalc c;
  	ASSERT_THROW(c.Add("1,2..."), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleThousand) {
+	StringCalc c;
+ 	int actual = c.Add("1,2,1000");
+ 	ASSERT_EQ(actual, 3);
+}
+
+TEST(CalculatorTest, SampleThousandTwo) {
+	StringCalc c;
+ 	int actual = c.Add("1,999");
+ 	ASSERT_EQ(actual, 1000);
+}
+
+TEST(CalculatorTest, SampleThousandThree) {
+	StringCalc c;
+ 	int actual = c.Add("1000");
+ 	ASSERT_EQ(actual, 0);
 }

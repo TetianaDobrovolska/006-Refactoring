@@ -6,12 +6,16 @@
 class StringCalc
 {
 public:
-	StringCalc();
+    StringCalc();
 
 	~StringCalc();
 	
     int Add(const std::string& numbers);
+
+private:
+    bool validity(const std::string& numbers);
+
+    const char m_defaultDelimiter = ',';
 };
 
 #endif
-

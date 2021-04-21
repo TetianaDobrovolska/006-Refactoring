@@ -60,3 +60,14 @@ TEST(CalculatorTest, AddWithNewLineAndComaDelimiters) {
 	ASSERT_EQ(actual, 6);
 }
 
+TEST(CalculatorTest, AddWithCustomDelimiters) {
+	StringCalc c;
+	int actual = c.Add("//;\n1;2,3");
+	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, AddIncorectFormatWithCustomDelimiters) {
+	StringCalc c;
+	int actual = c.Add("\n1;2,3");
+	ASSERT_EQ(actual, -1);
+}

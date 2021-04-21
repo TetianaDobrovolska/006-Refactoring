@@ -1,4 +1,5 @@
 #include "string_calc.hpp"
+#include "utils.hpp"
 #include <vector>
 #include <algorithm>
 
@@ -13,14 +14,19 @@ StringCalc::~StringCalc()
 {
 }
 
-
 int StringCalc::Add(string numbers)
 {
 	if (numbers.length() == 0) {
 		return 0;
 	}
 
-	char customDelimiter = RemoveCustomDelimiterFromInput(numbers);
+	string customDelimiterStr = RemoveCustomDelimiterFromInput(numbers);
+
+	if (customDelimiterStr.length() > 1) {
+		numbers = utils::replace(numbers, customDelimiterStr, ",");
+		customDelimiterStr = ",";
+	}
+	char customDelimiter = customDelimiterStr[0];
 
 	if (any_of(numbers.cbegin(), numbers.cend(), 
 		[customDelimiter](char ch) { return !(ch == ',' ||
@@ -41,7 +47,7 @@ int StringCalc::Add(string numbers)
 												ch == customDelimiter; 
 			});
 		int number = stoi(string(beginIter, endIter));
-		if (number <= 1000) {
+		if (number <= MAX_NUMBER) {
 			acc += number;
 		}
 		beginIter = endIter + 1;
@@ -50,13 +56,25 @@ int StringCalc::Add(string numbers)
 	return acc;
 }
 
-char StringCalc::RemoveCustomDelimiterFromInput(string& numbers)
+string StringCalc::RemoveCustomDelimiterFromInput(string& numbers)
 {
-	char customDelimiter = ',';
+	const int LONG_DELIMITER_BEGIN_INDEX = 3;
+	const int SHORT_DELIMITER_NUMBER_BEGIN_INDEX = 4;
+	string customDelimiter = ",";
 
-	if (numbers.rfind("//", 0) == 0 && numbers[3] == '\n') {
-		customDelimiter = numbers[2];
-		numbers = string(numbers.begin() + 4, numbers.end());
+	if (numbers.find("//", 0) == 0) {
+		if (auto endIndex = numbers.find("]", 0);
+			numbers.find("//[", 0) == 0 &&
+			endIndex > LONG_DELIMITER_BEGIN_INDEX &&
+			endIndex != string::npos) {
+			customDelimiter = numbers.substr(LONG_DELIMITER_BEGIN_INDEX, endIndex - LONG_DELIMITER_BEGIN_INDEX);
+			numbers = string(numbers.cbegin() + endIndex + 2, numbers.cend());
+		} else if (numbers[3] == '\n') {
+			customDelimiter = numbers[2];
+			numbers = string(numbers.begin() + SHORT_DELIMITER_NUMBER_BEGIN_INDEX, numbers.end());
+		} else {
+			throw std::invalid_argument("Invalid delimiter");
+		}
 	}
 	return customDelimiter;
 }

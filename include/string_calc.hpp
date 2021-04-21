@@ -12,7 +12,8 @@ public:
 	
 	int Add(std::string numbers);
 private:
-	char RemoveCustomDelimiterFromInput(std::string& numbers);
+	const int MAX_NUMBER = 1000;
+	std::string RemoveCustomDelimiterFromInput(std::string& numbers);
 };
 
 #endif

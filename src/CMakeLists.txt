@@ -3,6 +3,7 @@ project(calculator)
 set(SRC
 	main.cpp
 	string_calc.cpp
+	utils.cpp
 )
 
 add_executable(${PROJECT_NAME}

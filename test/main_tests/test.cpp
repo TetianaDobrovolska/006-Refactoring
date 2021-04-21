@@ -127,3 +127,15 @@ TEST(CalculatorTest, BigNumber) {
     int actual = c.Add("1001,2");
     ASSERT_EQ(actual, 2);
 }
+
+TEST(CalculatorTest, MultipleDelims) {
+    StringCalc c;
+    int actual = c.Add("//***\n4***1");
+    ASSERT_EQ(actual, 5);
+}
+
+TEST(CalculatorTest, MixedMultipleDelims) {
+    StringCalc c;
+    int actual = c.Add("//***\n4***1\n1,3");
+    ASSERT_EQ(actual, 9);
+}

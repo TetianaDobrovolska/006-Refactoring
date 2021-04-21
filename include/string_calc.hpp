@@ -16,7 +16,8 @@ public:
 private:
 	std::string::size_type findFirstDelim(const std::string& str,
 																				std::vector<std::string>& delims,
-																				size_t offset);
+																				size_t offset,
+																				size_t& delim_pos);
 	bool isDigit(const std::string& str);
 };
 

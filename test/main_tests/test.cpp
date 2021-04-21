@@ -82,3 +82,13 @@ TEST_F(CalculatorTest, Test13) {
 	int actual = res->Add("22,44");
 	EXPECT_EQ(actual, 66);
 }
+
+TEST_F(CalculatorTest, Test14) {
+	int actual = res->Add("1,20,4,1,12");
+	EXPECT_EQ(actual, 38);
+}
+
+TEST_F(CalculatorTest, Test15) {
+	int actual = res->Add("1,20,4,,12");
+	EXPECT_EQ(actual, -1);
+}

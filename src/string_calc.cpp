@@ -51,14 +51,14 @@ int StringCalc::Add(string numbers)
 		{
 			if(numbers[i] == ',')
 			{
-				delimetersPositions.push_back(i);
+				if(numbers[i+1] != ',')
+					delimetersPositions.push_back(i);
+				else
+					return -1;
 			}
 		}
 	}
 	else
-		return -1;
-
-	if (delimetersPositions.size() > 1)
 		return -1;
 		
 	if (delimetersPositions.empty())
@@ -66,8 +66,34 @@ int StringCalc::Add(string numbers)
 		return std::stoi(numbers);
 	}
 
-	int a = std::stoi(numbers.substr(0, delimetersPositions[0]));
-	int b = std::stoi(numbers.substr(delimetersPositions[0]+1));
+	vector<int> nums;
+	string tmp;
 
-	return a + b;
+	nums.push_back(std::stoi(numbers.substr(0, delimetersPositions[0])));
+
+	for (size_t i = 0; i < delimetersPositions.size(); i++)
+	{
+		if (i + 1 < delimetersPositions.size())
+		{
+			tmp = numbers.substr(delimetersPositions[i]+1);
+		}
+		else
+		{
+			int len = delimetersPositions[i+1] - (delimetersPositions[i] + 1);
+			tmp = numbers.substr(delimetersPositions[i]+1, len);
+		}
+		nums.push_back(std::stoi(tmp));
+	}
+	
+	int summ = 0;
+
+	for (auto &i : nums)
+	{
+		summ +=i;
+	}
+	
+//	int a = std::stoi(numbers.substr(0, delimetersPositions[0]));
+//	int b = std::stoi(numbers.substr(delimetersPositions[0]+1));
+
+	return summ;
 }

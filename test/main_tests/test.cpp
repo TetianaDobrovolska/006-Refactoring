@@ -117,3 +117,13 @@ TEST_F(CalculatorTest, Test20) {
 	EXPECT_THROW(res->Add("//%1%2,3\n4"), std::invalid_argument);
 	//EXPECT_EQ(actual, -1);
 }
+
+TEST_F(CalculatorTest, Test21) {
+	int actual = res->Add("2222,3\n432");
+	EXPECT_EQ(actual, 435);
+}
+
+TEST_F(CalculatorTest, Test22) {
+	int actual = res->Add("2222,3333");
+	EXPECT_EQ(actual, 0);
+}

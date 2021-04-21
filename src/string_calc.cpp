@@ -67,7 +67,10 @@ int StringCalc::sumValues(const std::string &numbers, const std::vector<int> &de
 
 	for (auto &i : nums)
 	{
-		summ +=i;
+		if(i < 1000)
+		{
+			summ +=i;
+		}
 	}
 
 	return summ;

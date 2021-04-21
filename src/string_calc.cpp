@@ -28,7 +28,7 @@ int StringCalc::Add(string numbers)
 											  ch == customDelimiter ||
 											  isdigit(ch)); 
 		})) {
-		return -1;
+		throw std::invalid_argument("incorrect argument");
 	}
 
 	int acc = 0;

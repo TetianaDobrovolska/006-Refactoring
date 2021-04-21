@@ -49,33 +49,33 @@ TEST_F(CalculatorTest, Test6) {
 }
 
 TEST_F(CalculatorTest, Test7) {
-	int actual = res->Add("-3");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add("-3"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test8) {
-	int actual = res->Add("^&*");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add("^&*"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test9) {
-	int actual = res->Add(",");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add(","), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test10) {
-	int actual = res->Add("5,");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add("5,"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test11) {
-	int actual = res->Add(",9");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add(",9"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test12) {
-	int actual = res->Add("2,4,");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add("2,4,"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test13) {
@@ -89,13 +89,13 @@ TEST_F(CalculatorTest, Test14) {
 }
 
 TEST_F(CalculatorTest, Test15) {
-	int actual = res->Add("1,20,4,,12");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add("1,20,4,,12"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test16) {
-	int actual = res->Add("1,20\\n4,12");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add("1,20\\n4,12"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test17) {
@@ -104,8 +104,8 @@ TEST_F(CalculatorTest, Test17) {
 }
 
 TEST_F(CalculatorTest, Test18) {
-	int actual = res->Add("1\n\12");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add("1\n\12"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }
 
 TEST_F(CalculatorTest, Test19) {
@@ -114,6 +114,6 @@ TEST_F(CalculatorTest, Test19) {
 }
 
 TEST_F(CalculatorTest, Test20) {
-	int actual = res->Add("//%1%2,3\n4");
-	EXPECT_EQ(actual, -1);
+	EXPECT_THROW(res->Add("//%1%2,3\n4"), std::invalid_argument);
+	//EXPECT_EQ(actual, -1);
 }

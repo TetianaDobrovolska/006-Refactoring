@@ -49,7 +49,7 @@ int StringCalc::Add(string numbers)
 	std::replace(numbers.begin(), numbers.end(), '\n', ',');
 
 	if (checkStringValidity(numbers) == false)
-		return -1;
+		throw std::invalid_argument("Invalid argument");
 
 	vector<int> delimetersPositions;
 	int lastIndex = numbers.size() -1;
@@ -63,12 +63,12 @@ int StringCalc::Add(string numbers)
 				if(numbers[i+1] != ',')
 					delimetersPositions.push_back(i);
 				else
-					return -1;
+					throw std::invalid_argument("Invalid argument");;
 			}
 		}
 	}
 	else
-		return -1;
+		throw std::invalid_argument("Invalid argument");;
 		
 	if (delimetersPositions.empty())
 	{

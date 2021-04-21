@@ -38,6 +38,13 @@ int StringCalc::Add(string numbers)
 {
 	if(numbers.size() == 0)
 		return 0;
+
+	if((numbers.find("//") == 0) && (numbers.find("\n") == 3))
+	{
+		char customDeliminary = numbers[2];
+		numbers.erase(0, 4);
+		std::replace(numbers.begin(), numbers.end(), customDeliminary, ',');
+	}
 	
 	std::replace(numbers.begin(), numbers.end(), '\n', ',');
 

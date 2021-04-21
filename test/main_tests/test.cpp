@@ -107,3 +107,13 @@ TEST_F(CalculatorTest, Test18) {
 	int actual = res->Add("1\n\12");
 	EXPECT_EQ(actual, -1);
 }
+
+TEST_F(CalculatorTest, Test19) {
+	int actual = res->Add("//%\n1%2,3\n4");
+	EXPECT_EQ(actual, 10);
+}
+
+TEST_F(CalculatorTest, Test20) {
+	int actual = res->Add("//%1%2,3\n4");
+	EXPECT_EQ(actual, -1);
+}

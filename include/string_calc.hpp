@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 class StringCalc
 {
@@ -11,16 +12,17 @@ public:
 
 	~StringCalc();
 	
-    int Add(const std::string &numbers);
+    int Add(const std::string &input_str);
 private:
-    std::vector<std::string> parse(const std::string& str);
-    void parsePrefix(const std::string& str);
-    bool validate(const int& number);
-    bool validate(const std::string& number);
+    void parseNumbers(const std::string& str);
+    int parsePrefix(const std::string& str);
+    bool validateInputString(const std::string& str);
+    std::string getAllPossibleChars();
 
-    std::string char_delims = ",\n";
-    std::string str_delim = "";
-    std::string digits = "0123456789";
+    std::vector<std::string> numbers_ = {};
+    std::set<std::string> delimiters_ = {",", "\n"};
+    std::string digits_ = "0123456789";
+    const int UPPER_BOUND_ = 1000;
 };
 
 #endif

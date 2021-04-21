@@ -11,6 +11,8 @@ public:
 	~StringCalc();
 	
 	int Add(std::string numbers);
+private:
+	char RemoveCustomDelimiterFromInput(std::string& numbers);
 };
 
 #endif

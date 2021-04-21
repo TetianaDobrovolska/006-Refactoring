@@ -92,3 +92,18 @@ TEST_F(CalculatorTest, Test15) {
 	int actual = res->Add("1,20,4,,12");
 	EXPECT_EQ(actual, -1);
 }
+
+TEST_F(CalculatorTest, Test16) {
+	int actual = res->Add("1,20\\n4,12");
+	EXPECT_EQ(actual, -1);
+}
+
+TEST_F(CalculatorTest, Test17) {
+	int actual = res->Add("1\n5\n4\n12");
+	EXPECT_EQ(actual, 22);
+}
+
+TEST_F(CalculatorTest, Test18) {
+	int actual = res->Add("1\n\12");
+	EXPECT_EQ(actual, -1);
+}

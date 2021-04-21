@@ -39,6 +39,8 @@ int StringCalc::Add(string numbers)
 	if(numbers.size() == 0)
 		return 0;
 	
+	std::replace(numbers.begin(), numbers.end(), '\n', ',');
+
 	if (checkStringValidity(numbers) == false)
 		return -1;
 

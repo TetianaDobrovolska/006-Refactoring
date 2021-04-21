@@ -48,3 +48,15 @@ TEST(CalculatorTest, AddFiftyANumbers) {
 	ASSERT_EQ(actual, 1275);
 }
 
+TEST(CalculatorTest, AddWithNewLineDelimiter) {
+	StringCalc c;
+	int actual = c.Add("1\n2");
+	ASSERT_EQ(actual, 3);
+}
+
+TEST(CalculatorTest, AddWithNewLineAndComaDelimiters) {
+	StringCalc c;
+	int actual = c.Add("1\n2,3");
+	ASSERT_EQ(actual, 6);
+}
+

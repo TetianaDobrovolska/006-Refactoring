@@ -40,7 +40,10 @@ int StringCalc::Add(string numbers)
 												ch == '\n' ||
 												ch == customDelimiter; 
 			});
-		acc += stoi(string(beginIter, endIter));
+		int number = stoi(string(beginIter, endIter));
+		if (number <= 1000) {
+			acc += number;
+		}
 		beginIter = endIter + 1;
 	}
 

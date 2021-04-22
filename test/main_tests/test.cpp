@@ -8,7 +8,7 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
    
     Monopoly monopoly(players,3);
 
-    list<tuple<string,int>>* x = monopoly.GetPlayersList();
+    const list<tuple<string,int>>* x = monopoly.GetPlayersList();
     int i = 0;
     for (auto c : *x) {
         ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());

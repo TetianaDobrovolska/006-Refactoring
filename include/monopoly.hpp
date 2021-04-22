@@ -2,8 +2,8 @@
 #define MONOPOLY_HPP
 
 #include <list>
-#include <tuple>
 #include <string>
+#include <tuple>
 
 class Monopoly
 {
@@ -19,15 +19,18 @@ public:
 		PRISON,
 		BANK
 	};
-	Monopoly(std::string names[kMaxPlayerCount], int);
-	std::list<std::tuple<std::string, int>> *	GetPlayersList();
-	std::list<std::tuple<std::string, Type, int, bool>> * GetFieldsList();
-	std::list<std::tuple<std::string, Type, int, bool>> Fields;
+	Monopoly(const std::string names[kMaxPlayerCount], const int&);
+
+	const std::list<std::tuple<std::string, int>> *	GetPlayersList() const;
+	const std::list<std::tuple<std::string, Type, int, bool>> * GetFieldsList() const;
+	const std::tuple<std::string, int> GetPlayerInfo(const int&) const;
+	const std::tuple<std::string, Type, int, bool> GetFieldByName(const std::string&) const;
+
+	bool Buy(const int& p, std::tuple<std::string, Type, int, bool>&);
+	bool Renta(const int& p, std::tuple<std::string, Type, int, bool>&);
+
 	std::list<std::tuple<std::string, int>> Players;
-	std::tuple<std::string, int> GetPlayerInfo(int);	 
-	bool Buy(int p,std::tuple<std::string, Type, int, bool>);
-	std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);
-	bool Renta(int p, std::tuple<std::string, Type, int, bool>c);
+	std::list<std::tuple<std::string, Type, int, bool>> Fields;
 
 };
 

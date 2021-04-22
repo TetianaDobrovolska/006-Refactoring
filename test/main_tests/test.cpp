@@ -47,7 +47,7 @@ TEST(CalculatorTest, LongString) {
 TEST(CalculatorTest, NegativeValue) {
     StringCalc c;
     int actual = c.Add("-2,1");
-    ASSERT_THROW(actual, std::exception);
+    ASSERT_THROW(actual, std::invalid_argument);
 }
 
 TEST(CalculatorTest, ZeroValue) {
@@ -59,13 +59,13 @@ TEST(CalculatorTest, ZeroValue) {
 TEST(CalculatorTest, AlfaValue) {
     StringCalc c;
     int actual = c.Add("a,1");
-    ASSERT_THROW(actual, std::exception);
+    ASSERT_THROW(actual, std::invalid_argument);
 }
 
 TEST(CalculatorTest, AlfaValue2) {
     StringCalc c;
     int actual = c.Add("0,c");
-    ASSERT_THROW(actual, std::exception);
+    ASSERT_THROW(actual, std::invalid_argument);
 }
 
 TEST(CalculatorTest, NewLineString) {
@@ -107,19 +107,19 @@ TEST(CalculatorTest, DefaultAndExpandDelims3) {
 TEST(CalculatorTest, InvalidDelims) {
     StringCalc c;
     int actual = c.Add("//4,5");
-    ASSERT_THROW(actual, std::exception);
+    ASSERT_THROW(actual, std::invalid_argument);
 }
 
 TEST(CalculatorTest, InvalidDelims2) {
     StringCalc c;
     int actual = c.Add("/4,5");
-    ASSERT_THROW(actual, std::exception);
+    ASSERT_THROW(actual, std::invalid_argument);
 }
 
 TEST(CalculatorTest, InvalidDelims3) {
     StringCalc c;
     int actual = c.Add("//;\n4;5*1");
-    ASSERT_THROW(actual, std::exception);
+    ASSERT_THROW(actual, std::invalid_argument);
 }
 
 TEST(CalculatorTest, BigNumber) {
@@ -130,12 +130,12 @@ TEST(CalculatorTest, BigNumber) {
 
 TEST(CalculatorTest, MultipleDelims) {
     StringCalc c;
-    int actual = c.Add("//***\n4***1");
+    int actual = c.Add("//[***]\n4***1");
     ASSERT_EQ(actual, 5);
 }
 
 TEST(CalculatorTest, MixedMultipleDelims) {
     StringCalc c;
-    int actual = c.Add("//***\n4***1\n1,3");
+    int actual = c.Add("//[***]\n4***1\n1,3");
     ASSERT_EQ(actual, 9);
 }

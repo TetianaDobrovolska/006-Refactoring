@@ -29,9 +29,9 @@ public:
 	bool Buy(const int& p, std::tuple<std::string, Type, int, bool>&);
 	bool Renta(const int& p, std::tuple<std::string, Type, int, bool>&);
 
+private:
 	std::list<std::tuple<std::string, int>> Players;
 	std::list<std::tuple<std::string, Type, int, bool>> Fields;
-
 };
 
 #endif

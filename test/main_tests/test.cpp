@@ -128,3 +128,36 @@ TEST(CalculatorTest, SampleThousandThree) {
  	int actual = c.Add("1000");
  	ASSERT_EQ(actual, 0);
 }
+
+TEST(CalculatorTest, SampleLongDelimeter) {
+	StringCalc c;
+    int actual = c.Add("//***1,2***3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleLongDelimeterTwo) {
+	StringCalc c;
+ 	int actual = c.Add("//[***]1,2***3");
+ 	ASSERT_EQ(actual, 6);
+}
+
+TEST(CalculatorTest, SampleLongDelimeterThree) {
+	StringCalc c;
+ 	int actual = c.Add("//[***]1,2***3***5");
+ 	ASSERT_EQ(actual, 11);
+}
+
+TEST(CalculatorTest, SampleLongDelimeterFourth) {
+	StringCalc c;
+ 	ASSERT_THROW(c.Add("//[**]1,2***3***5"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleLongDelimeterFifth) {
+	StringCalc c;
+ 	ASSERT_THROW(c.Add("//[**]1,2****3***5"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, SampleLongDelimeterSixth) {
+	StringCalc c;
+ 	ASSERT_THROW(c.Add("//[**]1,2**3***5"), std::invalid_argument);
+}

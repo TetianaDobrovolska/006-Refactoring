@@ -12,16 +12,17 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
     int i = 0;
     for (auto c : *x) {
         ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());
-        ASSERT_EQ(get<1>(c), 6000);
+        ASSERT_EQ(get<1>(c), Monopoly::startupCapital);
     }
     ASSERT_TRUE(i);
 }
 
 TEST(LAB2, GetFieldsListReturnCorrectList) {
     tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
+        //make_tuple(company name, company industry type, owner id, isInMonopoly)
         make_tuple("Ford",Monopoly::AUTO ,0,false),
         make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("Lamoda",Monopoly::CLOTHER,0,false),
+        make_tuple("Lamoda",Monopoly::CLOTHES,0,false),
         make_tuple("Air Baltic",Monopoly::TRAVEL,0,false),
         make_tuple("Nordavia",Monopoly::TRAVEL,0,false),
         make_tuple("Prison",Monopoly::PRISON,0,false),

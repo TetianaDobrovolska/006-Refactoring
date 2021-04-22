@@ -139,3 +139,9 @@ TEST(CalculatorTest, MixedMultipleDelims) {
     int actual = c.Add("//[***]\n4***1\n1,3");
     ASSERT_EQ(actual, 9);
 }
+
+TEST(CalculatorTest, InvalidMultipleDelims) {
+    StringCalc c;
+    int actual = c.Add("//[***\n4***1");
+    ASSERT_THROW(actual, std::invalid_argument);
+}

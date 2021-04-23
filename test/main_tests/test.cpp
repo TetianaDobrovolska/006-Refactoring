@@ -3,145 +3,46 @@
 #include <exception>
 #include <iostream>
 
-TEST(CalculatorTest, TestName) {
-  EXPECT_EQ(1, 1);
-  EXPECT_TRUE(true);
+class ParametrizedCalculatorTest : public ::testing::TestWithParam <std::tuple<std::string, int>>
+{
+protected:
+   StringCalc c;
+};
+
+TEST_P(ParametrizedCalculatorTest, stringCalcTest)
+{
+    std::string expression = std::get<0>(GetParam());
+    int expected = std::get<1>(GetParam());
+    int actual = c.Add(expression);
+
+    ASSERT_EQ(actual, expected);
 }
 
-TEST(CalculatorTest, EmptyString) {
-    StringCalc c;
-    int actual = c.Add("");
-    ASSERT_EQ(actual, 0);
-}
-
-TEST(CalculatorTest, OneDigit) {
-    StringCalc c;
-    int actual = c.Add("1");
-    ASSERT_EQ(actual, 1);
-}
-
-TEST(CalculatorTest, SampleTest) {
-    StringCalc c;
-    int actual = c.Add("2,2");
-    ASSERT_EQ(actual, 4);
-}
-
-TEST(CalculatorTest, SampleTest2) {
-    StringCalc c;
-    int actual = c.Add("1,10");
-    ASSERT_EQ(actual, 11);
-}
-
-TEST(CalculatorTest, SampleTest3) {
-    StringCalc c;
-    int actual = c.Add("120,1");
-    ASSERT_EQ(actual, 121);
-}
-
-TEST(CalculatorTest, LongString) {
-    StringCalc c;
-    int actual = c.Add("100,20,3");
-    ASSERT_EQ(actual, 123);
-}
-
-TEST(CalculatorTest, NegativeValue) {
-    StringCalc c;
-    int actual = c.Add("-2,1");
-    ASSERT_THROW(actual, std::invalid_argument);
-}
-
-TEST(CalculatorTest, ZeroValue) {
-    StringCalc c;
-    int actual = c.Add("0");
-    ASSERT_EQ(actual, 0);
-}
-
-TEST(CalculatorTest, AlfaValue) {
-    StringCalc c;
-    int actual = c.Add("a,1");
-    ASSERT_THROW(actual, std::invalid_argument);
-}
-
-TEST(CalculatorTest, AlfaValue2) {
-    StringCalc c;
-    int actual = c.Add("0,c");
-    ASSERT_THROW(actual, std::invalid_argument);
-}
-
-TEST(CalculatorTest, NewLineString) {
-    StringCalc c;
-    int actual = c.Add("3\n2");
-    ASSERT_EQ(actual, 5);
-}
-
-TEST(CalculatorTest, MixedDefaultDelim) {
-    StringCalc c;
-    int actual = c.Add("1\n3,5");
-    ASSERT_EQ(actual, 9);
-}
-
-TEST(CalculatorTest, ExpandDelim) {
-    StringCalc c;
-    int actual = c.Add("//*\n4*1");
-    ASSERT_EQ(actual, 5);
-}
-
-TEST(CalculatorTest, DefaultAndExpandDelims) {
-    StringCalc c;
-    int actual = c.Add("//*\n4*1,2");
-    ASSERT_EQ(actual, 7);
-}
-
-TEST(CalculatorTest, DefaultAndExpandDelims2) {
-    StringCalc c;
-    int actual = c.Add("//*\n4*1\n1");
-    ASSERT_EQ(actual, 6);
-}
-
-TEST(CalculatorTest, DefaultAndExpandDelims3) {
-    StringCalc c;
-    int actual = c.Add("//*\n4*1\n1,3");
-    ASSERT_EQ(actual, 9);
-}
-
-TEST(CalculatorTest, InvalidDelims) {
-    StringCalc c;
-    int actual = c.Add("//4,5");
-    ASSERT_THROW(actual, std::invalid_argument);
-}
-
-TEST(CalculatorTest, InvalidDelims2) {
-    StringCalc c;
-    int actual = c.Add("/4,5");
-    ASSERT_THROW(actual, std::invalid_argument);
-}
-
-TEST(CalculatorTest, InvalidDelims3) {
-    StringCalc c;
-    int actual = c.Add("//;\n4;5*1");
-    ASSERT_THROW(actual, std::invalid_argument);
-}
-
-TEST(CalculatorTest, BigNumber) {
-    StringCalc c;
-    int actual = c.Add("1001,2");
-    ASSERT_EQ(actual, 2);
-}
-
-TEST(CalculatorTest, MultipleDelims) {
-    StringCalc c;
-    int actual = c.Add("//[***]\n4***1");
-    ASSERT_EQ(actual, 5);
-}
-
-TEST(CalculatorTest, MixedMultipleDelims) {
-    StringCalc c;
-    int actual = c.Add("//[***]\n4***1\n1,3");
-    ASSERT_EQ(actual, 9);
-}
-
-TEST(CalculatorTest, InvalidMultipleDelims) {
-    StringCalc c;
-    int actual = c.Add("//[***\n4***1");
-    ASSERT_THROW(actual, std::invalid_argument);
-}
+INSTANTIATE_TEST_CASE_P(
+        TDDKata,
+        ParametrizedCalculatorTest,
+        testing::Values(
+            std::make_tuple("", 0),
+            std::make_tuple("0", 0),
+            std::make_tuple("1", 1),
+            std::make_tuple("2,2", 4),
+            std::make_tuple("1,10", 11),
+            std::make_tuple("120,1", 121),
+            std::make_tuple("100,20,", 123),
+            std::make_tuple("-2,1", -1),
+            std::make_tuple("a,1", -1),
+            std::make_tuple("0,c", -1),
+            std::make_tuple("3\n2", 5),
+            std::make_tuple("1\n3,5", 9),
+            std::make_tuple("//*\n4*1", 5),
+            std::make_tuple("/*\n4*1,2", 7),
+            std::make_tuple("//*\n4*1\n1", 6),
+            std::make_tuple("//*\n4*1\n1,3", 9),
+            std::make_tuple("//4,5", -1),
+            std::make_tuple("/4,5", -1),
+            std::make_tuple("//;\n4;5*1", -1),
+            std::make_tuple("1001,2", 2),
+            std::make_tuple("//[***]\n4***1", 5),
+            std::make_tuple("//[***]\n4***1\n1,3", 9),
+            std::make_tuple("//[***\n4***1", -1)
+));

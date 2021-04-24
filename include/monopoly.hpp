@@ -26,7 +26,17 @@ public:
 	bool Buy(int p,std::tuple<std::string, Type, int, bool>);
 	std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);	
 	bool Renta(int p, std::tuple<std::string, Type, int, bool>c);
-	
+private:
+	static constexpr int PLAYER_START_MONEY = 6000;
+	static const int AUTO_PRICE = 500;
+	static const int FOOD_PRICE = 250;
+	static const int TRAVEL_PRICE = 700;
+	static const int CLOTHER_PRICE = 100;
+	static const int AUTO_RENTA = 250;
+	static const int TRAVEL_RENTA = 250;
+	static const int CLOTHER_RENTA = 250;
+	static const int PRISON_PAYMENT = 1000;
+	static const int BANK_PAYMENT = 700;
 };
 
 #endif

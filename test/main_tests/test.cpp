@@ -8,11 +8,11 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
    
     Monopoly monopoly(players,3);
 
-    list<tuple<string,int>>* x = monopoly.GetPlayersList();
     int i = 0;
-    for (auto c : *x) {
-        ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());
-        ASSERT_EQ(get<1>(c), 6000);
+    for (auto iterator = monopoly.GetPlayersListCbegin(); iterator != monopoly.GetPlayersListCend(); ++iterator)
+    {
+        ASSERT_STREQ(get<0>(*iterator).c_str(), players[i++].c_str());
+        ASSERT_EQ(get<1>(*iterator), 6000);
     }
     ASSERT_TRUE(i);
 }
@@ -31,13 +31,13 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
-   auto actualCompanies = monopoly.GetFieldsList();
-   int i = 0;
-   for (auto x : *actualCompanies)
-   {
-       ASSERT_EQ(x, expectedCompanies[i++]);
-   }
-   ASSERT_TRUE(i);   
+    int i = 0;
+    for (auto iterator = monopoly.GetFieldsListCbegin(); iterator != monopoly.GetFieldsListCend(); ++iterator)
+    {
+        ASSERT_EQ(*iterator, expectedCompanies[i++]);
+        std::next(iterator, 1);
+    }
+    ASSERT_TRUE(i);
 }
 
 TEST(LAB2, PlayerBuyNoOwnedCompanies)

@@ -18,8 +18,10 @@ public:
 		BANK
 	};
 	Monopoly(std::string names[10], int);
-	std::list<std::tuple<std::string,int>> * GetPlayersList();
-	std::list<std::tuple<std::string, Type, int, bool>> * GetFieldsList();
+	std::list<std::tuple<std::string,int>>::const_iterator GetPlayersListCbegin();
+	std::list<std::tuple<std::string, int>>::const_iterator GetPlayersListCend();
+	std::list<std::tuple<std::string, Type, int, bool>>::const_iterator GetFieldsListCbegin();
+	std::list<std::tuple<std::string, Type, int, bool>>::const_iterator GetFieldsListCend();
 	std::tuple<std::string, int> GetPlayerInfo(int);	 
 	bool Buy(int p, std::tuple<std::string, Type, int, bool>);
 	std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);	

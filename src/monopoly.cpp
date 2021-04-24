@@ -29,14 +29,24 @@ Monopoly::Monopoly(string names[10],int countPlayers)
 	Fields.push_back(make_tuple(fieldTesla, Monopoly::AUTO, initialPlayer, false));
 }
 
-std::list<std::tuple<std::string, int>> * Monopoly::GetPlayersList()
+std::list<std::tuple<std::string, int>>::const_iterator Monopoly::GetPlayersListCbegin()
 {
-	return &Players;
+	return Players.cbegin();
 }
 
-std::list<std::tuple<std::string, Monopoly::Type,int,bool>> * Monopoly::GetFieldsList()
+std::list<std::tuple<std::string, int>>::const_iterator Monopoly::GetPlayersListCend()
 {
-	return &Fields;
+	return Players.cend();
+}
+
+std::list<std::tuple<std::string, Monopoly::Type, int, bool>>::const_iterator Monopoly::GetFieldsListCbegin()
+{
+	return Fields.cbegin();
+}
+
+std::list<std::tuple<std::string, Monopoly::Type, int, bool>>::const_iterator Monopoly::GetFieldsListCend()
+{
+	return Fields.cend();
 }
 
 std::tuple<std::string, int> Monopoly::GetPlayerInfo(int m)

@@ -56,100 +56,97 @@ Player Monopoly::GetPlayerInfo(int index)
 	return *i;
 }
 
-bool Monopoly::Buy(int index, Field& k)
+bool Monopoly::Buy(int playerIndex, const Field& field)
 {
-	auto x = GetPlayerInfo(index);
-	Player p;
-	list<Field>::iterator i;
-	list<Player>::iterator j = Players.begin();
-	switch (k.GetType())
+	if (field.GetOwnerIndex())
+	{
+		return false;
+	}
+
+	Player player = GetPlayerInfo(playerIndex);
+	Player newPlayer;
+
+	switch (field.GetType())
 	{
 	case Field::AUTO:
-		if (k.GetOwnerIndex())
-			return false;
-		p = Player(x.GetName(), x.GetMoney() - AUTO_PRICE);
-		k = Field(k.GetCompanyName(), k.GetType(), index, k.GetOwnerIndex());
+		newPlayer = Player(player.GetName(), player.GetMoney() - AUTO_PRICE);
 		break;
 	case Field::FOOD:
-		if (k.GetOwnerIndex())
-			return false;
-		p = Player(x.GetName(), x.GetMoney() - FOOD_PRICE);
-		k = Field(k.GetCompanyName(), k.GetType(), index, k.GetOwnerIndex());
+		newPlayer = Player(player.GetName(), player.GetMoney() - FOOD_PRICE);
 		break;
 	case Field::TRAVEL:
-		if (k.GetOwnerIndex())
-			return false;
-		p = Player(x.GetName(), x.GetMoney() - TRAVEL_PRICE);
-		k = Field(k.GetCompanyName(), k.GetType(), index, k.GetOwnerIndex());
+		newPlayer = Player(player.GetName(), player.GetMoney() - TRAVEL_PRICE);
 		break;
 	case Field::CLOTHER:
-		if (k.GetOwnerIndex())
-			return false;
-		p = Player(x.GetName(), x.GetMoney() - CLOTHER_PRICE);
-		k = Field(k.GetCompanyName(), k.GetType(), index, k.GetOwnerIndex());
+		newPlayer = Player(player.GetName(), player.GetMoney() - CLOTHER_PRICE);
 		break;
 	default:
 		return false;
 	};
-	i = find_if(Fields.begin(), Fields.end(), [k](auto x) { return x.GetCompanyName() == k.GetCompanyName(); });
-	*i = k;
-    advance(j, index-1);
-	*j = p;
+	Field newField(field.GetCompanyName(), field.GetType(), playerIndex, field.GetOwnerIndex());
+	auto fieldsIterator = find_if(Fields.begin(), Fields.end(), [newField](auto x) { return x.GetCompanyName() == newField.GetCompanyName(); });
+	*fieldsIterator = newField;
+	auto playersIterator = Players.begin();
+	advance(playersIterator, playerIndex - 1);
+	*playersIterator = newPlayer;
 	return true;
 }
 
-Field Monopoly::GetFieldByName(const std::string& l)
+Field Monopoly::GetFieldByName(const std::string& companyName)
 {
-	std::list<Field>::const_iterator i = find_if(Fields.cbegin(), Fields.cend(), [l](Field x) {
-		return x.GetCompanyName() == l;
+	std::list<Field>::const_iterator i = find_if(Fields.cbegin(), Fields.cend(), [companyName](Field x) {
+		return x.GetCompanyName() == companyName;
 	});
 	return *i;
 }
 
-bool Monopoly::Renta(int m, const Field& c)
+bool Monopoly::Renta(int playerIndex, const Field& field)
 {
-	Player z = GetPlayerInfo(m);
-	Player o;
+	if ((field.GetType() == Field::AUTO ||
+		field.GetType() == Field::FOOD ||
+		field.GetType() == Field::TRAVEL ||
+		field.GetType() == Field::CLOTHER) &&
+		!field.GetOwnerIndex())
+	{
+		return false;
+	}
 
-	switch (c.GetType())
+	Player player = GetPlayerInfo(playerIndex);
+	Player newPlayer;
+
+	switch (field.GetType())
 	{
 	case Field::AUTO:
-		if (!c.GetOwnerIndex())
-			return false;
-		o = GetPlayerInfo(c.GetOwnerIndex());
-		o = Player(o.GetName(), o.GetMoney() + AUTO_RENTA);
-		z = Player(z.GetName(), z.GetMoney() - AUTO_RENTA);
+		CalcRenta(player, newPlayer, field, AUTO_RENTA);
 		break;
 	case Field::FOOD:
-		if (!c.GetOwnerIndex())
-			return false;
+		break;
 	case Field::TRAVEL:
-		if (!c.GetOwnerIndex())
-			return false;
-		o = GetPlayerInfo(c.GetOwnerIndex());
-		o = Player(o.GetName(), o.GetMoney() + TRAVEL_RENTA);
-		z = Player(z.GetName(), z.GetMoney() - TRAVEL_RENTA);
+		CalcRenta(player, newPlayer, field, TRAVEL_RENTA);
 		break;
 	case Field::CLOTHER:
-		if (!c.GetOwnerIndex())
-			return false;
-		o = GetPlayerInfo(c.GetOwnerIndex());
-		o = Player(o.GetName(), o.GetMoney() + CLOTHER_RENTA);
-		z = Player(z.GetName(), z.GetMoney() - CLOTHER_RENTA);
+		CalcRenta(player, newPlayer, field, CLOTHER_RENTA);
 		break;
 	case Field::PRISON:
-		z = Player(z.GetName(), z.GetMoney() - PRISON_PAYMENT);
+		player = Player(player.GetName(), player.GetMoney() - PRISON_PAYMENT);
 		break;
 	case Field::BANK:
-		z = Player(z.GetName(), z.GetMoney() - BANK_PAYMENT);
+		player = Player(player.GetName(), player.GetMoney() - BANK_PAYMENT);
 		break;
 	default:
 		return false;
 	}
-	list<Player>::iterator i = Players.begin();
-	advance(i, m - 1);
-	*i = z;
-	i = find_if(Players.begin(), Players.end(), [o](auto x) { return x.GetName() == o.GetName(); });
-	*i = o;
+	auto iterator = Players.begin();
+	advance(iterator, playerIndex - 1);
+	*iterator = player;
+	iterator = find_if(Players.begin(), Players.end(), [newPlayer](auto player) { return player.GetName() == newPlayer.GetName(); });
+	*iterator = newPlayer;
 	return true;
+}
+
+void Monopoly::CalcRenta(Player& player, Player& newPlayer, const Field& field, const int renta)
+{
+	newPlayer = GetPlayerInfo(field.GetOwnerIndex());
+	newPlayer = Player(newPlayer.GetName(), newPlayer.GetMoney() + renta);
+	player = Player(player.GetName(), player.GetMoney() - renta);
 }

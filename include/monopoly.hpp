@@ -17,7 +17,7 @@ public:
 	std::list<Field>::const_iterator GetFieldsListCbegin();
 	std::list<Field>::const_iterator GetFieldsListCend();
 	Player GetPlayerInfo(int);
-	bool Buy(int, Field&);
+	bool Buy(int, const Field&);
 	Field GetFieldByName(const std::string&);
 	bool Renta(int, const Field&);
 private:
@@ -34,6 +34,8 @@ private:
 
 	std::list<Field> Fields;
 	std::list<Player> Players;
+
+	void CalcRenta(Player&, Player&, const Field&, const int);
 };
 
 #endif

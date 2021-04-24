@@ -5,27 +5,21 @@
 #include <tuple>
 #include <string>
 
+#include "player.hpp"
+#include "field.hpp"
+
 class Monopoly
 {
 public:
-	enum Type
-	{
-		AUTO,
-		FOOD,
-		TRAVEL,
-		CLOTHER,
-		PRISON,
-		BANK
-	};
 	Monopoly(std::string names[10], int);
-	std::list<std::tuple<std::string,int>>::const_iterator GetPlayersListCbegin();
-	std::list<std::tuple<std::string, int>>::const_iterator GetPlayersListCend();
-	std::list<std::tuple<std::string, Type, int, bool>>::const_iterator GetFieldsListCbegin();
-	std::list<std::tuple<std::string, Type, int, bool>>::const_iterator GetFieldsListCend();
-	std::tuple<std::string, int> GetPlayerInfo(int);	 
-	bool Buy(int p, std::tuple<std::string, Type, int, bool>);
-	std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);	
-	bool Renta(int p, std::tuple<std::string, Type, int, bool> c);
+	std::list<Player>::const_iterator GetPlayersListCbegin();
+	std::list<Player>::const_iterator GetPlayersListCend();
+	std::list<Field>::const_iterator GetFieldsListCbegin();
+	std::list<Field>::const_iterator GetFieldsListCend();
+	Player GetPlayerInfo(int);
+	bool Buy(int, Field&);
+	Field GetFieldByName(const std::string&);
+	bool Renta(int, const Field&);
 private:
 	static constexpr int PLAYER_START_MONEY = 6000;
 	static const int AUTO_PRICE = 500;
@@ -38,8 +32,8 @@ private:
 	static const int PRISON_PAYMENT = 1000;
 	static const int BANK_PAYMENT = 700;
 
-	std::list<std::tuple<std::string, Type, int, bool>> Fields;
-	std::list<std::tuple<std::string, int>> Players;
+	std::list<Field> Fields;
+	std::list<Player> Players;
 };
 
 #endif

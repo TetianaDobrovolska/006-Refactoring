@@ -6,27 +6,27 @@ using namespace ::std;
 TEST(LAB2, GetPlayersListReturnCorrectList) {
     string players[]{ "Peter","Ekaterina","Alexander" };
    
-    Monopoly monopoly(players,3);
+    Monopoly monopoly(players, 3);
 
     int i = 0;
     for (auto iterator = monopoly.GetPlayersListCbegin(); iterator != monopoly.GetPlayersListCend(); ++iterator)
     {
-        ASSERT_STREQ(get<0>(*iterator).c_str(), players[i++].c_str());
-        ASSERT_EQ(get<1>(*iterator), 6000);
+        ASSERT_STREQ(iterator->GetName().c_str(), players[i++].c_str());
+        ASSERT_EQ(iterator->GetMoney(), 6000);
     }
     ASSERT_TRUE(i);
 }
 
 TEST(LAB2, GetFieldsListReturnCorrectList) {
-    tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
-        make_tuple("Ford",Monopoly::AUTO ,0,false),
-        make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("Lamoda",Monopoly::CLOTHER,0,false),
-        make_tuple("Air Baltic",Monopoly::TRAVEL,0,false),
-        make_tuple("Nordavia",Monopoly::TRAVEL,0,false),
-        make_tuple("Prison",Monopoly::PRISON,0,false),
-        make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("TESLA",Monopoly::AUTO,0,false)
+    Field expectedCompanies[]{
+        Field("Ford",Field::AUTO ,0,false),
+        Field("MCDonald",Field::FOOD,0,false),
+        Field("Lamoda",Field::CLOTHER,0,false),
+        Field("Air Baltic",Field::TRAVEL,0,false),
+        Field("Nordavia",Field::TRAVEL,0,false),
+        Field("Prison",Field::PRISON,0,false),
+        Field("MCDonald",Field::FOOD,0,false),
+        Field("TESLA",Field::AUTO,0,false)
     };
     string players[]{ "Peter","Ekaterina","Alexander" };
 
@@ -35,7 +35,6 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     for (auto iterator = monopoly.GetFieldsListCbegin(); iterator != monopoly.GetFieldsListCend(); ++iterator)
     {
         ASSERT_EQ(*iterator, expectedCompanies[i++]);
-        std::next(iterator, 1);
     }
     ASSERT_TRUE(i);
 }
@@ -49,9 +48,9 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
     monopoly.Buy(1, x);
 
     auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(get<1>(player), 5500);
+    ASSERT_EQ(player.GetMoney(), 5500);
     x = monopoly.GetFieldByName("Ford");
-    ASSERT_TRUE(get<2>(x) != 0);
+    ASSERT_TRUE(x.GetOwnerIndex() != 0);
 }
 
 TEST(LAB2, RentaShouldBeCorrectTransferMoney)
@@ -64,14 +63,8 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     x = monopoly.GetFieldByName("Ford");
     monopoly.Renta(2, x);
     auto player1 = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(get<1>(player1), 5750);
+    ASSERT_EQ(player1.GetMoney(), 5750);
 
     auto player2 = monopoly.GetPlayerInfo(2);
-    ASSERT_EQ(get<1>(player2), 5750);    
-}
-
-
-bool operator== (std::tuple<std::string, Monopoly::Type, int, bool> & a , std::tuple<std::string, Monopoly::Type, int, bool> & b)
-{
-    return get<0>(a) == get<0>(b) && get<1>(a) == get<1>(b) && get<2>(a) == get<2>(b) && get<3>(a) == get<3>(b);
+    ASSERT_EQ(player2.GetMoney(), 5750);
 }

@@ -67,25 +67,25 @@ bool Monopoly::Buy(const int& playerIndex, Field& resource)
         if (iterResource->getOwnerIndex())
 			return false;
         curPlayerIterator->calcBalance(-kAutoFieldCost);
-        iterResource->setOwnerIndex(playerIndex);//) = std::make_tuple(std::get<0>(resource), std::get<1>(resource), playerIndex, std::get<2>(resource));
+        iterResource->setOwnerIndex(playerIndex);
 		break;
     case resource::FOOD:
         if (iterResource->getOwnerIndex())
 			return false;
         curPlayerIterator->calcBalance(-kFoodFieldCost);
-        iterResource->setOwnerIndex(playerIndex);// = std::make_tuple(std::get<0>(resource), std::get<1>(resource), playerIndex, std::get<2>(resource));
+        iterResource->setOwnerIndex(playerIndex);
 		break;
     case resource::TRAVEL:
         if (iterResource->getOwnerIndex())
 			return false;
         curPlayerIterator->calcBalance(-kTravelFieldCost);
-        iterResource->setOwnerIndex(playerIndex);// = std::make_tuple(std::get<0>(resource), std::get<1>(resource), playerIndex, std::get<2>(resource));
+        iterResource->setOwnerIndex(playerIndex);
 		break;
     case resource::CLOTHER:
         if (iterResource->getOwnerIndex())
 			return false;
         curPlayerIterator->calcBalance(-kClotherFieldCost);
-        iterResource->setOwnerIndex(playerIndex);// = std::make_tuple(std::get<0>(resource), std::get<1>(resource), playerIndex, std::get<2>(resource));
+        iterResource->setOwnerIndex(playerIndex);
 		break;
 	default:
 		return false;

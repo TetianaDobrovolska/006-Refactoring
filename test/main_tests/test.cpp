@@ -21,7 +21,7 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
         make_tuple("Ford",Monopoly::AUTO ,0,false),
         make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("Lamoda",Monopoly::CLOTHER,0,false),
+        make_tuple("Lamoda",Monopoly::CLOTHES,0,false),
         make_tuple("Air Baltic",Monopoly::TRAVEL,0,false),
         make_tuple("Nordavia",Monopoly::TRAVEL,0,false),
         make_tuple("Prison",Monopoly::PRISON,0,false),
@@ -54,7 +54,7 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
     ASSERT_TRUE(get<2>(x) != 0);
 }
 
-TEST(LAB2, RentaShouldBeCorrectTransferMoney)
+TEST(LAB2, RentalShouldBeCorrectTransferMoney)
 {
     string players[]{ "Peter","Ekaterina","Alexander" };
     Monopoly monopoly(players, 3);
@@ -62,7 +62,7 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     monopoly.Buy(1, x);
 
     x = monopoly.GetFieldByName("Ford");
-    monopoly.Renta(2, x);
+    monopoly.Rental(2, x);
     auto player1 = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(get<1>(player1), 5750);
 

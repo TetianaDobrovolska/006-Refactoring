@@ -5,12 +5,12 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players,3);
+    auto playersList = monopoly.GetPlayersList();
 
-    const std::list<std::tuple<std::string, int>> playersList = monopoly.GetPlayersList();
     int i = 0;
     for (auto player : playersList) {
-        ASSERT_STREQ(std::get<0>(player).c_str(), players[i++].c_str());
-        ASSERT_EQ(std::get<1>(player), 6000);
+        ASSERT_STREQ(player.getName().c_str(), players[i++].c_str());
+        ASSERT_EQ(player.getBalance(), 6000);
     }
     ASSERT_TRUE(i);
 }
@@ -29,6 +29,7 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
+
     auto actualCompanies = monopoly.GetFieldsList();
     int i = 0;
     for (auto x : actualCompanies)
@@ -43,11 +44,12 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
+
     auto resource = monopoly.GetFieldByName("Ford");
     monopoly.Buy(1, resource);
 
     auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(std::get<1>(player), 5500);
+    ASSERT_EQ(player.getBalance(), 5500);
 
     resource = monopoly.GetFieldByName("Ford");
     ASSERT_TRUE(std::get<2>(resource) != 0);
@@ -65,10 +67,10 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     monopoly.Renta(2, resource);
 
     auto player1 = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(std::get<1>(player1), 5750);
+    ASSERT_EQ(player1.getBalance(), 5750);
 
     auto player2 = monopoly.GetPlayerInfo(2);
-    ASSERT_EQ(std::get<1>(player2), 5750);
+    ASSERT_EQ(player2.getBalance(), 5750);
 }
 
 

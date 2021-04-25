@@ -6,9 +6,9 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
 
     Monopoly monopoly(players,3);
 
-    const std::list<std::tuple<std::string, int>>* playersList = monopoly.GetPlayersList();
+    const std::list<std::tuple<std::string, int>> playersList = monopoly.GetPlayersList();
     int i = 0;
-    for (auto player : *playersList) {
+    for (auto player : playersList) {
         ASSERT_STREQ(std::get<0>(player).c_str(), players[i++].c_str());
         ASSERT_EQ(std::get<1>(player), 6000);
     }
@@ -31,7 +31,7 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     Monopoly monopoly(players, 3);
     auto actualCompanies = monopoly.GetFieldsList();
     int i = 0;
-    for (auto x : *actualCompanies)
+    for (auto x : actualCompanies)
     {
         ASSERT_EQ(x, expectedCompanies[i++]);
     }

@@ -41,17 +41,17 @@ Monopoly::Monopoly(const std::string names[kMaxPlayerCount], const int& countPla
 	Fields.push_back(std::make_tuple(kTesla, Monopoly::AUTO, kBankIndex, false));
 }
 
-const std::list<std::tuple<std::string, int>> * Monopoly::GetPlayersList() const
+const std::list<std::tuple<std::string, int>>& Monopoly::GetPlayersList() const
 {
-	return &Players;
+    return Players;
 }
 
-const std::list<std::tuple<std::string, Monopoly::Type,int,bool>> * Monopoly::GetFieldsList() const
+const std::list<std::tuple<std::string, Monopoly::Type,int,bool>>& Monopoly::GetFieldsList() const
 {
-	return &Fields;
+    return Fields;
 }
 
-const std::tuple<std::string, int> Monopoly::GetPlayerInfo(const int& playerIndex) const
+const std::tuple<std::string, int>& Monopoly::GetPlayerInfo(const int& playerIndex) const
 {
 	std::list<std::tuple<std::string, int>>::const_iterator i = Players.begin();
 	std::advance(i, playerIndex - 1);
@@ -100,14 +100,14 @@ bool Monopoly::Buy(const int& playerIndex, std::tuple<std::string, Type, int, bo
 	}
 	*iterResource = resource;
 
-	std::list<std::tuple<std::string, int>>::iterator iterPlayer = Players.begin();
-  std::advance(iterPlayer, playerIndex - 1);
-	*iterPlayer = tmpPlayer;
+    std::list<std::tuple<std::string, int>>::iterator iterPlayer = Players.begin();
+    std::advance(iterPlayer, playerIndex - 1);
+    *iterPlayer = tmpPlayer;
 
 	return true;
 }
 
-const std::tuple<std::string, Monopoly::Type, int, bool>  Monopoly::GetFieldByName(const std::string& playerName) const
+const std::tuple<std::string, Monopoly::Type, int, bool>&  Monopoly::GetFieldByName(const std::string& playerName) const
 {
 	auto i = std::find_if(Fields.begin(), Fields.end(), [playerName] (std::tuple<std::string, Monopoly::Type, int, bool> x) {
 		return std::get<0>(x) == playerName;

@@ -12,6 +12,7 @@ Controller::~Controller(){}
 void Controller::setNames() {
     for (int i = 1; i >= 1; i++) {
         std::string name = "";
+        std::cout << "Enter the name of the " << i << " player: ";
         std::cin >> name;
         if (name.length() < 1) {
             i -= 1;
@@ -23,6 +24,7 @@ void Controller::setNames() {
                 m_players.setPlayerName(i, value.second, name);
             } 
         }
+        std::cout << std::endl;
         if (i >= 2) {
             break;
         }

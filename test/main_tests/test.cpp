@@ -8,9 +8,9 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
    
     Monopoly monopoly(players,3);
 
-    list<tuple<string,int>>* x = monopoly.GetPlayersList();
+    list<tuple<string,int>>& x = monopoly.GetPlayersList();
     int i = 0;
-    for (auto c : *x) {
+    for (auto c : x) {
         ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());
         ASSERT_EQ(get<1>(c), Monopoly::startupCapital);
     }
@@ -34,7 +34,7 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     Monopoly monopoly(players, 3);
    auto actualCompanies = monopoly.GetFieldsList();
    int i = 0;
-   for (auto x : *actualCompanies)
+   for (auto x : actualCompanies)
    {
        ASSERT_EQ(x, expectedCompanies[i++]);
    }

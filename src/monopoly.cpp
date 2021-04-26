@@ -19,17 +19,17 @@ Monopoly::Monopoly(string names[Monopoly::maxPlayersCount],int countPlayers)
 	Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, 0, false));
 }
 
-std::list<std::tuple<std::string, int>> * Monopoly::GetPlayersList()
+std::list<std::tuple<std::string, int>> & Monopoly::GetPlayersList()
 {
-	return &Players;
+    return Players;
 }
 
-std::list<std::tuple<std::string, Monopoly::Type,int,bool>> * Monopoly::GetFieldsList()
+std::list<std::tuple<std::string, Monopoly::Type,int,bool>> & Monopoly::GetFieldsList()
 {
-	return &Fields;
+    return Fields;
 }
 
-std::tuple<std::string, int> Monopoly::GetPlayerInfo(int m)
+std::tuple<std::string, int>& Monopoly::GetPlayerInfo(int m)
 {
 	list<std::tuple<std::string, int>>::iterator i = Players.begin();
 	advance(i, m - 1);
@@ -78,7 +78,7 @@ bool Monopoly::Buy(int z, std::tuple<std::string, Type, int, bool> k)
 	return true;
 }
 
-std::tuple<std::string, Monopoly::Type, int, bool>  Monopoly::GetFieldByName(std::string l)
+std::tuple<std::string, Monopoly::Type, int, bool>& Monopoly::GetFieldByName(std::string l)
 {
 	std::list<std::tuple<std::string, Monopoly::Type, int, bool>>::iterator i = find_if(Fields.begin(), Fields.end(),[l] (std::tuple<std::string, Monopoly::Type, int, bool> x) {
 		return get<0>(x) == l;
@@ -133,5 +133,3 @@ bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
 	*i = o;
 	return true;
 }
-
-

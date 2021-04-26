@@ -106,21 +106,19 @@ int main(int argc, char** argv) {
     show_cells();
 
     for (int move = 1; move <= kMaxCellCount; move++) {
-        if (move % 2) make_move(1); 
+        if (move % 2) make_move(1);
         else make_move(2);
 
         show_cells();
         
-        if (move >= kMinStepsToWin)
-        {
-            win = check();
-            if (win != '-')
-                break;
-        }
-  
+        if (move < kMinStepsToWin)
+            continue;
+        win = check();
+        if (win != '-')
+            break;
     }
 
     result();
-   
+
     return 0;
 }

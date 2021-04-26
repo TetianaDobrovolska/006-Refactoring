@@ -57,6 +57,35 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
     ASSERT_TRUE(resource.getOwnerIndex() != 0);
 }
 
+TEST(LAB2, PlayerBuyPrison)
+{
+    std::string players[]{ "Peter","Ekaterina","Alexander" };
+
+    Monopoly monopoly(players, 3);
+
+    auto resource = monopoly.GetFieldByName(Field::BPRISON);
+    monopoly.Buy(1, resource);
+
+    auto player = monopoly.GetPlayerInfo(1);
+    ASSERT_EQ(player.getBalance(), 6000);
+
+    resource = monopoly.GetFieldByName(Field::BPRISON);
+    ASSERT_TRUE(resource.getOwnerIndex() == 0);
+}
+
+TEST(LAB2, PlayerBuyUndefinedField)
+{
+    std::string players[]{ "Peter","Ekaterina","Alexander" };
+
+    Monopoly monopoly(players, 3);
+
+    Field resource(Field::UKRSIBBANK, Field::BANK, 0);
+    ASSERT_FALSE(monopoly.Buy(1, resource));
+
+    auto player = monopoly.GetPlayerInfo(1);
+    ASSERT_EQ(player.getBalance(), 6000);
+}
+
 TEST(LAB2, RentaShouldBeCorrectTransferMoney)
 {
     std::string players[]{ "Peter","Ekaterina","Alexander" };
@@ -73,6 +102,30 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
 
     auto player2 = monopoly.GetPlayerInfo(2);
     ASSERT_EQ(player2.getBalance(), 5750);
+}
+
+TEST(LAB2, RentaPrison)
+{
+    std::string players[]{ "Peter","Ekaterina","Alexander" };
+
+    Monopoly monopoly(players, 3);
+    auto resource = monopoly.GetFieldByName(Field::BPRISON);
+    monopoly.Renta(1, resource);
+
+    auto player = monopoly.GetPlayerInfo(1);
+    ASSERT_EQ(player.getBalance(), 5000);
+}
+
+TEST(LAB2, RentaBank)
+{
+    std::string players[]{ "Peter","Ekaterina","Alexander" };
+
+    Monopoly monopoly(players, 3);
+    Field resource(Field::UKRSIBBANK, Field::BANK, 0);
+    monopoly.Renta(1, resource);
+
+    auto player = monopoly.GetPlayerInfo(1);
+    ASSERT_EQ(player.getBalance(), 5300);
 }
 
 bool operator== (const Field & a, const Field & b)

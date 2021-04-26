@@ -2,6 +2,9 @@ project(tic_tac_toe)
 
 set(SRC
 	tic_tac_toe.cpp
+  players.cpp
+  field.cpp
+  controller.cpp
 )
 
 add_executable(${PROJECT_NAME}

@@ -1,14 +1,10 @@
 #include "field.h"
+#include "player.h"
+#include "monopoly.hpp"
 
-Field::Field(eBrand brand, eType type, const int& index)
-    : Brand(brand), Type(type), ownerIndex(index)
+Field::Field(const eBrand brand, const int& index)
+    : Brand(brand), ownerIndex(index)
 {
-
-}
-
-const Field::eType Field::getType() const
-{
-    return Type;
 }
 
 const Field::eBrand Field::getBrand() const
@@ -24,4 +20,18 @@ const int &Field::getOwnerIndex() const
 void Field::setOwnerIndex(const int &index)
 {
     ownerIndex = index;
+}
+
+bool Field::buy(Player& player)
+{
+    return false;
+}
+
+bool Field::renta(Player& player, Player& owner)
+{
+    if(!ownerIndex)
+        return false;
+    player.calcBalance(-kRentCost);
+    owner.calcBalance(kRentCost);
+    return true;
 }

@@ -1,7 +1,12 @@
 #include "gtest/gtest.h"
-#include "monopoly.hpp"
 
-#include <iostream>
+#include "auto_field.h"
+#include "bank_field.h"
+#include "cloth_field.h"
+#include "food_field.h"
+#include "monopoly.hpp"
+#include "prison_field.h"
+#include "travel_field.h"
 
 TEST(LAB2, GetPlayersListReturnCorrectList) {
     std::string players[]{ "Peter","Ekaterina","Alexander" };
@@ -19,14 +24,14 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
 
 TEST(LAB2, GetFieldsListReturnCorrectList) {
     Field expectedCompanies [] {
-        Field(Field::FORD, Field::AUTO, 0),
-        Field(Field::MCDONALD, Field::FOOD, 0),
-        Field(Field::LAMODA, Field::CLOTHER, 0),
-        Field(Field::AIR_BALTIC, Field::TRAVEL, 0),
-        Field(Field::NORDAVIA, Field::TRAVEL, 0),
-        Field(Field::BPRISON, Field::PRISON, 0),
-        Field(Field::MCDONALD, Field::FOOD, 0),
-        Field(Field::TESLA, Field::AUTO, 0)
+        AutoField(Field::FORD, 0),
+        FoodField(Field::MCDONALD, 0),
+        ClothField(Field::LAMODA, 0),
+        TravelField(Field::AIR_BALTIC, 0),
+        TravelField(Field::NORDAVIA, 0),
+        PrisonField(Field::BPRISON, 0),
+        FoodField(Field::MCDONALD, 0),
+        AutoField(Field::TESLA, 0),
     };
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
@@ -36,7 +41,7 @@ TEST(LAB2, GetFieldsListReturnCorrectList) {
     int i = 0;
     for (auto x : actualCompanies)
     {
-        ASSERT_EQ(x, expectedCompanies[i++]);
+        ASSERT_EQ(*x, expectedCompanies[i++]);
     }
     ASSERT_TRUE(i);
 }
@@ -79,7 +84,7 @@ TEST(LAB2, PlayerBuyUndefinedField)
 
     Monopoly monopoly(players, 3);
 
-    Field resource(Field::UKRSIBBANK, Field::BANK, 0);
+    BankField resource(Field::eBrand::UKRSIBBANK, 0);
     ASSERT_FALSE(monopoly.Buy(1, resource));
 
     auto player = monopoly.GetPlayerInfo(1);
@@ -121,7 +126,7 @@ TEST(LAB2, RentaBank)
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
-    Field resource(Field::UKRSIBBANK, Field::BANK, 0);
+    BankField resource(Field::UKRSIBBANK, 0);
     monopoly.Renta(1, resource);
 
     auto player = monopoly.GetPlayerInfo(1);
@@ -131,6 +136,5 @@ TEST(LAB2, RentaBank)
 bool operator== (const Field & a, const Field & b)
 {
     return a.getBrand() == b.getBrand() &&
-            a.getType() == b.getType() &&
             a.getOwnerIndex() == b.getOwnerIndex();
 }

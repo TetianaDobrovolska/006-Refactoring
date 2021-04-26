@@ -1,19 +1,10 @@
 #ifndef FIELD_H
 #define FIELD_H
 
+class Player;
 class Field
 {
 public:
-    enum eType
-    {
-        AUTO,
-        FOOD,
-        TRAVEL,
-        CLOTHER,
-        PRISON,
-        BANK
-    };
-
     enum eBrand
     {
         FORD,
@@ -25,15 +16,17 @@ public:
         BPRISON,
         UKRSIBBANK
     };
-    Field(eBrand brand, eType type, const int& index);
+    static constexpr int kRentCost = 250;
+    Field(const eBrand brand, const int& index);
 
     const Field::eBrand getBrand() const;
-    const Field::eType getType() const;
     const int& getOwnerIndex() const;
     void setOwnerIndex(const int& index);
+
+    virtual bool buy(Player& player);
+    virtual bool renta(Player& player, Player& owner);
 private:
     eBrand Brand;
-    eType Type;
     int ownerIndex;
 };
 

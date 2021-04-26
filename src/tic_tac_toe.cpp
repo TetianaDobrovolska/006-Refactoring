@@ -5,9 +5,20 @@
 #include <stdlib.h>
 using namespace std;
 
+namespace {
+
+constexpr int kMaxNameSize = kMaxNameSize;
+constexpr int kMaxCellCount = 9;
+constexpr int kRowSize = 3;
+constexpr int kMinStepsToWin = 5;
+const char kOSymbol = 'O';
+const char kXSymbol = 'X';
+
+}  //namespace
+
 char win = '-'; 
-char PlayerName1[80], PlayerName2[80];
-char cells[9] = { '-','-','-','-','-','-','-','-','-' };
+char PlayerName1[kMaxNameSize], PlayerName2[kMaxNameSize];
+char cells[kMaxCellCount] = { '-','-','-','-','-','-','-','-','-' };
 
 void show_cells() {
     system("cls");
@@ -24,41 +35,62 @@ void show_cells() {
 
 }
 
+bool isCellValid(const int& cell) {
+    return cell > kMaxCellCount || cell < 1 ||
+            cells[cell - 1] == kOSymbol ||
+            cells[cell - 1] == kXSymbol;
+}
+
 void make_move(int num) {
     if (num == 1) cout << PlayerName1;
     else cout << PlayerName2;
     int cell;
     cout << ",enter cell number, make your move:";
     cin >> cell;
-  
 
-       
-    while (cell > 9 || cell < 1 || cells[cell - 1] == 'O' || cells[cell - 1] == 'X') {
+    while (!isCellValid(cell)) {
         cout << "Enter the number of the correct (1-9) or empty (---) cells to make a move:";
         cin >> cell;
         cout << "\n";
     }
     
-    if (num == 1) cells[cell - 1] = 'X';
-    else cells[cell - 1] = 'O';
+    if (num == 1) cells[cell - 1] = kXSymbol;
+    else cells[cell - 1] = kOSymbol;
+}
+
+bool isHorizontalLine(const int& index) {
+    return cells[index * kRowSize] == cells[index * kRowSize + 1] &&
+            cells[index * kRowSize + 1] == cells[index * kRowSize + 2];
+}
+
+bool isVerticalLine(const int& index) {
+    return cells[index] == cells[index + 3] &&
+            cells[index + 3] == cells[index + 6];
+}
+
+bool isDiagonalLine() {
+    return cells[2] == cells[4] && cells[4] == cells[6] ||
+            cells[0] == cells[4] && cells[4] == cells[8];
 }
 
 char check()
 {
     for (int i = 0; i < 3; i++) 
-        if (cells[i * 3] == cells[i * 3 + 1] && cells[i * 3 + 1] == cells[i * 3 + 2])
-            return cells[i]; 
-        else if (cells[i] == cells[i + 3] && cells[i + 3] == cells[i + 6]) 
-            return cells[i];
-        else if ((cells[2] == cells[4] && cells[4] == cells[6]) || (cells[0] == cells[4] && cells[4] == cells[8]))
+        if (isHorizontalLine(i) || isVerticalLine(i) || isDiagonalLine())
             return cells[i]; 
     return '-'; 
 }
 
+void printResult(const std::string& winer, const std::string loser)
+{
+    cout << winer << "you won congratulations " << loser << " you lose..." << endl;
+}
+
 void result() {
-    if (win == 'X')
-        cout << PlayerName1 << "you won congratulations " << PlayerName2 << " you lose..." << endl;
-    else if (win == 'O') cout << PlayerName2 << "you won congratulations  " << PlayerName1 << " you lose..." << endl;
+    if (win == kXSymbol)
+        printResult(PlayerName1, PlayerName2);
+    else if (win == kOSymbol)
+        printResult(PlayerName2, PlayerName1);
 
 }
 
@@ -73,13 +105,13 @@ int main(int argc, char** argv) {
     
     show_cells();
 
-    for (int move = 1; move <= 9; move++) {
+    for (int move = 1; move <= kMaxCellCount; move++) {
         if (move % 2) make_move(1); 
         else make_move(2);
 
         show_cells();
         
-        if (move >= 5)
+        if (move >= kMinStepsToWin)
         {
             win = check();
             if (win != '-')

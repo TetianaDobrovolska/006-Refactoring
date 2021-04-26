@@ -6,6 +6,7 @@
 class Player
 {
 public:
+    Player();
     Player(const std::string& name, const int& balance);
 
     const int& getBalance() const;

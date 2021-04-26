@@ -1,5 +1,6 @@
 #include "monopoly.hpp"
 #include <algorithm>
+#include <iostream>
 
 namespace {
 
@@ -19,18 +20,18 @@ constexpr int kRentCost = 250;
 
 Monopoly::Monopoly(const std::string names[kMaxPlayerCount], const int& countPlayers)
 {
-	for (int i = 0; i < countPlayers; i++)
-	{
+    for (int i = 0; i < countPlayers; i++)
+    {
         Players.push_back(Player(names[i], kStartMoney));
-	}
-    Fields.push_back(Field(resource::FORD, resource::AUTO, kBankIndex));
-    Fields.push_back(Field(resource::MCDONALD, resource::FOOD, kBankIndex));
-    Fields.push_back(Field(resource::LAMODA, resource::CLOTHER, kBankIndex));
-    Fields.push_back(Field(resource::AIR_BALTIC, resource::TRAVEL, kBankIndex));
-    Fields.push_back(Field(resource::NORDAVIA, resource::TRAVEL, kBankIndex));
-    Fields.push_back(Field(resource::BPRISON, resource::PRISON, kBankIndex));
-    Fields.push_back(Field(resource::MCDONALD, resource::FOOD, kBankIndex));
-    Fields.push_back(Field(resource::TESLA, resource::AUTO, kBankIndex));
+    }
+    Fields.push_back(Field(Field::FORD, Field::AUTO, kBankIndex));
+    Fields.push_back(Field(Field::MCDONALD, Field::FOOD, kBankIndex));
+    Fields.push_back(Field(Field::LAMODA, Field::CLOTHER, kBankIndex));
+    Fields.push_back(Field(Field::AIR_BALTIC, Field::TRAVEL, kBankIndex));
+    Fields.push_back(Field(Field::NORDAVIA, Field::TRAVEL, kBankIndex));
+    Fields.push_back(Field(Field::BPRISON, Field::PRISON, kBankIndex));
+    Fields.push_back(Field(Field::MCDONALD, Field::FOOD, kBankIndex));
+    Fields.push_back(Field(Field::TESLA, Field::AUTO, kBankIndex));
 }
 
 const std::list<Player>& Monopoly::GetPlayersList() const
@@ -46,7 +47,15 @@ const std::list<Field>& Monopoly::GetFieldsList() const
 const Player& Monopoly::GetPlayerInfo(const int& playerIndex) const
 {
     std::list<Player>::const_iterator i = Players.cbegin();
-	std::advance(i, playerIndex - 1);
+    std::advance(i, playerIndex - 1);
+    return *i;
+}
+
+const Field&  Monopoly::GetFieldByName(const Field::eBrand brand) const
+{
+    auto i = std::find_if(Fields.cbegin(), Fields.cend(), [brand] (Field x) {
+        return x.getBrand() == brand;
+    });
     return *i;
 }
 
@@ -56,94 +65,90 @@ bool Monopoly::Buy(const int& playerIndex, Field& resource)
     std::advance(curPlayerIterator, playerIndex - 1);
 
     auto iterResource = std::find_if(Fields.begin(), Fields.end(),
-                                     [resource](auto x) { return x.getBrand() == resource.getBrand(); });
+                                    [resource](auto x) { return x.getBrand() == resource.getBrand(); });
     if (Fields.end() == iterResource)
     {
         return false;
     }
-    switch (iterResource->getType())
-	{
-    case resource::AUTO:
-        if (iterResource->getOwnerIndex())
-			return false;
+    switch (resource.getType())
+    {
+    case Field::AUTO:
+        if (resource.getOwnerIndex())
+            return false;
         curPlayerIterator->calcBalance(-kAutoFieldCost);
-        iterResource->setOwnerIndex(playerIndex);
-		break;
-    case resource::FOOD:
-        if (iterResource->getOwnerIndex())
-			return false;
+        break;
+    case Field::FOOD:
+        if (resource.getOwnerIndex())
+            return false;
         curPlayerIterator->calcBalance(-kFoodFieldCost);
-        iterResource->setOwnerIndex(playerIndex);
-		break;
-    case resource::TRAVEL:
-        if (iterResource->getOwnerIndex())
-			return false;
+        break;
+    case Field::TRAVEL:
+        if (resource.getOwnerIndex())
+            return false;
         curPlayerIterator->calcBalance(-kTravelFieldCost);
-        iterResource->setOwnerIndex(playerIndex);
-		break;
-    case resource::CLOTHER:
-        if (iterResource->getOwnerIndex())
-			return false;
+        break;
+    case Field::CLOTHER:
+        if (resource.getOwnerIndex())
+            return false;
         curPlayerIterator->calcBalance(-kClotherFieldCost);
-        iterResource->setOwnerIndex(playerIndex);
-		break;
-	default:
-		return false;
-	};
+        break;
+    default:
+        return false;
+    };
+    iterResource->setOwnerIndex(playerIndex);
 
-	return true;
-}
-
-const Field&  Monopoly::GetFieldByName(const resource::eBrand brand) const
-{
-    auto i = std::find_if(Fields.cbegin(), Fields.cend(), [brand] (Field x) {
-        return x.getBrand() == brand;
-	});
-	return *i;
+    return true;
 }
 
 bool Monopoly::Renta(const int& playerIndex, Field& resource)
 {
-    std::list<Player>::iterator curPlayerIterator = Players.begin();
-    std::advance(curPlayerIterator, playerIndex - 1);
-    Player ownerPlayer = GetPlayerInfo(resource.getOwnerIndex());
+    Player curPlayer = GetPlayerInfo(playerIndex);
+    Player ownerPlayer;
 
     switch (resource.getType())
-	{
-    case resource::AUTO:
+    {
+    case Field::AUTO:
         if (!resource.getOwnerIndex())
-			return false;
+            return false;
+        ownerPlayer = GetPlayerInfo(resource.getOwnerIndex());
         ownerPlayer.calcBalance(kRentCost);
-        curPlayerIterator->calcBalance(-kRentCost);
-		break;
-    case resource::FOOD:
+        curPlayer.calcBalance(-kRentCost);
+        break;
+    case Field::FOOD:
         if (!resource.getOwnerIndex())
-			return false;
-    case resource::TRAVEL:
+            return false;
+    case Field::TRAVEL:
         if (!resource.getOwnerIndex())
-			return false;
+            return false;
+        ownerPlayer = GetPlayerInfo(resource.getOwnerIndex());
         ownerPlayer.calcBalance(kRentCost);
-        curPlayerIterator->calcBalance(-kRentCost);
-		break;
-    case resource::CLOTHER:
+        curPlayer.calcBalance(-kRentCost);
+        break;
+    case Field::CLOTHER:
         if (!resource.getOwnerIndex())
-			return false;
+            return false;
+        ownerPlayer = GetPlayerInfo(resource.getOwnerIndex());
         ownerPlayer.calcBalance(kRentCost);
-        curPlayerIterator->calcBalance(-kRentCost);
-		break;
-    case resource::PRISON:
-        curPlayerIterator->calcBalance(-kPrisonRansomCost);
-		break;
-    case resource::BANK:
-        curPlayerIterator->calcBalance(-kBankPaymant);
-		break;
-	default:
-		return false;
-	}
+        curPlayer.calcBalance(-kRentCost);
+        break;
+    case Field::PRISON:
+        curPlayer.calcBalance(-kPrisonRansomCost);
+        break;
+    case Field::BANK:
+        curPlayer.calcBalance(-kBankPaymant);
+        break;
+    default:
+        return false;
+    }
     std::list<Player>::iterator i = Players.begin();
+    std::advance(i, playerIndex - 1);
+    *i = curPlayer;
     i = find_if(Players.begin(), Players.end(),
-                                     [ownerPlayer](auto x) { return x.getName() == ownerPlayer.getName(); });
-    *i = ownerPlayer;
+                [ownerPlayer](auto x) { return x.getName() == ownerPlayer.getName(); });
+    if (Players.end() != i)
+    {
+        *i = ownerPlayer;
+    }
 
     return true;
 }

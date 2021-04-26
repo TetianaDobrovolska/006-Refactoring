@@ -1,20 +1,39 @@
 #ifndef FIELD_H
 #define FIELD_H
 
-#include "utils.hpp"
-
 class Field
 {
 public:
-    Field(resource::eBrand brand, resource::eType type, const int& index);
+    enum eType
+    {
+        AUTO,
+        FOOD,
+        TRAVEL,
+        CLOTHER,
+        PRISON,
+        BANK
+    };
 
-    const resource::eBrand getBrand() const;
-    const resource::eType getType() const;
+    enum eBrand
+    {
+        FORD,
+        MCDONALD,
+        LAMODA,
+        AIR_BALTIC,
+        NORDAVIA,
+        TESLA,
+        BPRISON,
+        UKRSIBBANK
+    };
+    Field(eBrand brand, eType type, const int& index);
+
+    const Field::eBrand getBrand() const;
+    const Field::eType getType() const;
     const int& getOwnerIndex() const;
     void setOwnerIndex(const int& index);
 private:
-    resource::eBrand Brand;
-    resource::eType Type;
+    eBrand Brand;
+    eType Type;
     int ownerIndex;
 };
 

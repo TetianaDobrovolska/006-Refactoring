@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "monopoly.hpp"
 
+#include <iostream>
+
 TEST(LAB2, GetPlayersListReturnCorrectList) {
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
@@ -17,14 +19,14 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
 
 TEST(LAB2, GetFieldsListReturnCorrectList) {
     Field expectedCompanies [] {
-        Field(resource::FOOD, resource::AUTO, 0),
-        Field(resource::MCDONALD, resource::FOOD, 0),
-        Field(resource::LAMODA, resource::CLOTHER, 0),
-        Field(resource::AIR_BALTIC, resource::TRAVEL, 0),
-        Field(resource::NORDAVIA, resource::TRAVEL, 0),
-        Field(resource::BPRISON, resource::PRISON, 0),
-        Field(resource::MCDONALD, resource::FOOD, 0),
-        Field(resource::TESLA, resource::AUTO, 0)
+        Field(Field::FORD, Field::AUTO, 0),
+        Field(Field::MCDONALD, Field::FOOD, 0),
+        Field(Field::LAMODA, Field::CLOTHER, 0),
+        Field(Field::AIR_BALTIC, Field::TRAVEL, 0),
+        Field(Field::NORDAVIA, Field::TRAVEL, 0),
+        Field(Field::BPRISON, Field::PRISON, 0),
+        Field(Field::MCDONALD, Field::FOOD, 0),
+        Field(Field::TESLA, Field::AUTO, 0)
     };
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
@@ -45,13 +47,13 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
 
     Monopoly monopoly(players, 3);
 
-    auto resource = monopoly.GetFieldByName(resource::FORD);
+    auto resource = monopoly.GetFieldByName(Field::FORD);
     monopoly.Buy(1, resource);
 
     auto player = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(player.getBalance(), 5500);
 
-    resource = monopoly.GetFieldByName(resource::FORD);
+    resource = monopoly.GetFieldByName(Field::FORD);
     ASSERT_TRUE(resource.getOwnerIndex() != 0);
 }
 
@@ -60,10 +62,10 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
-    auto resource = monopoly.GetFieldByName(resource::FORD);
+    auto resource = monopoly.GetFieldByName(Field::FORD);
     monopoly.Buy(1, resource);
 
-    resource = monopoly.GetFieldByName(resource::FORD);
+    resource = monopoly.GetFieldByName(Field::FORD);
     monopoly.Renta(2, resource);
 
     auto player1 = monopoly.GetPlayerInfo(1);
@@ -72,7 +74,6 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     auto player2 = monopoly.GetPlayerInfo(2);
     ASSERT_EQ(player2.getBalance(), 5750);
 }
-
 
 bool operator== (const Field & a, const Field & b)
 {

@@ -16,7 +16,7 @@ public:
     const std::list<Player>& GetPlayersList() const;
     const std::list<Field>& GetFieldsList() const;
     const Player& GetPlayerInfo(const int&) const;
-    const Field& GetFieldByName(const resource::eBrand brand) const;
+    const Field& GetFieldByName(const Field::eBrand brand) const;
 
     bool Buy(const int& p, Field&);
     bool Renta(const int& p, Field&);

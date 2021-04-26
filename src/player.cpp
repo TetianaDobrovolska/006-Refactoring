@@ -1,5 +1,12 @@
 #include "player.h"
 
+Player::Player()
+    : Name("")
+    , Balance(6000)
+{
+
+}
+
 Player::Player(const std::string& name, const int& balance)
     : Name(name)
     , Balance(balance)

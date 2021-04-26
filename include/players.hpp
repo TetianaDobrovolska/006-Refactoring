@@ -21,9 +21,8 @@ private:
     std::pair<std::string, const char> m_playerTwo {"", 'O'};
     std::vector<std::pair<std::string, const char>> m_players {m_playerOne, m_playerTwo};
     char m_turn = m_playerOne.second;
-
     std::pair<std::string, const char> m_getPlayer(const char &pict);
-    char m_setTurn(const char &pict);
+    
 };
 
 #endif

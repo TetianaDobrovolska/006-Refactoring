@@ -48,17 +48,38 @@ void Controller::makeMove() {
         if (cell > 9 || cell < 1) {
             std::cout << "Enter the number of the correct (1-9) cells to make a move:";
         } 
-        else if (currentFieldState[cell - 1] == 'O' || currentFieldState[cell - 1] == 'X') {
+        else if (currentFieldState[cell-1] != m_field.emptyCell) {
+            std::cout << currentFieldState[cell-1] << "    currentFieldState[cell]" << std::endl;
             std::cout << "Choise the empty cells to make a move:";
         }
         else {
             i = 1;
         }
     }
-    m_field.setCellState(m_players.getTurn(), cell);
+    m_field.setCellState(m_players.getTurn(), cell-1);
     m_players.changeTurn();
-    std::cout << m_players.getTurn() << std::endl;
+    std::cout << m_players.getTurn() << "   TURN" << std::endl;
     m_field.showCells();
+}
+
+const char Controller::checkWinner() {
+    char winner = m_field.checkWin();
+    for (const auto &value: m_players.getPlayers()) {
+        if (value.second == winner) {
+            return value.second;
+        }
+    }
+    return m_field.emptyCell;
+}
+
+bool Controller::isWin() {
+    bool win = checkWinner() != m_field.emptyCell;
+    if (m_field.checkTurnVariations()) win = true;
+    return win;
+}
+
+void Controller::newSession() {
+    m_field.eraseField();
 }
 
 const int Controller::m_userInput() {

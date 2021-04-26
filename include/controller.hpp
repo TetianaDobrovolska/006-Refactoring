@@ -16,6 +16,9 @@ public:
     std::string getName(const char &pict);
 	void makeMove();
     const char getTurn();
+    const char checkWinner();
+    void newSession();
+    bool isWin();
 private:
     Players m_players;
     Field m_field;

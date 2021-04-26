@@ -25,16 +25,9 @@ const char Players::getTurn() {
     return m_turn;
 }
 
-char Players::m_setTurn(const char &pict) {
-    m_turn = m_getPlayer(pict).second;
-}
-
 void Players::changeTurn() {
-    for (const auto &value: m_players) {
-        if (value.second != getTurn()) {
-            m_setTurn(value.second);
-        }
-    }
+    if (m_turn == m_playerOne.second) m_turn = m_playerTwo.second;
+    else m_turn = m_playerOne.second;
 }
 
 std::pair<std::string, const char> Players::m_getPlayer(const char &pict) {

@@ -51,3 +51,21 @@ TEST(TestSet, MakeMove) {
     int actual = 1;
     EXPECT_EQ(actual, 1);
 }
+
+TEST(TestSet, CheckWinner) {
+    char actual = c.checkWinner();
+    EXPECT_EQ(actual, '-');
+}
+
+TEST(TestSet, CheckWinnerPlayerX) {
+    for (int i = 0; i < 5; i++) c.makeMove();
+    char actual = c.checkWinner();
+    EXPECT_EQ(actual, 'X');
+}
+
+TEST(TestSet, CheckWinnerPlayerO) {
+    c.newSession();
+    for (int i = 0; i < 5; i++) c.makeMove();
+    char actual = c.checkWinner();
+    EXPECT_EQ(actual, 'O');
+}

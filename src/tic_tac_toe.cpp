@@ -36,6 +36,15 @@ void TicTacToe::setCellValue(char symbol, int index)
 	cells[index] = symbol;
 }
 
+int TicTacToe::getMoverIndex()
+{
+	return moverIndex;
+}
+void TicTacToe::setMoverIndex(int move)
+{
+	moverIndex = move % PLAYERS_COUNT;
+}
+
 void TicTacToe::startGame()
 {
 	for (int move = 1; move <= CELLS_COUNT; move++) {
@@ -77,43 +86,37 @@ void TicTacToe::showCellsNumber() {
 void TicTacToe::showCellsValue() {
 	printf("Current situation (-%c- empty):\n", initsymbol);
 	for (int i = 0; i < CELLS_COUNT; i++) {
-		printf("| - %c -|", cells[i]);
+		printf("| - %c -|", getCellValue(i));
 		if ((i + 1) % static_cast<int>(sqrt(CELLS_COUNT)) == 0) {
 			printf("\n");
 		}
 	}
 }
 
-int TicTacToe::getMoverIndex(int move)
+void TicTacToe::showMover()
 {
-	if (move % 2) {
-		printf("Player Name = %s your move", getPlayerName(0).c_str());
-		return 1;
-	}
-	else {
-		printf("Player Name = %s your move", getPlayerName(1).c_str());
-		return 2;
-	}
+	string movername = getPlayerName(getMoverIndex());
+	printf("Player Name = %s your move", movername.c_str());
 }
+
 void TicTacToe::makeMove(int move) {
-	int mover = getMoverIndex(move);
+	setMoverIndex(move - MOVER_CORRECTION);
+	int mover = getMoverIndex();
+	showMover();
 	int cell = enterCell();
-	if (mover == 1) {
-		setCellValue('X', cell);
+	if (mover == PLAYERS_COUNT - MOVER_CORRECTION) {
+		setCellValue('O', cell);
 	}
 	else {
-		setCellValue('O', cell);
+		setCellValue('X', cell);
 	}
 }
 
 bool TicTacToe::isCellValid(int cellnum)
 {
-	if (cellnum > 9 || cellnum < 1 || getCellValue(cellnum - 1) == 'O' || getCellValue(cellnum - 1) == 'X') {
-		return false;
-	}
-	else {
-		return true;
-	}
+	bool cellnumValid = cellnum < CELLS_COUNT + CELL_CORRECTION && cellnum > FIRST_CELL_INDEX;
+	bool cellValid = getCellValue(cellnum - CELL_CORRECTION) != 'O' && getCellValue(cellnum - CELL_CORRECTION) != 'X';
+	return cellnumValid && cellValid;
 }
 
 int TicTacToe::enterCell()
@@ -131,14 +134,12 @@ bool TicTacToe::isWinner()
 	if (getWin() != initsymbol) {
 		return true;
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 
 bool TicTacToe::isCheckWinnerValid(int move)
 {
-	if (move > 4)
+	if (move > HALF_MOVES)
 	{
 		return true;
 	}
@@ -147,16 +148,52 @@ bool TicTacToe::isCheckWinnerValid(int move)
 
 void TicTacToe::check()
 {
-	for (int i = 0; i < 3; i++) {
-		if ((getCellValue(i * 3) == getCellValue(i * 3 + 1) && getCellValue(i * 3 + 1) == getCellValue(i * 3 + 2)) ||
-			(getCellValue(i) == getCellValue(i + 3) && getCellValue(i + 3) == getCellValue(i + 6))) {
+	for (int i = 0; i < sqrt(CELLS_COUNT); i++) {
+		if ( isHorizontalWinner(i)) {
+			setWin(getCellValue(i * sqrt(CELLS_COUNT)));
+			break;
+		}
+		if (isVerticalWinner(i)) {
 			setWin(getCellValue(i));
+			break;
 		}
 	}
-	if ((getCellValue(2) == getCellValue(4) && getCellValue(4) == getCellValue(6)) ||
-		(getCellValue(0) == getCellValue(4) && getCellValue(4) == getCellValue(8))) {
-		setWin(getCellValue(4));
+	if (isDiagWinner()) {
+		setWin(getCellValue(BOARD_CENTER_CELL));
 	}
+}
+
+bool TicTacToe::isHorizontalWinner(int index)
+{
+	for (int i = 0; i < sqrt(CELLS_COUNT) - STEP; i++) {
+		if (getCellValue(index * sqrt(CELLS_COUNT) + i) != getCellValue(index * sqrt(CELLS_COUNT) + i + STEP)) {
+			return false;
+			break;
+		}
+	}
+	return true;
+}
+
+bool TicTacToe::isVerticalWinner(int index)
+{
+	for (int i = 0; i < sqrt(CELLS_COUNT) - STEP; i++) {
+		if (getCellValue(index + (i * sqrt(CELLS_COUNT))) != getCellValue(index + ((i + STEP) * sqrt(CELLS_COUNT)))) {
+			return false;
+			break;
+		}
+	}
+	return true;
+
+}
+
+bool TicTacToe::isDiagWinner()
+{
+	bool diagrigthleft = getCellValue(sqrt(CELLS_COUNT) - CELL_CORRECTION) == getCellValue(BOARD_CENTER_CELL) && 
+							getCellValue(BOARD_CENTER_CELL) == getCellValue(CELLS_COUNT - sqrt(CELLS_COUNT));
+	bool diagleftright = getCellValue(FIRST_CELL_INDEX) == getCellValue(BOARD_CENTER_CELL) && 
+							getCellValue(BOARD_CENTER_CELL) == getCellValue(CELLS_COUNT - CELL_CORRECTION);
+
+	return diagleftright || diagrigthleft;
 }
 
 void TicTacToe::result()

@@ -24,17 +24,16 @@ TEST(TestSet, getSetCellValue) {
     t.setCellValue('X',5);
     ASSERT_EQ(t.getCellValue(5), 'X');
 }
-/*
 
 TEST(TestSet, getMoverIndex) {
     TicTacToe t;
-    int value = t.getMoverIndex(5);
-    ASSERT_EQ(value, 1);
+    t.setMoverIndex(5);
+    ASSERT_EQ(t.getMoverIndex(), 1);
 }
 
 TEST(TestSet, getMoverIndex) {
     TicTacToe t;
-    int value = t.getMoverIndex(4);
-    ASSERT_EQ(value, 2);
+    t.setMoverIndex(4);
+    ASSERT_EQ(t.getMoverIndex(), 2);
 }
-*/
+

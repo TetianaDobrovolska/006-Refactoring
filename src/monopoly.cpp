@@ -3,7 +3,7 @@
 
 using namespace ::std;
 
-Monopoly::Monopoly(string names[Monopoly::maxPlayersCount],int countPlayers)
+Monopoly::Monopoly(const string names[], const int countPlayers)
 {
     for (int i = 0; i < countPlayers; i++)
     {
@@ -31,12 +31,12 @@ const std::list<std::tuple<std::string, Monopoly::Type,int,bool>> & Monopoly::Ge
 
 const std::tuple<std::string, int>& Monopoly::GetPlayerInfo(const int& m) const
 {
-    std::list<std::tuple<std::string, int>>::const_iterator i = Players.begin();
+    std::list<std::tuple<std::string, int>>::const_iterator i = Players.cbegin();
     advance(i, m - 1);
     return *i;
 }
 
-bool Monopoly::Buy(int z, std::tuple<std::string, Type, int, bool> k)
+bool Monopoly::Buy(const int z, std::tuple<string, Type, int, bool>& k)
 {
     auto x = GetPlayerInfo(z);
     tuple<string, int> p;
@@ -86,7 +86,7 @@ const std::tuple<std::string, Monopoly::Type, int, bool>& Monopoly::GetFieldByNa
 	return *i;
 }
 
-bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
+bool Monopoly::Renta(const int m, const std::tuple<std::string, Type, int, bool>& c)
 {
 	tuple<string, int> z = GetPlayerInfo(m);
 	tuple<string, int> o;

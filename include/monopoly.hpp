@@ -33,14 +33,14 @@ public:
     static constexpr const int sellPriceClothes = 100;
     static constexpr const int sellPriceFood = 250;
 
-    Monopoly(std::string names[maxPlayersCount],int);
+    Monopoly(const std::string names[maxPlayersCount], const int);
     const std::list<std::tuple<std::string,int>>& GetPlayersList() const;
     const std::list<std::tuple<std::string, Type, int, bool>>& GetFieldsList() const;
     const std::tuple<std::string, int>& GetPlayerInfo(const int&) const;
     const std::tuple<std::string, Type, int, bool>& GetFieldByName(const std::string&) const;
 
-    bool Buy(int p,std::tuple<std::string, Type, int, bool>);
-    bool Renta(int p, std::tuple<std::string, Type, int, bool>c);
+    bool Buy(const int p, std::tuple<std::string, Type, int, bool>&);
+    bool Renta(const int p, const std::tuple<std::string, Type, int, bool>&c);
 
 private:
     std::list<std::tuple<std::string, Type, int, bool>> Fields;

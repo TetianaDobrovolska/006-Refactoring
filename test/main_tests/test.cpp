@@ -3,7 +3,8 @@
 
 using namespace ::std;
 
-TEST(LAB2, GetPlayersListReturnCorrectList) {
+TEST(LAB2, GetPlayersListReturnCorrectList)
+{
     string players[]{ "Peter","Ekaterina","Alexander" };
    
     Monopoly monopoly(players,3);
@@ -17,7 +18,8 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
     ASSERT_TRUE(i);
 }
 
-TEST(LAB2, GetFieldsListReturnCorrectList) {
+TEST(LAB2, GetFieldsListReturnCorrectList)
+{
     tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
         //make_tuple(company name, company industry type, owner id, isInMonopoly)
         make_tuple("Ford",Monopoly::AUTO ,0,false),

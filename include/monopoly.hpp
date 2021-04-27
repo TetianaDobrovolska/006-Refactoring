@@ -1,6 +1,8 @@
 #ifndef MONOPOLY_HPP
 #define MONOPOLY_HPP
 
+#include "player.hpp"
+
 #include <list>
 #include <tuple>
 #include <string>
@@ -33,10 +35,10 @@ public:
     static constexpr const int sellPriceClothes = 100;
     static constexpr const int sellPriceFood = 250;
 
-    Monopoly(const std::string names[maxPlayersCount], const int);
-    const std::list<std::tuple<std::string,int>>& GetPlayersList() const;
+    Monopoly(const std::string names[maxPlayersCount], const int&);
+    const std::list<Player>& GetPlayersList() const;
     const std::list<std::tuple<std::string, Type, int, bool>>& GetFieldsList() const;
-    const std::tuple<std::string, int>& GetPlayerInfo(const int&) const;
+    const Player& GetPlayerInfo(const int&) const;
     const std::tuple<std::string, Type, int, bool>& GetFieldByName(const std::string&) const;
 
     bool Buy(const int p, std::tuple<std::string, Type, int, bool>&);
@@ -44,7 +46,7 @@ public:
 
 private:
     std::list<std::tuple<std::string, Type, int, bool>> Fields;
-    std::list<std::tuple<std::string, int>> Players;
+    std::list<Player> Players;
 };
 
 #endif

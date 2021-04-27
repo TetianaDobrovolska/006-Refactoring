@@ -3,11 +3,11 @@
 
 using namespace ::std;
 
-Monopoly::Monopoly(const string names[], const int countPlayers)
+Monopoly::Monopoly(const string names[], const int& countPlayers)
 {
     for (int i = 0; i < countPlayers; i++)
     {
-        Players.push_back(make_tuple(names[i], startupCapital));
+        Players.push_back(Player(names[i], startupCapital));
     }
     Fields.push_back(make_tuple("Ford", Monopoly::AUTO, 0, false));
     Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, 0, false));
@@ -19,7 +19,7 @@ Monopoly::Monopoly(const string names[], const int countPlayers)
     Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, 0, false));
 }
 
-const std::list<std::tuple<std::string, int>> & Monopoly::GetPlayersList() const
+const std::list<Player>& Monopoly::GetPlayersList() const
 {
     return Players;
 }
@@ -29,9 +29,9 @@ const std::list<std::tuple<std::string, Monopoly::Type,int,bool>> & Monopoly::Ge
     return Fields;
 }
 
-const std::tuple<std::string, int>& Monopoly::GetPlayerInfo(const int& m) const
+const Player& Monopoly::GetPlayerInfo(const int& m) const
 {
-    std::list<std::tuple<std::string, int>>::const_iterator i = Players.cbegin();
+    std::list<Player>::const_iterator i = Players.cbegin();
     advance(i, m - 1);
     return *i;
 }
@@ -39,33 +39,33 @@ const std::tuple<std::string, int>& Monopoly::GetPlayerInfo(const int& m) const
 bool Monopoly::Buy(const int z, std::tuple<string, Type, int, bool>& k)
 {
     auto x = GetPlayerInfo(z);
-    tuple<string, int> p;
+    Player p;
     list<tuple<std::string, Type, int, bool>>::iterator i;
-    list<tuple<string, int>>::iterator j = Players.begin();
+    list<Player>::iterator j = Players.begin();
     switch (get<1>(k))
     {
     case AUTO:
         if (get<2>(k))
             return false;
-        p = make_tuple(get<0>(x), get<1>(x) - sellPriceAuto);
+        p = Player(x.GetName(), x.GetMoney() - sellPriceAuto);
 		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
         break;
 	case FOOD:
 		if (get<2>(k))
 			return false;
-        p = make_tuple(get<0>(x), get<1>(x) - sellPriceFood);
+        p = Player(x.GetName(), x.GetMoney() - sellPriceFood);
 		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
 		break;
     case TRAVEL:
         if (get<2>(k))
             return false;
-        p = make_tuple(get<0>(x), get<1>(x) - sellPriceTravel);
+        p = Player(x.GetName(), x.GetMoney() - sellPriceTravel);
     k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
         break;
     case CLOTHES:
         if (get<2>(k))
             return false;
-        p = make_tuple(get<0>(x), get<1>(x) - sellPriceClothes);
+        p = Player(x.GetName(), x.GetMoney() - sellPriceClothes);
         k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
         break;
     default:
@@ -88,8 +88,8 @@ const std::tuple<std::string, Monopoly::Type, int, bool>& Monopoly::GetFieldByNa
 
 bool Monopoly::Renta(const int m, const std::tuple<std::string, Type, int, bool>& c)
 {
-	tuple<string, int> z = GetPlayerInfo(m);
-	tuple<string, int> o;
+    Player z = GetPlayerInfo(m);
+    Player o;
 
 	switch (get<1>(c))
 	{
@@ -97,8 +97,8 @@ bool Monopoly::Renta(const int m, const std::tuple<std::string, Type, int, bool>
 		if (!get<2>(c))
 			return false;
 		o = GetPlayerInfo(get<2>(c));
-        o = make_tuple(get<0>(o), get<1>(o) + rentalPriceAuto);
-        z = make_tuple(get<0>(z), get<1>(z) - rentalPriceAuto);
+        o = Player(o.GetName(), o.GetMoney() + rentalPriceAuto);
+        z = Player(z.GetName(), z.GetMoney() - rentalPriceAuto);
 		break;
 	case FOOD:
 		if (!get<2>(c))
@@ -107,29 +107,29 @@ bool Monopoly::Renta(const int m, const std::tuple<std::string, Type, int, bool>
 		if (!get<2>(c))
 			return false;
 		o = GetPlayerInfo(get<2>(c));
-        o = make_tuple(get<0>(o), get<1>(o) + rentalPriceTravel);
-        z = make_tuple(get<0>(z), get<1>(z) - rentalPriceTravel);
+        o = Player(o.GetName(), o.GetMoney() + rentalPriceTravel);
+        z = Player(z.GetName(), z.GetMoney() - rentalPriceTravel);
 		break;
     case CLOTHES:
 		if (!get<2>(c))
             return false;
 		o = GetPlayerInfo(get<2>(c));
-        o = make_tuple(get<0>(o), get<1>(o) + rentalPriceClothes);
-        z = make_tuple(get<0>(z), get<1>(z) - rentalPriceClothes);
+        o = Player(o.GetName(), o.GetMoney() + rentalPriceClothes);
+        z = Player(z.GetName(), z.GetMoney() - rentalPriceClothes);
 		break;
 	case PRISON:
-        z = make_tuple(get<0>(z), get<1>(z) - rentalPricePrison);
+        z = Player(z.GetName(), z.GetMoney() - rentalPricePrison);
 		break;
 	case BANK:
-        z = make_tuple(get<0>(z), get<1>(z) - rentalPriceBank);
+        z = Player(z.GetName(), z.GetMoney() - rentalPriceBank);
 		break;
 	default:
 		return false;
 	}
-	list<tuple<string, int>>::iterator i = Players.begin();
+    list<Player>::iterator i = Players.begin();
 	advance(i, m - 1);
 	*i = z;
-	i = find_if(Players.begin(), Players.end(), [o](auto x) { return get<0>(x) == get<0>(o); });
+    i = find_if(Players.begin(), Players.end(), [o](auto x) { return x.GetName() == o.GetName(); });
 	*i = o;
 	return true;
 }

@@ -9,11 +9,12 @@ TEST(LAB2, GetPlayersListReturnCorrectList)
    
     Monopoly monopoly(players,3);
 
-    const list<tuple<string,int>>& x = monopoly.GetPlayersList();
+    auto x = monopoly.GetPlayersList();
+
     int i = 0;
     for (auto c : x) {
-        ASSERT_STREQ(get<0>(c).c_str(), players[i++].c_str());
-        ASSERT_EQ(get<1>(c), Monopoly::startupCapital);
+        ASSERT_STREQ(c.GetName().c_str(), players[i++].c_str());
+        ASSERT_EQ(c.GetMoney(), Monopoly::startupCapital);
     }
     ASSERT_TRUE(i);
 }
@@ -52,7 +53,7 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
     monopoly.Buy(1, x);
 
     auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(get<1>(player), 5500);
+    ASSERT_EQ(player.GetMoney(), 5500);
     x = monopoly.GetFieldByName("Ford");
     ASSERT_TRUE(get<2>(x) != 0);
 }
@@ -67,10 +68,10 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     x = monopoly.GetFieldByName("Ford");
     monopoly.Renta(2, x);
     auto player1 = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(get<1>(player1), 5750);
+    ASSERT_EQ(player1.GetMoney(), 5750);
 
     auto player2 = monopoly.GetPlayerInfo(2);
-    ASSERT_EQ(get<1>(player2), 5750);    
+    ASSERT_EQ(player2.GetMoney(), 5750);
 }
 
 

@@ -116,3 +116,67 @@ TEST(TestSet, DrawTest) {
 	
     ASSERT_EQ(result, "Draw");
 }
+
+TEST(TestSet, Player1WinVerticalTestNew) {
+	TicTacToe t("pl1", "pl2");
+    char board[9]{'X','O','O','X','-','-','X','-','-'};
+	t.setCells(board);
+	char result = t.check();
+    ASSERT_EQ(result, 'X');
+}
+
+TEST(TestSet, Player1WinHorizontalTestNew) {
+    TicTacToe t("pl1", "pl2");
+    char board[9]{'X','X','X','O','O','-','-','-','-'};
+	t.setCells(board);
+	char result = t.check();
+    ASSERT_EQ(result, 'X');
+}
+
+TEST(TestSet, Player1WinDiagTestNew) {
+    TicTacToe t("pl1", "pl2");
+    char board[9]{'X','-','O','O','X','-','-','-','X'};
+	t.setCells(board);
+	char result = t.check();
+    ASSERT_EQ(result, 'X');
+}
+
+TEST(TestSet, Player2WinDiag1TestNew) {
+    TicTacToe t("pl1", "pl2");
+    char board[9]{'O','X','X','X','O','-','-','-','O'};
+	t.setCells(board);
+	char result = t.check();
+    ASSERT_EQ(result, 'O');
+}
+
+TEST(TestSet, Player2WinDiag2TestNew) {
+    TicTacToe t("pl1", "pl2");
+    char board[9]{'X','X','O','X','O','-','O','-','-'};
+	t.setCells(board);
+	char result = t.check();
+    ASSERT_EQ(result, 'O');
+}
+
+TEST(TestSet, Player2WinVertTestNew) {
+    TicTacToe t("pl1", "pl2");
+    char board[9]{'O','X','X','O','X','-','O','-','-'};
+	t.setCells(board);
+	char result = t.check();
+    ASSERT_EQ(result, 'O');
+}
+
+TEST(TestSet, Player2WinHorizTestNew) {
+    TicTacToe t("pl1", "pl2");
+    char board[9]{'O','O','O','X','X','-','X','-','-'};
+	t.setCells(board);
+	char result = t.check();
+    ASSERT_EQ(result, 'O');
+}
+
+TEST(TestSet, DrawTestNew) {
+    TicTacToe t("pl1", "pl2");
+    char board[9]{'X','X','O','O','O','X','X','O','X'};
+	t.setCells(board);
+	char result = t.check();
+    ASSERT_EQ(result, '-');
+}

@@ -7,7 +7,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    TicTacToe t("pl1", "pl2", cin, cout);
+    TicTacToe t("pl1", "pl2");
 	t.play_game();
 
     return 0;

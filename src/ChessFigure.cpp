@@ -4,9 +4,8 @@
 
 using namespace std;
 
-ChessFigure::ChessFigure(ChessFigure::FigureType type, std::string coord) : type(type),
-currentCoord(coord)
-{
+ChessFigure::ChessFigure(const std::string& coord) : currentCoord(coord)
+{    
 }
 
 
@@ -14,82 +13,76 @@ ChessFigure::~ChessFigure()
 {
 }
 
-bool ChessFigure::Move(string nextCoord)
+bool ChessFigure::are_coordinates_inside_board(const string& nextCoord)
 {
-	if (type == PAWN)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (nextCoord[0] != currentCoord[0] || nextCoord[1] <= currentCoord[1] || (nextCoord[1] - currentCoord[1] != 1 && (currentCoord[1] != '2' || nextCoord[1] != '4')))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-			
-	}
-	
-	else if (type == ROOK)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if ((nextCoord[0] != currentCoord[0]) && (nextCoord[1] != currentCoord[1]) || ((nextCoord[0] == currentCoord[0]) && (nextCoord[1] == currentCoord[1])))
-				return false;
-			else
-				return true;
+    Coordinates next(nextCoord);
+	bool is_valid_x = next.getRow() >= BOARD_X_MIN && next.getRow() <= BOARD_X_MAX;
+	bool is_valid_y = next.getColumn() >= BOARD_Y_MIN && next.getColumn() <= BOARD_Y_MAX;
+	return is_valid_x && is_valid_y;
+}
 
-		}
-		else return false;
-	}
-	else if (type == KNIGHT)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			int dx, dy;
-			dx = abs(nextCoord[0] - currentCoord[0]);
-			dy = abs(nextCoord[1] - currentCoord[1]);
-		    if (!(abs(nextCoord[0] - currentCoord[0]) == 1 && abs(nextCoord[1] - currentCoord[1]) == 2 || abs(nextCoord[0] - currentCoord[0]) == 2 && abs(nextCoord[1] - currentCoord[1]) == 1))
-			  return false;
-			else
-			return true;
-		}
-		else return false;
-	}
-	
-	else if (type == BISHOP)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1])))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-	}
-	
-	else if (type == KING)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) <= 1 && abs(nextCoord[1] - currentCoord[1]) <= 1))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-	}
-	else if (type == QUEEN)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1]) || nextCoord[0] == currentCoord[0] || nextCoord[1] == currentCoord[1]))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-	}
-	else
-		return false;
+bool ChessFigure::Move(const std::string& nextCoord) {
+    if (!are_coordinates_inside_board(nextCoord))
+        return false;
+    if (is_valid_step(nextCoord))
+        return true;
+    return false;
+}
+
+bool RookFigure::is_valid_step(const std::string& nextCoord){
+    Coordinates next(nextCoord);
+    bool is_same_row = next.getRow() == currentCoord.getRow();
+    bool is_same_column = next.getColumn() == currentCoord.getColumn();
+    bool is_same_row_or_column = is_same_row && is_same_column;
+    
+    return (is_same_row || is_same_column) && !is_same_row_or_column;
+}
+
+bool KnightFigure::is_valid_step(const std::string& nextCoord){
+    Coordinates next(nextCoord);
+    int dx, dy;
+    dx = abs(next.getRow() - currentCoord.getRow());
+    dy = abs(next.getColumn() - currentCoord.getColumn());
+    
+    return (dx == 1 && dy == 2 || dx == 2 && dy == 1);
+}
+
+bool BishopFigure::is_valid_step(const std::string& nextCoord){
+    Coordinates next(nextCoord);
+    int dx, dy;
+    dx = abs(next.getRow() - currentCoord.getRow());
+    dy = abs(next.getColumn() - currentCoord.getColumn());
+    
+    return dx == dy;
+}
+
+bool PawnFigure::is_valid_step(const std::string& nextCoord) {
+    Coordinates next(nextCoord);
+    bool is_same_row = next.getRow() == currentCoord.getRow();
+    bool is_same_column = next.getColumn() == currentCoord.getColumn();
+    bool is_step_forward = next.getColumn() > currentCoord.getColumn();
+    bool is_step_forward_in_one_step = next.getColumn() - currentCoord.getColumn() == 1;
+    bool is_double_step_from_initial = currentCoord.getColumn() == INITIAL_STEP.first && next.getColumn() == INITIAL_STEP.second;
+    return is_same_row && is_step_forward && (is_step_forward_in_one_step || is_double_step_from_initial);
+}
+
+bool KingFigure::is_valid_step(const std::string& nextCoord) {
+    Coordinates next(nextCoord);
+    int dx, dy;
+    dx = abs(next.getRow() - currentCoord.getRow());
+    dy = abs(next.getColumn() - currentCoord.getColumn());
+    
+    return dx <= 1 && dy <= 1;
+}
+
+bool QueenFigure::is_valid_step(const std::string& nextCoord) {
+    Coordinates next(nextCoord);
+    int dx, dy;
+    dx = abs(next.getRow() - currentCoord.getRow());
+    dy = abs(next.getColumn() - currentCoord.getColumn());
+    
+    bool is_same_row = next.getRow() == currentCoord.getRow();
+    bool is_same_column = next.getColumn() == currentCoord.getColumn();
+    
+    return dx == dy || is_same_row || is_same_column;
 }

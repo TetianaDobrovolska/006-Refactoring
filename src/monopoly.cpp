@@ -1,137 +1,77 @@
 #include "monopoly.hpp"
 #include <algorithm>
+#include <iostream>
 
 using namespace ::std;
 
-Monopoly::Monopoly(string names[10],int countPlaers)
+Monopoly::Monopoly(string names[MAX_PLAYERS],int countPlaers)
 {
 	for (int i = 0; i < countPlaers; i++)
 	{
-		Players.push_back(make_tuple(names[i], 6000));
+		Players.push_back(new Person(names[i], INITIAL_CAPITAL));
 	}
-	Fields.push_back(make_tuple("Ford", Monopoly::AUTO, 0, false));
-	Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, 0, false));
-	Fields.push_back(make_tuple("Lamoda", Monopoly::CLOTHER, 0, false));
-	Fields.push_back(make_tuple("Air Baltic", Monopoly::TRAVEL, 0, false));
-	Fields.push_back(make_tuple("Nordavia", Monopoly::TRAVEL, 0, false));
-	Fields.push_back(make_tuple("Prison", Monopoly::PRISON, 0, false));
-	Fields.push_back(make_tuple("MCDonald", Monopoly::FOOD, 0, false));
-	Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, 0, false));
+	const int owner = 0;
+	
+    Fields.push_back(new AutoField("Ford", owner, false));
+	Fields.push_back(new FoodField("MCDonald", owner, false));
+	Fields.push_back(new ClotherField("Lamoda", owner, false));
+	Fields.push_back(new TravelField("Air Baltic", owner, false));
+	Fields.push_back(new TravelField("Nordavia", owner, false));
+	Fields.push_back(new PrisonField("Prison", owner, false));
+	Fields.push_back(new FoodField("MCDonald", owner, false));
+	Fields.push_back(new AutoField("TESLA", owner, false));
 }
 
-std::list<std::tuple<std::string, int>> * Monopoly::GetPlayersList()
+std::list<Person*>::const_iterator Monopoly::GetPlayersListBegin()
 {
-	return &Players;
+	return Players.cbegin();
 }
 
-std::list<std::tuple<std::string, Monopoly::Type,int,bool>> * Monopoly::GetFieldsList()
+std::list<Person*>::const_iterator Monopoly::GetPlayersListEnd()
 {
-	return &Fields;
+	return Players.cend();
 }
 
-std::tuple<std::string, int> Monopoly::GetPlayerInfo(int m)
+std::list<BaseField*>::const_iterator Monopoly::GetFieldsListBegin()
 {
-	list<std::tuple<std::string, int>>::iterator i = Players.begin();
+	return Fields.cbegin();
+}
+
+std::list<BaseField*>::const_iterator Monopoly::GetFieldsListEnd()
+{
+	return Fields.cend();
+}
+
+Person* Monopoly::GetPlayerInfo(int m)
+{
+    if (m ==0 ) return nullptr;
+	list<Person*>::iterator i = Players.begin();
 	advance(i, m - 1);
 	return *i;
 }
 
-bool Monopoly::Buy(int z, std::tuple<std::string, Type, int, bool> k)
+bool Monopoly::Buy(int z, BaseField* k)
 {
-	auto x = GetPlayerInfo(z);
-	tuple<string, int> p;
-	list<tuple<std::string, Type, int, bool>>::iterator i;
-	list<tuple<string, int>>::iterator j = Players.begin();
-	switch (get<1>(k))
-	{
-	case AUTO:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - 500);
-		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
-		break;
-	case FOOD:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - 250);
-		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
-		break;
-	case TRAVEL:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - 700);
-		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
-		break;
-	case CLOTHER:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - 100);
-		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
-		break;
-	default:
-		return false;
-	};
-	i = find_if(Fields.begin(), Fields.end(), [k](auto x) { return get<0>(x) == get<0>(k); });
-	*i = k;
-    advance(j, z-1);
-	*j = p;
-	return true;
+    auto x = GetPlayerInfo(z);
+	if (k->getOwner())
+        return false;
+    x->setMoney(x->getMoney() - k->getPrice());
+    return k->Buy(z);
 }
 
-std::tuple<std::string, Monopoly::Type, int, bool>  Monopoly::GetFieldByName(std::string l)
+BaseField* Monopoly::GetFieldByName(const std::string& l)
 {
-	std::list<std::tuple<std::string, Monopoly::Type, int, bool>>::iterator i = find_if(Fields.begin(), Fields.end(),[l] (std::tuple<std::string, Monopoly::Type, int, bool> x) {
-		return get<0>(x) == l;
+	auto i = find_if(Fields.cbegin(), Fields.cend(),[l] (auto x) {
+		return x->getName() == l;
 	});
 	return *i;
 }
 
-bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
+bool Monopoly::Renta(int m, BaseField* c)
 {
-	tuple<string, int> z = GetPlayerInfo(m);
-	tuple<string, int> o;
-
-	switch (get<1>(c))
-	{
-	case AUTO:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + 250);
-		z = make_tuple(get<0>(z), get<1>(z) - 250);
-		break;
-	case FOOD:
-		if (!get<2>(c))
-			return false;
-	case TRAVEL:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + 250);
-		z = make_tuple(get<0>(z), get<1>(z) - 250);
-		break;
-	case CLOTHER:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + 250);
-		z = make_tuple(get<0>(z), get<1>(z) - 250);
-		break;
-	case PRISON:
-		z = make_tuple(get<0>(z), get<1>(z) - 1000);
-		break;
-	case BANK:
-		z = make_tuple(get<0>(z), get<1>(z) - 700);
-		break;
-	default:
-		return false;
-	}
-	list<tuple<string, int>>::iterator i = Players.begin();
-	advance(i, m - 1);
-	*i = z;
-	i = find_if(Players.begin(), Players.end(), [o](auto x) { return get<0>(x) == get<0>(o); });
-	*i = o;
-	return true;
+	auto getMoneyFrom = GetPlayerInfo(m);
+    auto owner = GetPlayerInfo(c->getOwner());
+    return c->Renta(getMoneyFrom, owner);
 }
 
 

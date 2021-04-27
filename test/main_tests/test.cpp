@@ -127,10 +127,10 @@ TEST(LAB2, RentaBank)
 
     Monopoly monopoly(players, 3);
     BankField resource(Field::UKRSIBBANK, 0);
-    monopoly.Renta(1, resource);
+    ASSERT_FALSE(monopoly.Renta(1, resource));
 
     auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player.getBalance(), 5300);
+    ASSERT_EQ(player.getBalance(), 6000);
 }
 
 bool operator== (const Field & a, const Field & b)

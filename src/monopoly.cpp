@@ -48,10 +48,15 @@ const Field&  Monopoly::GetFieldByName(const Field::eBrand brand) const
     return *(*i);
 }
 
+std::list<Field*>::const_iterator Monopoly::getFieldIterator(const Field& resource)
+{
+    return std::find_if(Fields.cbegin(), Fields.cend(),
+                        [resource](auto x) { return x->getBrand() == resource.getBrand(); });
+}
+
 bool Monopoly::Buy(const int& playerIndex, Field& resource)
 {
-    auto iterResource = std::find_if(Fields.begin(), Fields.end(),
-                                    [resource](auto x) { return x->getBrand() == resource.getBrand(); });
+    auto iterResource = getFieldIterator(resource);
     if (Fields.end() == iterResource)
     {
         return false;
@@ -74,19 +79,19 @@ bool Monopoly::Buy(const int& playerIndex, Field& resource)
 bool Monopoly::Renta(const int& playerIndex, Field& resource)
 {
 
-    Player curPlayer = GetPlayerInfo(playerIndex);
-    Player ownerPlayer = GetPlayerInfo(resource.getOwnerIndex());
-    if(!resource.renta(curPlayer, ownerPlayer))
-    {
-        return false;
-    }
-
-    auto iterResource = std::find_if(Fields.begin(), Fields.end(),
-                                    [resource](auto x) { return x->getBrand() == resource.getBrand(); });
+    auto iterResource = getFieldIterator(resource);
     if (Fields.end() == iterResource)
     {
         return false;
     }
+
+    Player curPlayer = GetPlayerInfo(playerIndex);
+    Player ownerPlayer = GetPlayerInfo(resource.getOwnerIndex());
+    if(!(*iterResource)->renta(curPlayer, ownerPlayer))
+    {
+        return false;
+    }
+
     std::list<Player>::iterator i = Players.begin();
     std::advance(i, playerIndex - 1);
     *i = curPlayer;

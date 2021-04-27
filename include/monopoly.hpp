@@ -24,6 +24,7 @@ public:
     bool Renta(const int& p, Field&);
 
 private:
+    std::list<Field*>::const_iterator getFieldIterator(const Field& resource);
     std::list<Player> Players;
     std::list<Field*> Fields;
 };

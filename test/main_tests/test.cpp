@@ -19,14 +19,14 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
 
 TEST(LAB2, GetFieldsListReturnCorrectList) {
     Field expectedCompanies[]{
-        Field("Ford",Field::Type::AUTO ,0),
-        Field("MCDonald",Field::Type::FOOD,0),
-        Field("Lamoda",Field::Type::CLOTHER,0),
-        Field("Air Baltic",Field::Type::TRAVEL,0),
-        Field("Nordavia",Field::Type::TRAVEL,0),
-        Field("Prison",Field::Type::PRISON,0),
-        Field("MCDonald",Field::Type::FOOD,0),
-        Field("TESLA",Field::Type::AUTO,0)
+        FieldAuto("Ford"),
+        FieldFood("MCDonald"),
+        FieldClother("Lamoda"),
+        FieldTravel("Air Baltic"),
+        FieldTravel("Nordavia"),
+        FieldPrison("Prison"),
+        FieldFood("MCDonald"),
+        FieldAuto("TESLA")
     };
     string players[]{ "Peter","Ekaterina","Alexander" };
 
@@ -46,12 +46,12 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
 
     Monopoly monopoly(players, 3);
     auto x = monopoly.GetFieldByName("Ford");
-    monopoly.Buy(1, *x);
+    auto player = monopoly.GetPlayer(1);
+    monopoly.Buy(player, *x);
 
-    auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player.getMoney(), 5500);
+    ASSERT_EQ(player->getMoney(), 5500);
     x = monopoly.GetFieldByName("Ford");
-    ASSERT_TRUE(x->getId() != 0);
+    ASSERT_TRUE(x->getPlayer()->getName() == "Peter");
 }
 
 TEST(LAB2, RentaShouldBeCorrectTransferMoney)
@@ -59,19 +59,19 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     string players[]{ "Peter","Ekaterina","Alexander" };
     Monopoly monopoly(players, 3);
     auto x = monopoly.GetFieldByName("Ford");
-    monopoly.Buy(1, *x);
+    auto player1 = monopoly.GetPlayer(1);
+    monopoly.Buy(player1, *x);
 
     x = monopoly.GetFieldByName("Ford");
-    monopoly.Renta(2, *x);
-    auto player1 = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player1.getMoney(), 5750);
+    monopoly.Renta(monopoly.GetPlayer(2), *x);
+    ASSERT_EQ(player1->getMoney(), 5750);
 
-    auto player2 = monopoly.GetPlayerInfo(2);
-    ASSERT_EQ(player2.getMoney(), 5750);
+    auto player2 = monopoly.GetPlayer(2);
+    ASSERT_EQ(player2->getMoney(), 5750);
 }
 
 
 bool operator== (const Field & a, const Field & b)
 {
-    return a.getName() == b.getName() && a.getType() == b.getType() && a.getId() == b.getId();
+    return a.getName() == b.getName() && a.getType() == b.getType() && a.getPlayer() == b.getPlayer();
 }

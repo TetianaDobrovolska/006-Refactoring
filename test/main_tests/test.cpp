@@ -69,3 +69,10 @@ TEST(TestSet, CheckWinnerPlayerO) {
     char actual = c.checkWinner();
     EXPECT_EQ(actual, 'O');
 }
+
+TEST(TestSet, CheckWin) {
+    c.newSession();
+    for (int i = 0; i < 5; i++) c.makeMove(); c.isWin();
+    bool actual = c.isWin();
+    EXPECT_EQ(actual, true);
+}

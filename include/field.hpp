@@ -11,6 +11,8 @@ public:
 	~Field();
 	
 	const char emptyCell = '-';
+	const int firstCell = 1;
+	const int lastCell = 9;
 
 	void showCells();
 	const std::vector<char> getCellsState();

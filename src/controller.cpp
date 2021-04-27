@@ -45,7 +45,7 @@ void Controller::makeMove() {
     std::cout << m_players.getPlayerName(m_players.getTurn()) << ",enter cell number, make your move:";
     for (int i = 0; i == 0;) {
         cell = m_userInput();
-        if (cell > 9 || cell < 1) {
+        if (cell > m_field.lastCell || cell < m_field.firstCell) {
             std::cout << "Enter the number of the correct (1-9) cells to make a move:";
         } 
         else if (currentFieldState[cell-1] != m_field.emptyCell) {
@@ -58,7 +58,6 @@ void Controller::makeMove() {
     }
     m_field.setCellState(m_players.getTurn(), cell-1);
     m_players.changeTurn();
-    std::cout << m_players.getTurn() << "   TURN" << std::endl;
     m_field.showCells();
 }
 

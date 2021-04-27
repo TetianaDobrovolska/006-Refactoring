@@ -7,8 +7,34 @@
 
 namespace monopoly::constannts {
 static const int START_BALANCE_ = 6000;
-static const int COMPANY_START_BALANCE_ = 0;
 }
+class Field;
+using Fields = std::list<Field>;
+using FieldIterator = std::list<Field>::iterator;
+
+class Field {
+public:
+    enum class Type
+    {
+        AUTO,
+        FOOD,
+        TRAVEL,
+        CLOTHER,
+        PRISON,
+        BANK
+    };
+
+    Field();
+    Field(const std::string& name, const Type& type, const int& owner);
+    std::string getName() const;
+    Type getType() const;
+    int getId() const;
+
+private:
+    std::string name_;
+    Type type_;
+    int id_;
+};
 
 class Monopoly
 {
@@ -27,25 +53,16 @@ private:
     static const int RENT_BANK_ = 700;
 
 public:
-	enum Type
-	{
-		AUTO,
-		FOOD,
-		TRAVEL,
-		CLOTHER,
-		PRISON,
-		BANK
-	};
-
     Monopoly(std::string names[COMPANY_NUMBER_],int);
 	std::list<std::tuple<std::string,int>> *	GetPlayersList();
-	std::list<std::tuple<std::string, Type, int,bool>> * GetFieldsList();
-	std::list<std::tuple<std::string, Type, int, bool>> Fields;
+    FieldIterator GetFieldsList();
+    Fields::iterator FieldsEnd();
+    Fields fields_;
 	std::list<std::tuple<std::string, int>> Players;
 	std::tuple<std::string, int>  GetPlayerInfo(int);	 
-	bool Buy(int p,std::tuple<std::string, Type, int, bool>);
-	std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);	
-	bool Renta(int p, std::tuple<std::string, Type, int, bool>c);
+    bool Buy(int, Field&);
+    FieldIterator GetFieldByName(const std::string&);
+    bool Renta(int, const Field&);
 	
 };
 

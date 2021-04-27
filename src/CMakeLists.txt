@@ -3,6 +3,7 @@ project(tic_tac_toe)
 set(SRC
   main.cpp
   tic_tac_toe.cpp
+  player.cpp
 )
 
 add_executable(${PROJECT_NAME}

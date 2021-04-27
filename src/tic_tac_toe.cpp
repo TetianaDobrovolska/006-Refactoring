@@ -1,21 +1,13 @@
 #include "tic_tac_toe.h"
 
+#include <algorithm>
 #include <iostream>
-#include <cstring>
-
-namespace {
-
-void printResult(const std::string& winer, const std::string loser) {
-    std::cout << winer << "you won congratulations " << loser << " you lose..." << std::endl;
-}
-
-}  //namespace
 
 TicTacToe::TicTacToe(const char name[kMaxNameSize], const char name2[kMaxNameSize])
     : winSymbol(kDefaultSymbol)
 {
-    strcpy(PlayerName1, name);
-    strcpy(PlayerName2, name2);
+    Players.emplace_back(Player(name, kXSymbol));
+    Players.emplace_back(Player(name2, kOSymbol));
     for (size_t i = 0; i < kMaxCellCount; ++i) {
         cells[i] = kDefaultSymbol;
     }
@@ -23,12 +15,12 @@ TicTacToe::TicTacToe(const char name[kMaxNameSize], const char name2[kMaxNameSiz
 
 const char * TicTacToe::getFirstPlayer() const
 {
-    return PlayerName1;
+    return Players[0].getName();
 }
 
 const char * TicTacToe::getSecondPlayer() const
 {
-    return PlayerName2;
+    return Players[1].getName();
 }
 
 const char TicTacToe::getCellByIndex(const int& index) const
@@ -38,8 +30,8 @@ const char TicTacToe::getCellByIndex(const int& index) const
 
 bool TicTacToe::isCellValid(const int& cell) {
     return cell <= kMaxCellCount && cell >= 1 &&
-            cells[cell - 1] != kOSymbol &&
-            cells[cell - 1] != kXSymbol;
+            cells[cell - 1] != Players[1].getSymbol() &&
+            cells[cell - 1] != Players[0].getSymbol();
 }
 
 bool TicTacToe::isHorizontalLine(const int& index) {
@@ -67,8 +59,7 @@ bool TicTacToe::make_move(const int& num, const int& cell) {
         std::cout << "Enter the number of the correct (1-9) or empty (---) cells to make a move:";
         return false;
     }
-    if (num == 1) cells[cell - 1] = kXSymbol;
-    else cells[cell - 1] = kOSymbol;
+    cells[cell - 1] = Players[num - 1].getSymbol();
     return true;
 }
 
@@ -85,12 +76,16 @@ char TicTacToe::check_winner() {
 }
 
 void TicTacToe::result() {
-    if (winSymbol == kXSymbol)
-        printResult(PlayerName1, PlayerName2);
-    else if (winSymbol == kOSymbol)
-        printResult(PlayerName2, PlayerName1);
-    else
-        std::cout << "The game ended in a draw";
+    const char win = winSymbol;
+    auto printWinner = [win](Player p) {
+        if(p.getSymbol() != win)
+            return false;
+        std::cout << "Game over. " << p.getName() << " wins!";
+        return true;
+    };
+    auto it = std::find_if(Players.cbegin(), Players.cend(), printWinner);
+    if (Players.cend() == it)
+        std::cout << "The game is over. Tie!";
 }
 
 void TicTacToe::show_cells() {

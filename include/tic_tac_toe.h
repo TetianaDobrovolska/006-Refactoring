@@ -1,6 +1,11 @@
 #ifndef _TIC_TAC_TOE_H_
 #define _TIC_TAC_TOE_H_
 
+#include <string>
+#include <vector>
+
+#include "player.h"
+
 class TicTacToe {
 public:
     static constexpr int kMaxCellCount = 9;
@@ -31,8 +36,7 @@ private:
 
     char winSymbol;
     char cells[kMaxCellCount];
-    char PlayerName1[kMaxNameSize];
-    char PlayerName2[kMaxNameSize];
+    std::vector<Player> Players;
 };
 
 #endif  //_TIC_TAC_TOE_H_

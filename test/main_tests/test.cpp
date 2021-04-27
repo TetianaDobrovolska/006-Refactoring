@@ -29,7 +29,7 @@ class LAB2 : public ::testing::Test
 
 TEST_F(LAB2, GetPlayersListReturnCorrectList) {
 
-    list<tuple<string,int>>* x = monopoly->GetPlayersList();
+    const list<tuple<string,int>>* x = monopoly->GetPlayersList();
     const int startMoney = 6000;
     int i = 0;
     for (auto c : *x) {
@@ -51,7 +51,7 @@ TEST_F(LAB2, GetFieldsListReturnCorrectList) {
         make_tuple("TESLA",Monopoly::AUTO,0,false)
     };
 
-   auto actualCompanies = monopoly->GetFieldsList();
+   const auto actualCompanies = monopoly->GetFieldsList();
    int i = 0;
    for (auto x : *actualCompanies)
    {
@@ -60,7 +60,17 @@ TEST_F(LAB2, GetFieldsListReturnCorrectList) {
    ASSERT_TRUE(i);   
 }
 
-TEST_F(LAB2, PlayerBuyNoOwnedCompanies)
+TEST_F(LAB2, UpdatePlayerCashSetCorrectValue)
+{
+    const int newPlayesrCashAmount = 3333;
+    
+    monopoly->UpdatePlayerCash(idPlayer1, newPlayesrCashAmount);
+
+    auto player = monopoly->GetPlayerInfo(idPlayer1);
+    ASSERT_EQ(get<1>(player), newPlayesrCashAmount);
+}
+
+TEST_F(LAB2, PlayerBuyNoOwnedAutoCompany)
 {
     auto x = monopoly->GetFieldByName("Ford");
     monopoly->Buy(idPlayer1, x);
@@ -73,9 +83,49 @@ TEST_F(LAB2, PlayerBuyNoOwnedCompanies)
     ASSERT_TRUE(get<2>(x) != 0);
 }
 
-TEST_F(LAB2, RentaShouldBeCorrectTransferMoney)
+TEST_F(LAB2, PlayerBuyNoOwnedFoodCompany)
 {
-const int restOfMoney = 5750;
+    auto x = monopoly->GetFieldByName("MCDonald");
+    monopoly->Buy(idPlayer1, x);
+
+    const int restOfMoney = 5750;
+
+    auto player = monopoly->GetPlayerInfo(idPlayer1);
+    ASSERT_EQ(get<1>(player), restOfMoney);
+    x = monopoly->GetFieldByName("MCDonald");
+    ASSERT_TRUE(get<2>(x) != 0);
+}
+
+TEST_F(LAB2, PlayerBuyNoOwnedTravelCompany)
+{
+    auto x = monopoly->GetFieldByName("Nordavia");
+    monopoly->Buy(idPlayer1, x);
+
+    const int restOfMoney = 5300;
+
+    auto player = monopoly->GetPlayerInfo(idPlayer1);
+    ASSERT_EQ(get<1>(player), restOfMoney);
+    x = monopoly->GetFieldByName("Nordavia");
+    ASSERT_TRUE(get<2>(x) != 0);
+}
+
+TEST_F(LAB2, PlayerBuyNoOwnedClotherCompany)
+{
+    auto x = monopoly->GetFieldByName("Lamoda");
+    monopoly->Buy(idPlayer1, x);
+
+    const int restOfMoney = 5900;
+
+    auto player = monopoly->GetPlayerInfo(idPlayer1);
+    ASSERT_EQ(get<1>(player), restOfMoney);
+    x = monopoly->GetFieldByName("Lamoda");
+    ASSERT_TRUE(get<2>(x) != 0);
+}
+
+TEST_F(LAB2, RentaShouldBeCorrectTransferMoney_AUTO)
+{
+    const int restOfMoneyPlayer1 = 5750;
+    const int restOfMoneyPlayer2 = 5750;
 
     auto x = monopoly->GetFieldByName("Ford");
     monopoly->Buy(idPlayer1, x);
@@ -83,12 +133,62 @@ const int restOfMoney = 5750;
     x = monopoly->GetFieldByName("Ford");
     monopoly->Renta(2, x);
     auto player1Info = monopoly->GetPlayerInfo(idPlayer1);
-    ASSERT_EQ(get<1>(player1Info), restOfMoney);
+    ASSERT_EQ(get<1>(player1Info), restOfMoneyPlayer1);
 
     auto player2Info = monopoly->GetPlayerInfo(idPlayer2);
-    ASSERT_EQ(get<1>(player2Info), restOfMoney);    
+    ASSERT_EQ(get<1>(player2Info), restOfMoneyPlayer2);    
 }
 
+TEST_F(LAB2, RentaShouldBeCorrectTransferMoney_FOOD)
+{
+    const int restOfMoneyPlayer1 = 6000;
+    const int restOfMoneyPlayer2 = 5750;
+
+    auto x = monopoly->GetFieldByName("MCDonald");
+    monopoly->Buy(idPlayer1, x);
+
+    x = monopoly->GetFieldByName("MCDonald");
+    monopoly->Renta(2, x);
+    auto player1Info = monopoly->GetPlayerInfo(idPlayer1);
+    ASSERT_EQ(get<1>(player1Info), restOfMoneyPlayer1);
+
+    auto player2Info = monopoly->GetPlayerInfo(idPlayer2);
+    ASSERT_EQ(get<1>(player2Info), restOfMoneyPlayer2);    
+}
+
+TEST_F(LAB2, RentaShouldBeCorrectTransferMoney_TRAVEL)
+{
+    const int restOfMoneyPlayer1 = 5550;
+    const int restOfMoneyPlayer2 = 5750;
+
+    auto x = monopoly->GetFieldByName("Nordavia");
+    monopoly->Buy(idPlayer1, x);
+
+    x = monopoly->GetFieldByName("Nordavia");
+    monopoly->Renta(2, x);
+    auto player1Info = monopoly->GetPlayerInfo(idPlayer1);
+    ASSERT_EQ(get<1>(player1Info), restOfMoneyPlayer1);
+
+    auto player2Info = monopoly->GetPlayerInfo(idPlayer2);
+    ASSERT_EQ(get<1>(player2Info), restOfMoneyPlayer2);    
+}
+
+TEST_F(LAB2, RentaShouldBeCorrectTransferMoney_CLOTHER)
+{
+    const int restOfMoneyPlayer1 = 6150;
+    const int restOfMoneyPlayer2 = 5750;
+
+    auto x = monopoly->GetFieldByName("Lamoda");
+    monopoly->Buy(idPlayer1, x);
+
+    x = monopoly->GetFieldByName("Lamoda");
+    monopoly->Renta(2, x);
+    auto player1Info = monopoly->GetPlayerInfo(idPlayer1);
+    ASSERT_EQ(get<1>(player1Info), restOfMoneyPlayer1);
+
+    auto player2Info = monopoly->GetPlayerInfo(idPlayer2);
+    ASSERT_EQ(get<1>(player2Info), restOfMoneyPlayer2);    
+}
 
 bool operator== (std::tuple<std::string, Monopoly::Type, int, bool> & a , std::tuple<std::string, Monopoly::Type, int, bool> & b)
 {

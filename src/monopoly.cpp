@@ -1,7 +1,7 @@
 #include "monopoly.hpp"
 #include <algorithm>
 
-using namespace ::std;
+using namespace std;
 
 Monopoly::Monopoly(string names[10],int countPlaers)
 {
@@ -21,83 +21,70 @@ Monopoly::Monopoly(string names[10],int countPlaers)
 	Fields.push_back(make_tuple("TESLA", Monopoly::AUTO, 0, false));
 }
 
-std::list<std::tuple<std::string, int>> * Monopoly::GetPlayersList()
+const list<tuple<string, int>> * Monopoly::GetPlayersList()
 {
 	return &Players;
 }
 
-std::list<std::tuple<std::string, Monopoly::Type,int,bool>> * Monopoly::GetFieldsList()
+const list<tuple<string, Monopoly::Type,int,bool>> * Monopoly::GetFieldsList()
 {
 	return &Fields;
 }
 
-std::tuple<std::string, int> Monopoly::GetPlayerInfo(int m)
+tuple<string, int> Monopoly::GetPlayerInfo(int m)
 {
-	list<std::tuple<std::string, int>>::iterator i = Players.begin();
+	list<tuple<string, int>>::iterator i = Players.begin();
 	advance(i, m - 1);
 	return *i;
 }
 
-bool Monopoly::Buy(int z, std::tuple<std::string, Type, int, bool> k)
+bool Monopoly::Buy(int playerId, tuple<string, Type, int, bool> field)
 {
-	auto x = GetPlayerInfo(z);
-	tuple<string, int> p;
-	list<tuple<std::string, Type, int, bool>>::iterator i;
-	list<tuple<string, int>>::iterator j = Players.begin();
+	auto player = GetPlayerInfo(playerId);
 
 	int autoPrice = 500;
 	int foodPrice = 250;
 	int travelPrice = 700;
 	int clotherPrice = 100;
 
-	switch (get<1>(k))
+	if (get<2>(field))
+			return false;
+
+	switch (get<1>(field))
 	{
 	case AUTO:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - autoPrice);
-		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
+		UpdatePlayerCash(playerId, get<1>(player) - autoPrice);
 		break;
 	case FOOD:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - foodPrice);
-		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
+		UpdatePlayerCash(playerId, get<1>(player) - foodPrice);
 		break;
 	case TRAVEL:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - travelPrice);
-		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
+		UpdatePlayerCash(playerId, get<1>(player) - travelPrice);
 		break;
 	case CLOTHER:
-		if (get<2>(k))
-			return false;
-		p = make_tuple(get<0>(x), get<1>(x) - clotherPrice);
-		k = make_tuple(get<0>(k), get<1>(k), z, get<2>(k));
+		UpdatePlayerCash(playerId, get<1>(player) - clotherPrice);
 		break;
 	default:
 		return false;
 	};
-	i = find_if(Fields.begin(), Fields.end(), [k](auto x) { return get<0>(x) == get<0>(k); });
-	*i = k;
-    advance(j, z-1);
-	*j = p;
+	UpdateFieldOwner(get<0>(field), playerId);
+
 	return true;
 }
 
-std::tuple<std::string, Monopoly::Type, int, bool>  Monopoly::GetFieldByName(std::string l)
+tuple<string, Monopoly::Type, int, bool>  Monopoly::GetFieldByName(string l)
 {
-	std::list<std::tuple<std::string, Monopoly::Type, int, bool>>::iterator i = find_if(Fields.begin(), Fields.end(),[l] (std::tuple<std::string, Monopoly::Type, int, bool> x) {
+	list<tuple<string, Monopoly::Type, int, bool>>::iterator i = find_if(Fields.begin(), Fields.end(),[l] (tuple<string, Monopoly::Type, int, bool> x) {
 		return get<0>(x) == l;
 	});
 	return *i;
 }
 
-bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
+bool Monopoly::Renta(int playerPayerId, tuple<string, Type, int, bool> field)
 {
-	tuple<string, int> z = GetPlayerInfo(m);
-	tuple<string, int> o;
+	int playerOwnerId = get<2>(field);
+	tuple<string, int> playerPayer = GetPlayerInfo(playerPayerId);
+	tuple<string, int> playerOwner = GetPlayerInfo(playerOwnerId);
 
 	int autoRentPrice = 250;
 	int foodRentPrice = 250;
@@ -106,47 +93,53 @@ bool Monopoly::Renta(int m, std::tuple<std::string, Type, int, bool> c)
 	int prisonRentPrice = 1000;
 	int bankRentPrice = 700;
 
-	switch (get<1>(c))
+	if (!playerOwnerId)
+			return false;
+
+	switch (get<1>(field))
 	{
 	case AUTO:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + autoRentPrice);
-		z = make_tuple(get<0>(z), get<1>(z) - autoRentPrice);
+		UpdatePlayerCash(playerPayerId, get<1>(playerPayer) - autoRentPrice);
+		UpdatePlayerCash(playerOwnerId, get<1>(playerOwner) + autoRentPrice);
 		break;
 	case FOOD:
-		if (!get<2>(c))
-			return false;
+		UpdatePlayerCash(playerPayerId, get<1>(playerPayer) - foodRentPrice);
+		UpdatePlayerCash(playerOwnerId, get<1>(playerOwner) + foodRentPrice);
+		break;
 	case TRAVEL:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + travelRentPrice);
-		z = make_tuple(get<0>(z), get<1>(z) - travelRentPrice);
+		UpdatePlayerCash(playerPayerId, get<1>(playerPayer) - travelRentPrice);
+		UpdatePlayerCash(playerOwnerId, get<1>(playerOwner) + travelRentPrice);
 		break;
 	case CLOTHER:
-		if (!get<2>(c))
-			return false;
-		o = GetPlayerInfo(get<2>(c));
-		o = make_tuple(get<0>(o), get<1>(o) + clotherRentPrice);
-		z = make_tuple(get<0>(z), get<1>(z) - clotherRentPrice);
+		UpdatePlayerCash(playerPayerId, get<1>(playerPayer) - clotherRentPrice);
+		UpdatePlayerCash(playerOwnerId, get<1>(playerOwner) + clotherRentPrice);
 		break;
 	case PRISON:
-		z = make_tuple(get<0>(z), get<1>(z) - prisonRentPrice);
+		UpdatePlayerCash(playerPayerId, get<1>(playerPayer) - prisonRentPrice);
 		break;
 	case BANK:
-		z = make_tuple(get<0>(z), get<1>(z) - bankRentPrice);
+		UpdatePlayerCash(playerPayerId, get<1>(playerPayer) - bankRentPrice);
 		break;
 	default:
 		return false;
 	}
-	list<tuple<string, int>>::iterator i = Players.begin();
-	advance(i, m - 1);
-	*i = z;
-	i = find_if(Players.begin(), Players.end(), [o](auto x) { return get<0>(x) == get<0>(o); });
-	*i = o;
+
 	return true;
 }
 
+void Monopoly::UpdatePlayerCash(int playerId, int newPlayerCash)
+{
+	list<tuple<string, int>>::iterator p = Players.begin();
+	advance(p, playerId-1);
 
+	tuple<string, int> newPlayerInfo = make_tuple(get<0>(*p), newPlayerCash);
+	*p = newPlayerInfo;
+
+}
+
+void Monopoly::UpdateFieldOwner(string fieldName, int ownerId)
+{
+	list<tuple<string, Type, int, bool>>::iterator i;
+	i = find_if(Fields.begin(), Fields.end(), [fieldName](auto x) { return get<0>(x) == fieldName; });
+	*i = make_tuple(get<0>(*i), get<1>(*i), ownerId, get<3>(*i));
+}

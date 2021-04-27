@@ -1,7 +1,8 @@
 project(tic_tac_toe)
 
 set(SRC
-	tic_tac_toe.cpp
+  main.cpp
+  tic_tac_toe.cpp
 )
 
 add_executable(${PROJECT_NAME}

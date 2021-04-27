@@ -1,4 +1,5 @@
-#include "tic_tac_toe.hpp"
+#include "pch.h"
+#include "TictacToe.h"
 #include <iostream> 
 #include <cstring> 
 #include <clocale>
@@ -6,7 +7,9 @@
 #include <stdlib.h>
 #include <istream>
 #include <math.h>
+
 using namespace std;
+
 
 char TicTacToe::getWin() {
 	return win;
@@ -51,13 +54,10 @@ void TicTacToe::startGame()
 		makeMove(move);
 		showCellsNumber();
 		showCellsValue();
-		if (isCheckWinnerValid(move))
+		if (check(move))
 		{
-			check();
-			if (isWinner()) {
-				result();
-				break;
-			}
+			result();
+			break;
 		}
 	}
 }
@@ -99,6 +99,7 @@ void TicTacToe::showMover()
 	printf("Player Name = %s your move", movername.c_str());
 }
 
+
 void TicTacToe::makeMove(int move) {
 	setMoverIndex(move - MOVER_CORRECTION);
 	int mover = getMoverIndex();
@@ -126,46 +127,37 @@ int TicTacToe::enterCell()
 		printf("\nEnter the number (1-9) or empty (---) cells to make a move:");
 		cin >> cell;
 	} while (!isCellValid(cell));
-	return cell - 1;
+	return cell - CELL_CORRECTION;
 }
 
-bool TicTacToe::isWinner()
+bool TicTacToe::check(int move)
 {
-	if (getWin() != initsymbol) {
-		return true;
-	}
-	return false;
-}
-
-bool TicTacToe::isCheckWinnerValid(int move)
-{
-	if (move > HALF_MOVES)
-	{
-		return true;
-	}
-	return false;
-}
-
-void TicTacToe::check()
-{
-	for (int i = 0; i < sqrt(CELLS_COUNT); i++) {
-		if ( isHorizontalWinner(i)) {
-			setWin(getCellValue(i * sqrt(CELLS_COUNT)));
-			break;
+	if (move > HALF_MOVES) {
+		for (int i = 0; i < sqrt(CELLS_COUNT); i++) {
+			if (getCellValue(i) != initsymbol && getCellValue(i * sqrt(CELLS_COUNT)) != initsymbol) {
+				if (isHorizontalWinner(i)) {
+					setWin(getCellValue(i * sqrt(CELLS_COUNT)));
+					return true;
+					break;
+				}
+				if (isVerticalWinner(i)) {
+					setWin(getCellValue(i));
+					return true;
+					break;
+				}
+			}
 		}
-		if (isVerticalWinner(i)) {
-			setWin(getCellValue(i));
-			break;
+		if (isDiagWinner()) {
+			setWin(getCellValue(BOARD_CENTER_CELL));
+			return true;
 		}
 	}
-	if (isDiagWinner()) {
-		setWin(getCellValue(BOARD_CENTER_CELL));
-	}
+	return false;
 }
 
 bool TicTacToe::isHorizontalWinner(int index)
 {
-	for (int i = 0; i < sqrt(CELLS_COUNT) - STEP; i++) {
+	for (int i = 0; i < sqrt(CELLS_COUNT) - CELL_CORRECTION; i++) {
 		if (getCellValue(index * sqrt(CELLS_COUNT) + i) != getCellValue(index * sqrt(CELLS_COUNT) + i + STEP)) {
 			return false;
 			break;
@@ -176,23 +168,23 @@ bool TicTacToe::isHorizontalWinner(int index)
 
 bool TicTacToe::isVerticalWinner(int index)
 {
-	for (int i = 0; i < sqrt(CELLS_COUNT) - STEP; i++) {
+	for (int i = 0; i < sqrt(CELLS_COUNT) - CELL_CORRECTION; i++) {
 		if (getCellValue(index + (i * sqrt(CELLS_COUNT))) != getCellValue(index + ((i + STEP) * sqrt(CELLS_COUNT)))) {
 			return false;
 			break;
 		}
 	}
 	return true;
-
 }
 
 bool TicTacToe::isDiagWinner()
 {
-	bool diagrigthleft = getCellValue(sqrt(CELLS_COUNT) - CELL_CORRECTION) == getCellValue(BOARD_CENTER_CELL) && 
-							getCellValue(BOARD_CENTER_CELL) == getCellValue(CELLS_COUNT - sqrt(CELLS_COUNT));
-	bool diagleftright = getCellValue(FIRST_CELL_INDEX) == getCellValue(BOARD_CENTER_CELL) && 
-							getCellValue(BOARD_CENTER_CELL) == getCellValue(CELLS_COUNT - CELL_CORRECTION);
-
+	bool diagrigthleft = false;
+	bool diagleftright = false;
+	if (getCellValue(BOARD_CENTER_CELL) != initsymbol) {
+		diagrigthleft = getCellValue(sqrt(CELLS_COUNT) - CELL_CORRECTION) == getCellValue(CELLS_COUNT - sqrt(CELLS_COUNT));
+		diagleftright = getCellValue(FIRST_CELL_INDEX) == getCellValue(CELLS_COUNT - CELL_CORRECTION);
+	}
 	return diagleftright || diagrigthleft;
 }
 
@@ -205,6 +197,7 @@ void TicTacToe::result()
 		printf("%s you won congratulations %s you lose...", getPlayerName(1).c_str(), getPlayerName(0).c_str());
 	}
 }
+
 int main(int argc, char** argv) {
 	TicTacToe tictactoe;
 	tictactoe.enterPlayers();

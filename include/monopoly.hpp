@@ -5,12 +5,12 @@
 #include <tuple>
 #include <string>
 
-namespace monopoly::constannts {
-static const int START_BALANCE_ = 6000;
-}
 class Field;
+class Player;
 using Fields = std::list<Field>;
+using Players = std::list<Player>;
 using FieldIterator = std::list<Field>::iterator;
+using PlayerIterator = std::list<Player>::iterator;
 
 class Field {
 public:
@@ -36,6 +36,17 @@ private:
     int id_;
 };
 
+class Player {
+public:
+    Player();
+    Player(const std::string& name_, const int& money);
+    std::string getName() const;
+    int getMoney() const;
+private:
+    std::string name_;
+    int money_;
+};
+
 class Monopoly
 {
 private:
@@ -54,12 +65,13 @@ private:
 
 public:
     Monopoly(std::string names[COMPANY_NUMBER_],int);
-	std::list<std::tuple<std::string,int>> *	GetPlayersList();
     FieldIterator GetFieldsList();
     Fields::iterator FieldsEnd();
     Fields fields_;
-	std::list<std::tuple<std::string, int>> Players;
-	std::tuple<std::string, int>  GetPlayerInfo(int);	 
+    Players players_;
+    PlayerIterator GetPlayersList();
+    PlayerIterator PlayersEnd();
+    Player  GetPlayerInfo(int);
     bool Buy(int, Field&);
     FieldIterator GetFieldByName(const std::string&);
     bool Renta(int, const Field&);

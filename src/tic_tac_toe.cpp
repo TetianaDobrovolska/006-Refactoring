@@ -3,14 +3,12 @@
 #include <algorithm>
 #include <iostream>
 
-TicTacToe::TicTacToe(const char name[kMaxNameSize], const char name2[kMaxNameSize])
-    : winSymbol(kDefaultSymbol)
+TicTacToe::TicTacToe(const char name[Player::kMaxNameSize], const char name2[Player::kMaxNameSize])
+    : winSymbol(Board::kDefaultSymbol)
+    , board()
 {
-    Players.emplace_back(Player(name, kXSymbol));
-    Players.emplace_back(Player(name2, kOSymbol));
-    for (size_t i = 0; i < kMaxCellCount; ++i) {
-        cells[i] = kDefaultSymbol;
-    }
+    Players.emplace_back(Player(name, Board::kXSymbol));
+    Players.emplace_back(Player(name2, Board::kOSymbol));
 }
 
 const char * TicTacToe::getFirstPlayer() const
@@ -25,33 +23,13 @@ const char * TicTacToe::getSecondPlayer() const
 
 const char TicTacToe::getCellByIndex(const int& index) const
 {
-    return cells[index - 1];
+    return board.getCellByIndex(index);
 }
 
 bool TicTacToe::isCellValid(const int& cell) {
-    return cell <= kMaxCellCount && cell >= 1 &&
-            cells[cell - 1] != Players[1].getSymbol() &&
-            cells[cell - 1] != Players[0].getSymbol();
-}
-
-bool TicTacToe::isHorizontalLine(const int& index) {
-    return cells[index * kRowSize] != kDefaultSymbol &&
-            cells[index * kRowSize] == cells[index * kRowSize + 1] &&
-            cells[index * kRowSize + 1] == cells[index * kRowSize + 2];
-}
-
-bool TicTacToe::isVerticalLine(const int& index) {
-    return cells[index] != kDefaultSymbol &&
-            cells[index] == cells[index + kRowSize] &&
-            cells[index + kRowSize] == cells[index + 2 * kRowSize];
-}
-
-bool TicTacToe::isRightDiagonalLine() {
-    return cells[0] != kDefaultSymbol && cells[0] == cells[4] && cells[4] == cells[8];
-}
-
-bool TicTacToe::isLeftDiagonalLine() {
-    return cells[2] != kDefaultSymbol && cells[2] == cells[4] && cells[4] == cells[6];
+    return cell <= Board::kMaxCellCount && cell >= 1 &&
+            board.getCellByIndex(cell) != Players[1].getSymbol() &&
+            board.getCellByIndex(cell) != Players[0].getSymbol();
 }
 
 bool TicTacToe::make_move(const int& num, const int& cell) {
@@ -59,19 +37,13 @@ bool TicTacToe::make_move(const int& num, const int& cell) {
         std::cout << "Enter the number of the correct (1-9) or empty (---) cells to make a move:";
         return false;
     }
-    cells[cell - 1] = Players[num - 1].getSymbol();
+    board.setCell(cell, Players[num - 1].getSymbol());
     return true;
 }
 
 char TicTacToe::check_winner() {
-    if(isRightDiagonalLine() || isLeftDiagonalLine())
-        winSymbol = cells[4];
-    for (int i = 0; i < kRowSize; ++i) {
-        if (isHorizontalLine(i))
-            winSymbol = cells[i * kRowSize];
-        if(isVerticalLine(i))
-            winSymbol = cells[i];
-    }
+    
+    winSymbol = board.checkWinner();
     return winSymbol;
 }
 
@@ -89,20 +61,5 @@ void TicTacToe::result() {
 }
 
 void TicTacToe::show_cells() {
-    system("cls");
-
-    std::cout << "Cell numbers: \n";
-    for (int i = 0; i < kRowSize; ++i) {
-        std::cout << '-' << i * kRowSize + 1 << '-' << '|'
-                << '-' << i * kRowSize + 2 << '-' << '|'
-                << '-' << i * kRowSize + 3 << '-' << '\n';
-    }
-    std::cout << std::endl;
-    std::cout << "Current situation (--- empty):\n" << std::endl;
-    for (int i = 0; i < kRowSize; ++i) {
-        std::cout << '-' << cells[i * kRowSize] << '-' << '|'
-                << '-' << cells[i * kRowSize + 1] << '-' << '|'
-                << '-' << cells[i * kRowSize + 2] << '-' << '\n';
-    }
-    std::cout << std::endl;
+    board.showBoard();
 }

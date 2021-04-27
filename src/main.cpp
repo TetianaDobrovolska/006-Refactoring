@@ -4,8 +4,8 @@
 
 
 int main(int argc, char** argv) {
-    char PlayerName1[TicTacToe::kMaxNameSize];
-    char PlayerName2[TicTacToe::kMaxNameSize];
+    char PlayerName1[Player::kMaxNameSize];
+    char PlayerName2[Player::kMaxNameSize];
     do {
         std::cout << "Enter the name of the first player: ";
         std::cin >> PlayerName1;
@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     game.show_cells();
 
     char win;
-    for (int i = 1; i <= TicTacToe::kMaxCellCount; i++) {
+    for (int i = 1; i <= Board::kMaxCellCount; i++) {
         int cell;
         int move = i%2 ? 1 : 2;
         do {
@@ -28,10 +28,10 @@ int main(int argc, char** argv) {
 
         game.show_cells();
 
-        if (i < TicTacToe::kMinStepsToWin)
+        if (i < Board::kMinStepsToWin)
             continue;
         win = game.check_winner();
-        if (win != TicTacToe::kDefaultSymbol)
+        if (win != Board::kDefaultSymbol)
             break;
     }
     game.result();

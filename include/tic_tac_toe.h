@@ -4,19 +4,20 @@
 #include <string>
 #include <vector>
 
+#include "board.h"
 #include "player.h"
 
 class TicTacToe {
 public:
-    static constexpr int kMaxCellCount = 9;
-    static constexpr int kMinStepsToWin = 5;
-    static constexpr int kMaxNameSize = 80;
-    static constexpr int kRowSize = 3;
-    static const char kDefaultSymbol = '-';
-    const char kOSymbol = 'O';
-    const char kXSymbol = 'X';
+    // static constexpr int kMaxNameSize = 80;
+    // static constexpr int kMaxCellCount = 9;
+    // static constexpr int kMinStepsToWin = 5;
+    // static constexpr int kRowSize = 3;
+    // static const char kDefaultSymbol = '-';
+    // const char kOSymbol = 'O';
+    // const char kXSymbol = 'X';
 
-    TicTacToe(const char name[kMaxNameSize], const char name2[kMaxNameSize]);
+    TicTacToe(const char name[Player::kMaxNameSize], const char name2[Player::kMaxNameSize]);
 
     const char * getFirstPlayer() const;
     const char * getSecondPlayer() const;
@@ -29,13 +30,9 @@ public:
 
 private:
     bool isCellValid(const int& cell);
-    bool isHorizontalLine(const int& index);
-    bool isVerticalLine(const int& index);
-    bool isRightDiagonalLine();
-    bool isLeftDiagonalLine();
 
     char winSymbol;
-    char cells[kMaxCellCount];
+    Board board;
     std::vector<Player> Players;
 };
 

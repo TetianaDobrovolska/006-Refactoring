@@ -40,21 +40,21 @@ const Player& Monopoly::GetPlayerInfo(const int& playerIndex) const
     return *i;
 }
 
-const Field&  Monopoly::GetFieldByName(const Field::eBrand brand) const
+const Field* Monopoly::GetFieldByName(const Field::eBrand brand) const
 {
     auto i = std::find_if(Fields.cbegin(), Fields.cend(), [brand] (Field* x) {
         return x->getBrand() == brand;
     });
-    return *(*i);
+    return *i;
 }
 
-std::list<Field*>::const_iterator Monopoly::getFieldIterator(const Field& resource)
+std::list<Field*>::const_iterator Monopoly::getFieldIterator(const Field* resource)
 {
     return std::find_if(Fields.cbegin(), Fields.cend(),
-                        [resource](auto x) { return x->getBrand() == resource.getBrand(); });
+                        [resource](auto x) { return x->getBrand() == resource->getBrand(); });
 }
 
-bool Monopoly::Buy(const int& playerIndex, Field& resource)
+bool Monopoly::Buy(const int& playerIndex, const Field* resource)
 {
     auto iterResource = getFieldIterator(resource);
     if (Fields.end() == iterResource)
@@ -76,7 +76,7 @@ bool Monopoly::Buy(const int& playerIndex, Field& resource)
     return true;
 }
 
-bool Monopoly::Renta(const int& playerIndex, Field& resource)
+bool Monopoly::Renta(const int& playerIndex, const Field* resource)
 {
 
     auto iterResource = getFieldIterator(resource);
@@ -86,7 +86,7 @@ bool Monopoly::Renta(const int& playerIndex, Field& resource)
     }
 
     Player curPlayer = GetPlayerInfo(playerIndex);
-    Player ownerPlayer = GetPlayerInfo(resource.getOwnerIndex());
+    Player ownerPlayer = GetPlayerInfo((*iterResource)->getOwnerIndex());
     if(!(*iterResource)->renta(curPlayer, ownerPlayer))
     {
         return false;
@@ -95,6 +95,7 @@ bool Monopoly::Renta(const int& playerIndex, Field& resource)
     std::list<Player>::iterator i = Players.begin();
     std::advance(i, playerIndex - 1);
     *i = curPlayer;
+
     i = find_if(Players.begin(), Players.end(),
                 [ownerPlayer](auto x) { return x.getName() == ownerPlayer.getName(); });
     if (Players.end() != i)

@@ -52,14 +52,16 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
 
     Monopoly monopoly(players, 3);
 
-    auto resource = monopoly.GetFieldByName(Field::FORD);
+    const Field* resource = monopoly.GetFieldByName(Field::FORD);
     monopoly.Buy(1, resource);
 
     auto player = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(player.getBalance(), 5500);
 
     resource = monopoly.GetFieldByName(Field::FORD);
-    ASSERT_TRUE(resource.getOwnerIndex() != 0);
+    ASSERT_TRUE(resource->getOwnerIndex() != 0);
+
+    delete []resource;
 }
 
 TEST(LAB2, PlayerBuyPrison)
@@ -68,14 +70,16 @@ TEST(LAB2, PlayerBuyPrison)
 
     Monopoly monopoly(players, 3);
 
-    auto resource = monopoly.GetFieldByName(Field::BPRISON);
+    const Field* resource = monopoly.GetFieldByName(Field::BPRISON);
     monopoly.Buy(1, resource);
 
     auto player = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(player.getBalance(), 6000);
 
     resource = monopoly.GetFieldByName(Field::BPRISON);
-    ASSERT_TRUE(resource.getOwnerIndex() == 0);
+    ASSERT_TRUE(resource->getOwnerIndex() == 0);
+
+    delete []resource;
 }
 
 TEST(LAB2, PlayerBuyUndefinedField)
@@ -84,11 +88,13 @@ TEST(LAB2, PlayerBuyUndefinedField)
 
     Monopoly monopoly(players, 3);
 
-    BankField resource(Field::eBrand::UKRSIBBANK, 0);
+    const Field* resource = new BankField(Field::eBrand::UKRSIBBANK, 0);
     ASSERT_FALSE(monopoly.Buy(1, resource));
 
     auto player = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(player.getBalance(), 6000);
+
+    delete []resource;
 }
 
 TEST(LAB2, RentaShouldBeCorrectTransferMoney)
@@ -96,7 +102,8 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
-    auto resource = monopoly.GetFieldByName(Field::FORD);
+
+    const Field* resource = monopoly.GetFieldByName(Field::FORD);
     monopoly.Buy(1, resource);
 
     resource = monopoly.GetFieldByName(Field::FORD);
@@ -107,6 +114,8 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
 
     auto player2 = monopoly.GetPlayerInfo(2);
     ASSERT_EQ(player2.getBalance(), 5750);
+
+    delete []resource;
 }
 
 TEST(LAB2, RentaPrison)
@@ -114,11 +123,14 @@ TEST(LAB2, RentaPrison)
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
-    auto resource = monopoly.GetFieldByName(Field::BPRISON);
+
+    const Field* resource = monopoly.GetFieldByName(Field::BPRISON);
     monopoly.Renta(1, resource);
 
     auto player = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(player.getBalance(), 5000);
+
+    delete []resource;
 }
 
 TEST(LAB2, RentaBank)
@@ -126,11 +138,14 @@ TEST(LAB2, RentaBank)
     std::string players[]{ "Peter","Ekaterina","Alexander" };
 
     Monopoly monopoly(players, 3);
-    BankField resource(Field::UKRSIBBANK, 0);
+
+    const Field* resource = new BankField(Field::UKRSIBBANK, 0);
     ASSERT_FALSE(monopoly.Renta(1, resource));
 
     auto player = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(player.getBalance(), 6000);
+
+    delete []resource;
 }
 
 bool operator== (const Field & a, const Field & b)

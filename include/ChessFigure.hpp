@@ -1,27 +1,19 @@
 #ifndef CHESS_FIGURE_HPP
 #define CHESS_FIGURE_HPP
 
-#include <string>
+#include "FigureType.hpp"
 
 class ChessFigure
 {
-	
 public:
-	enum FigureType
-	{
-		ROOK,
-		KNIGHT,
-		BISHOP,
-		PAWN,
-		KING,
-		QUEEN
-	};
-	ChessFigure(FigureType type,std::string coord);
-	bool Move(std::string nextCoord);
-	virtual ~ChessFigure();
+  ChessFigure(FigureType* type, const std::string& coord);
+  virtual ~ChessFigure();
+
+  bool Move(const std::string& nextCoord);
+
 private:
-	FigureType type;
-	std::string currentCoord;
+  FigureType* type;
+  std::string currentCoord;
 };
 
 #endif

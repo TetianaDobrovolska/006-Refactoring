@@ -28,21 +28,56 @@ INSTANTIATE_TEST_CASE_P(
             std::make_tuple("2,2", 4),
             std::make_tuple("1,10", 11),
             std::make_tuple("120,1", 121),
-            std::make_tuple("100,20,", 123),
-            std::make_tuple("-2,1", -1),
-            std::make_tuple("a,1", -1),
-            std::make_tuple("0,c", -1),
+            std::make_tuple("100,20,3", 123),
             std::make_tuple("3\n2", 5),
             std::make_tuple("1\n3,5", 9),
             std::make_tuple("//*\n4*1", 5),
-            std::make_tuple("/*\n4*1,2", 7),
+            std::make_tuple("//*\n4*1,2", 7),
             std::make_tuple("//*\n4*1\n1", 6),
             std::make_tuple("//*\n4*1\n1,3", 9),
-            std::make_tuple("//4,5", -1),
-            std::make_tuple("/4,5", -1),
-            std::make_tuple("//;\n4;5*1", -1),
             std::make_tuple("1001,2", 2),
             std::make_tuple("//[***]\n4***1", 5),
-            std::make_tuple("//[***]\n4***1\n1,3", 9),
-            std::make_tuple("//[***\n4***1", -1)
+            std::make_tuple("//[***]\n4***1\n1,3", 9)
 ));
+
+TEST(CalculatorTest, NegativeArgument) {
+    StringCalc c;
+
+    ASSERT_THROW(c.Add("-2,1"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, AlfaArgument) {
+    StringCalc c;
+
+    ASSERT_THROW(c.Add("a,1"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, AlfaArgument2) {
+    StringCalc c;
+
+    ASSERT_THROW(c.Add("0,c"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, MissedAdditionalDelim) {
+    StringCalc c;
+
+    ASSERT_THROW(c.Add("//4,5"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, InvalidPrefixlDelim) {
+    StringCalc c;
+
+    ASSERT_THROW(c.Add("/4,5"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, InvalidDelim) {
+    StringCalc c;
+
+    ASSERT_THROW(c.Add("//;\n4;5*1"), std::invalid_argument);
+}
+
+TEST(CalculatorTest, InvalidMultipleDelim) {
+    StringCalc c;
+
+    ASSERT_THROW(c.Add("//[***\n4***1"), std::invalid_argument);
+}

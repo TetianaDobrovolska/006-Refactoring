@@ -7,18 +7,21 @@
 class StringCalc
 {
 public:
-	StringCalc() = default;
+    static constexpr int kMaxNumber = 1000;
 
-	~StringCalc() = default;
+    StringCalc() = default;
+    ~StringCalc() = default;
 
-	int Add(const std::string& numbers);
-
+    int Add(const std::string& numbers);
 private:
-	std::string::size_type findFirstDelim(const std::string& str,
-																				std::vector<std::string>& delims,
-																				size_t offset,
-																				size_t& delim_pos);
-	bool isDigit(const std::string& str);
+    bool IsValidity(const std::string& str);
+    void Equalizer(const std::string& str, std::string&);
+    std::string::size_type FindFirstDelim(const std::string& str,
+                                        std::vector<std::string>& delims,
+                                        size_t offset,
+                                        size_t& delim_pos);
+
+    std::vector<std::string> delims {",", "\n"};
 };
 
 #endif

@@ -19,13 +19,14 @@ public:
     const std::list<Field*>& GetFieldsList() const;
     const Field* GetFieldByName(const Field::eBrand brand) const;
     const int GetPlayerBalance(const int&) const;
+
     bool Buy(const int& p, const Field*);
     bool Renta(const int& p, const Field*);
 
 private:
-    const Player& GetPlayerInfo(const int&) const;
     std::list<Player>::iterator GetPlayer(const int&);
-    std::list<Field*>::const_iterator getFieldIterator(const Field* resource);
+    std::list<Field*>::const_iterator GetFieldIterator(const Field* resource);
+
     std::list<Player> Players;
     std::list<Field*> Fields;
 };

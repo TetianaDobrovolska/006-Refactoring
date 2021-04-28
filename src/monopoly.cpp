@@ -35,14 +35,9 @@ const std::list<Field*>& Monopoly::GetFieldsList() const
 
 const int Monopoly::GetPlayerBalance(const int& playerIndex) const
 {
-    return GetPlayerInfo(playerIndex).getBalance();
-}
-
-const Player& Monopoly::GetPlayerInfo(const int& playerIndex) const
-{
-    std::list<Player>::const_iterator i = Players.cbegin();
-    std::advance(i, playerIndex - 1);
-    return *i;
+    std::list<Player>::const_iterator it = Players.cbegin();
+    std::advance(it, playerIndex - 1);
+    return it->getBalance();
 }
 
 std::list<Player>::iterator Monopoly::GetPlayer(const int& playerIndex)
@@ -60,7 +55,7 @@ const Field* Monopoly::GetFieldByName(const Field::eBrand brand) const
     return *i;
 }
 
-std::list<Field*>::const_iterator Monopoly::getFieldIterator(const Field* resource)
+std::list<Field*>::const_iterator Monopoly::GetFieldIterator(const Field* resource)
 {
     return std::find_if(Fields.cbegin(), Fields.cend(),
                         [resource](auto x) { return x->getBrand() == resource->getBrand(); });
@@ -68,14 +63,14 @@ std::list<Field*>::const_iterator Monopoly::getFieldIterator(const Field* resour
 
 bool Monopoly::Buy(const int& playerIndex, const Field* resource)
 {
-    auto iterResource = getFieldIterator(resource);
+    auto iterResource = GetFieldIterator(resource);
     if (Fields.end() == iterResource)
     {
         return false;
     }
 
-    auto iterPlayer = GetPlayer(playerIndex);
-    if(!(*iterResource)->buy(*iterPlayer))
+    auto iterCurPlayer = GetPlayer(playerIndex);
+    if(!(*iterResource)->buy(*iterCurPlayer))
     {
         return false;
     }
@@ -88,15 +83,15 @@ bool Monopoly::Buy(const int& playerIndex, const Field* resource)
 bool Monopoly::Renta(const int& playerIndex, const Field* resource)
 {
 
-    auto iterResource = getFieldIterator(resource);
+    auto iterResource = GetFieldIterator(resource);
     if (Fields.end() == iterResource)
     {
         return false;
     }
 
-    auto curPlayer = GetPlayer(playerIndex);
-    auto ownerPlayer = GetPlayer((*iterResource)->getOwnerIndex());
-    if(!(*iterResource)->renta(*curPlayer, *ownerPlayer))
+    auto iterCurPlayer = GetPlayer(playerIndex);
+    auto iterOwnPlayer = GetPlayer((*iterResource)->getOwnerIndex());
+    if(!(*iterResource)->renta(*iterCurPlayer, *iterOwnPlayer))
     {
         return false;
     }

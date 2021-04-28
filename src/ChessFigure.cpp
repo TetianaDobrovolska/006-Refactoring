@@ -4,8 +4,7 @@
 
 using namespace std;
 
-ChessFigure::ChessFigure(ChessFigure::FigureType type, std::string coord) : type(type),
-currentCoord(coord)
+ChessFigure::ChessFigure(std::string coord) : currentCoord(coord)
 {
 }
 
@@ -14,82 +13,108 @@ ChessFigure::~ChessFigure()
 {
 }
 
-bool ChessFigure::Move(string nextCoord)
+bool ChessFigure::isCoordValid(string coord)
 {
-	if (type == PAWN)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (nextCoord[0] != currentCoord[0] || nextCoord[1] <= currentCoord[1] || (nextCoord[1] - currentCoord[1] != 1 && (currentCoord[1] != '2' || nextCoord[1] != '4')))
-				return false;
-			else
-				return true;
-		}
-		else return false;
-			
-	}
-	
-	else if (type == ROOK)
-	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if ((nextCoord[0] != currentCoord[0]) && (nextCoord[1] != currentCoord[1]) || ((nextCoord[0] == currentCoord[0]) && (nextCoord[1] == currentCoord[1])))
-				return false;
-			else
-				return true;
+	bool isValidX = coord[0] >= 'A' && coord[0] <= 'H';
+	bool isValidY = coord[1] >= '1' && coord[1] <= '8';
+	return isValidX && isValidY;
+}
 
-		}
-		else return false;
-	}
-	else if (type == KNIGHT)
+PawnFigure::PawnFigure(string coord) : ChessFigure(coord)
+{
+}
+
+bool PawnFigure::Move(std::string nextCoord)
+{
+	if (isCoordValid(nextCoord))
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			int dx, dy;
-			dx = abs(nextCoord[0] - currentCoord[0]);
-			dy = abs(nextCoord[1] - currentCoord[1]);
-		    if (!(abs(nextCoord[0] - currentCoord[0]) == 1 && abs(nextCoord[1] - currentCoord[1]) == 2 || abs(nextCoord[0] - currentCoord[0]) == 2 && abs(nextCoord[1] - currentCoord[1]) == 1))
-			  return false;
-			else
+        if (nextCoord[0] != currentCoord[0] || nextCoord[1] <= currentCoord[1] || (nextCoord[1] - currentCoord[1] != 1 && (currentCoord[1] != '2' || nextCoord[1] != '4')))
+            return false;
+        else
+            return true;
+	}
+	return false;
+}
+
+RookFigure::RookFigure(string coord) : ChessFigure(coord)
+{
+}
+
+bool RookFigure::Move(std::string nextCoord)
+{
+	if (isCoordValid(nextCoord))
+	{
+        if ((nextCoord[0] != currentCoord[0]) && (nextCoord[1] != currentCoord[1]) || ((nextCoord[0] == currentCoord[0]) && (nextCoord[1] == currentCoord[1])))
+            return false;
+        else
+            return true;
+	}
+	return false;
+}
+
+KnightFigure::KnightFigure(string coord) : ChessFigure(coord)
+{
+}
+
+bool KnightFigure::Move(std::string nextCoord)
+{
+	if (isCoordValid(nextCoord))
+	{
+		int dx, dy;
+		dx = abs(nextCoord[0] - currentCoord[0]);
+		dy = abs(nextCoord[1] - currentCoord[1]);
+		if (!(dx == 1 && dy == 2 || dx == 2 && dy == 1))
+			return false;
+		else
 			return true;
-		}
-		else return false;
 	}
-	
-	else if (type == BISHOP)
+	return false;
+}
+
+BishopFigure::BishopFigure(string coord) : ChessFigure(coord)
+{
+}
+
+bool BishopFigure::Move(std::string nextCoord)
+{
+	if (isCoordValid(nextCoord))
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1])))
-				return false;
-			else
-				return true;
-		}
-		else return false;
+		if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1])))
+            return false;
+        else
+            return true;
 	}
-	
-	else if (type == KING)
+	return false;
+}
+
+KingFigure::KingFigure(string coord) : ChessFigure(coord)
+{
+}
+
+bool KingFigure::Move(std::string nextCoord)
+{
+	if (isCoordValid(nextCoord))
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) <= 1 && abs(nextCoord[1] - currentCoord[1]) <= 1))
-				return false;
-			else
-				return true;
-		}
-		else return false;
+		if (!(abs(nextCoord[0] - currentCoord[0]) <= 1 && abs(nextCoord[1] - currentCoord[1]) <= 1))
+            return false;
+        else
+            return true;
 	}
-	else if (type == QUEEN)
+	return false;
+}
+
+QueenFigure::QueenFigure(string coord) : ChessFigure(coord)
+{
+}
+
+bool QueenFigure::Move(std::string nextCoord)
+{
+	if (isCoordValid(nextCoord))
 	{
-		if (nextCoord[0] >= 'A' && nextCoord[0] <= 'H' && nextCoord[1] >= '1' && nextCoord[1] <= '8')
-		{
-			if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1]) || nextCoord[0] == currentCoord[0] || nextCoord[1] == currentCoord[1]))
-				return false;
-			else
-				return true;
-		}
-		else return false;
+		if (!(abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1]) || nextCoord[0] == currentCoord[0] || nextCoord[1] == currentCoord[1]))
+            return false;
+        else
+			return true;
 	}
-	else
-		return false;
+	return false;
 }

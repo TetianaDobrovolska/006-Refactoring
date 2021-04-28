@@ -17,7 +17,7 @@ TEST(LAB2, GetPlayersListReturnCorrectList) {
     int i = 0;
     for (auto player : playersList) {
         ASSERT_STREQ(player.getName().c_str(), players[i++].c_str());
-        ASSERT_EQ(player.getBalance(), 6000);
+        ASSERT_EQ(monopoly.GetPlayerBalance(i), 6000);
     }
     ASSERT_TRUE(i);
 }
@@ -54,9 +54,7 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
 
     const Field* resource = monopoly.GetFieldByName(Field::FORD);
     monopoly.Buy(1, resource);
-
-    auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player.getBalance(), 5500);
+    ASSERT_EQ(monopoly.GetPlayerBalance(1), 5500);
 
     resource = monopoly.GetFieldByName(Field::FORD);
     ASSERT_TRUE(resource->getOwnerIndex() != 0);
@@ -72,9 +70,7 @@ TEST(LAB2, PlayerBuyPrison)
 
     const Field* resource = monopoly.GetFieldByName(Field::BPRISON);
     monopoly.Buy(1, resource);
-
-    auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player.getBalance(), 6000);
+    ASSERT_EQ(monopoly.GetPlayerBalance(1), 6000);
 
     resource = monopoly.GetFieldByName(Field::BPRISON);
     ASSERT_TRUE(resource->getOwnerIndex() == 0);
@@ -90,9 +86,7 @@ TEST(LAB2, PlayerBuyUndefinedField)
 
     const Field* resource = new BankField(Field::eBrand::UKRSIBBANK, 0);
     ASSERT_FALSE(monopoly.Buy(1, resource));
-
-    auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player.getBalance(), 6000);
+    ASSERT_EQ(monopoly.GetPlayerBalance(1), 6000);
 
     delete []resource;
 }
@@ -109,11 +103,8 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
     resource = monopoly.GetFieldByName(Field::FORD);
     monopoly.Renta(2, resource);
 
-    auto player1 = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player1.getBalance(), 5750);
-
-    auto player2 = monopoly.GetPlayerInfo(2);
-    ASSERT_EQ(player2.getBalance(), 5750);
+    ASSERT_EQ(monopoly.GetPlayerBalance(1), 5750);
+    ASSERT_EQ(monopoly.GetPlayerBalance(2), 5750);
 
     delete []resource;
 }
@@ -126,9 +117,7 @@ TEST(LAB2, RentaPrison)
 
     const Field* resource = monopoly.GetFieldByName(Field::BPRISON);
     monopoly.Renta(1, resource);
-
-    auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player.getBalance(), 5000);
+    ASSERT_EQ(monopoly.GetPlayerBalance(1), 5000);
 
     delete []resource;
 }
@@ -141,9 +130,7 @@ TEST(LAB2, RentaBank)
 
     const Field* resource = new BankField(Field::UKRSIBBANK, 0);
     ASSERT_FALSE(monopoly.Renta(1, resource));
-
-    auto player = monopoly.GetPlayerInfo(1);
-    ASSERT_EQ(player.getBalance(), 6000);
+    ASSERT_EQ(monopoly.GetPlayerBalance(1), 6000);
 
     delete []resource;
 }

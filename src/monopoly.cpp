@@ -33,11 +33,23 @@ const std::list<Field*>& Monopoly::GetFieldsList() const
     return Fields;
 }
 
+const int Monopoly::GetPlayerBalance(const int& playerIndex) const
+{
+    return GetPlayerInfo(playerIndex).getBalance();
+}
+
 const Player& Monopoly::GetPlayerInfo(const int& playerIndex) const
 {
     std::list<Player>::const_iterator i = Players.cbegin();
     std::advance(i, playerIndex - 1);
     return *i;
+}
+
+std::list<Player>::iterator Monopoly::GetPlayer(const int& playerIndex)
+{
+    std::list<Player>::iterator i = Players.begin();
+    std::advance(i, playerIndex - 1);
+    return i;
 }
 
 const Field* Monopoly::GetFieldByName(const Field::eBrand brand) const
@@ -62,14 +74,11 @@ bool Monopoly::Buy(const int& playerIndex, const Field* resource)
         return false;
     }
 
-    Player curPlayer = GetPlayerInfo(playerIndex);
-    if(!(*iterResource)->buy(curPlayer))
+    auto iterPlayer = GetPlayer(playerIndex);
+    if(!(*iterResource)->buy(*iterPlayer))
     {
         return false;
     }
-    std::list<Player>::iterator i = Players.begin();
-    std::advance(i, playerIndex - 1);
-    *i = curPlayer;
 
     (*iterResource)->setOwnerIndex(playerIndex);
 
@@ -85,22 +94,11 @@ bool Monopoly::Renta(const int& playerIndex, const Field* resource)
         return false;
     }
 
-    Player curPlayer = GetPlayerInfo(playerIndex);
-    Player ownerPlayer = GetPlayerInfo((*iterResource)->getOwnerIndex());
-    if(!(*iterResource)->renta(curPlayer, ownerPlayer))
+    auto curPlayer = GetPlayer(playerIndex);
+    auto ownerPlayer = GetPlayer((*iterResource)->getOwnerIndex());
+    if(!(*iterResource)->renta(*curPlayer, *ownerPlayer))
     {
         return false;
-    }
-
-    std::list<Player>::iterator i = Players.begin();
-    std::advance(i, playerIndex - 1);
-    *i = curPlayer;
-
-    i = find_if(Players.begin(), Players.end(),
-                [ownerPlayer](auto x) { return x.getName() == ownerPlayer.getName(); });
-    if (Players.end() != i)
-    {
-        *i = ownerPlayer;
     }
 
     return true;

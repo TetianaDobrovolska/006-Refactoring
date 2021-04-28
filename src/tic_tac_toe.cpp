@@ -26,40 +26,42 @@ const char TicTacToe::getCellByIndex(const int& index) const
     return board.getCellByIndex(index);
 }
 
-bool TicTacToe::isCellValid(const int& cell) {
-    return cell <= Board::kMaxCellCount && cell >= 1 &&
-            board.getCellByIndex(cell) != Players[1].getSymbol() &&
-            board.getCellByIndex(cell) != Players[0].getSymbol();
-}
-
 bool TicTacToe::make_move(const int& num, const int& cell) {
-    if (!isCellValid(cell)) {
-        std::cout << "Enter the number of the correct (1-9) or empty (---) cells to make a move:";
-        return false;
-    }
-    board.setCell(cell, Players[num - 1].getSymbol());
-    return true;
+    return board.setCell(cell, Players[num - 1].getSymbol());
 }
 
 char TicTacToe::check_winner() {
-    
     winSymbol = board.checkWinner();
     return winSymbol;
 }
 
-void TicTacToe::result() {
-    const char win = winSymbol;
-    auto printWinner = [win](Player p) {
-        if(p.getSymbol() != win)
-            return false;
-        std::cout << "Game over. " << p.getName() << " wins!";
-        return true;
-    };
-    auto it = std::find_if(Players.cbegin(), Players.cend(), printWinner);
-    if (Players.cend() == it)
+void TicTacToe::show_result() {
+    if (Board::kDefaultSymbol == winSymbol) {
         std::cout << "The game is over. Tie!";
+    } else {
+        std::cout << "Game over. "
+                  << (Players[0].getSymbol() == winSymbol ? Players[0].getName() : Players[1].getName())
+                  << " wins!";
+    }
 }
 
-void TicTacToe::show_cells() {
+void TicTacToe::play() {
     board.showBoard();
+    for (int i = 1; i <= Board::kMaxCellCount; i++) {
+        int cell;
+        int move = i%2 ? 1 : 2;
+        do {
+            std::cout << "Enter the cell number, make your move:";
+            std::cin >> cell;
+        } while(!make_move(move, cell));
+
+        board.showBoard();
+
+        if (i < Board::kMinStepsToWin)
+            continue;
+        winSymbol = board.checkWinner();
+        if (winSymbol != Board::kDefaultSymbol)
+            break;
+    }
+    show_result();
 }

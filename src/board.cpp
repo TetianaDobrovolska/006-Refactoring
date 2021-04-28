@@ -14,8 +14,13 @@ const char Board::getCellByIndex(const int& index) const
     return cells[index - 1];
 }
 
-void Board::setCell(const int& index, const char symbol) {
+bool Board::setCell(const int& index, const char symbol) {
+     if (!isCellValid(index)) {
+        std::cout << "Enter the number of the correct (1-9) or empty (---) cells to make a move: ";
+        return false;
+    }
     cells[index - 1] = symbol;
+    return true;
 }
 
 bool Board::isHorizontalLine(const int& index) {
@@ -40,6 +45,11 @@ bool Board::isLeftDiagonalLine() {
     return cells[2] != kDefaultSymbol &&
             cells[2] == cells[4] &&
             cells[4] == cells[6];
+}
+
+bool Board::isCellValid(const int& cell) {
+    return cell <= kMaxCellCount && cell >= 1 &&
+            cells[cell - 1] == kDefaultSymbol;
 }
 
 char Board::checkWinner() {

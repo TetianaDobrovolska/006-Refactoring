@@ -13,7 +13,8 @@ public:
     Board();
 
     const char getCellByIndex(const int& index) const;
-    void setCell(const int& index, const char symbol);
+    bool setCell(const int& index, const char symbol);
+    bool isCellValid(const int& cell);
 
     char checkWinner();
     void showBoard();

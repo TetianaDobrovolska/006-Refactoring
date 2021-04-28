@@ -5,22 +5,11 @@
 
 class ChessFigure
 {
-	
 public:
-	enum FigureType
-	{
-		ROOK,
-		KNIGHT,
-		BISHOP,
-		PAWN,
-		KING,
-		QUEEN
-	};
-	ChessFigure(FigureType type,std::string coord);
-	bool Move(std::string nextCoord);
+	ChessFigure(const std::string& coord);
+	virtual bool Move(const std::string& nextCoord) = 0;
 	virtual ~ChessFigure();
-private:
-	FigureType type;
+protected:
 	std::string currentCoord;
 };
 

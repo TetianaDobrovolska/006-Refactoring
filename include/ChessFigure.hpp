@@ -7,21 +7,14 @@ class ChessFigure
 {
 	
 public:
-	enum FigureType
-	{
-		ROOK,
-		KNIGHT,
-		BISHOP,
-		PAWN,
-		KING,
-		QUEEN
-	};
-	ChessFigure(FigureType type,std::string coord);
-	bool Move(std::string nextCoord);
+    ChessFigure();
+    ChessFigure(const std::string& coord);
+    virtual bool Move(const std::string& nextCoord);
 	virtual ~ChessFigure();
-private:
-	FigureType type;
-	std::string currentCoord;
+protected:
+    std::string current_coord_;
+    bool IsValidCoordinate(const std::string&);
+    int Distance(const char&, const char&);
 };
 
 #endif

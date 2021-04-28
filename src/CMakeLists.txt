@@ -3,6 +3,12 @@ project(Chess)
 set(SRC
 	main.cpp
 	ChessFigure.cpp
+        rook.cpp
+        pawn.cpp
+        knight.cpp
+        bishop.cpp
+        king.cpp
+        queen.cpp
 )
 
 add_executable(${PROJECT_NAME}

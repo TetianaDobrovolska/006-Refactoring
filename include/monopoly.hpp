@@ -2,6 +2,7 @@
 #define MONOPOLY_HPP
 
 #include "player.hpp"
+#include "field.hpp"
 
 #include <list>
 #include <tuple>
@@ -10,15 +11,6 @@
 class Monopoly
 {
 public:
-	enum Type
-	{
-		AUTO,
-		FOOD,
-        TRAVEL,
-        CLOTHES,
-		PRISON,
-		BANK
-	};
 
     static constexpr const int startupCapital = 6000;
 
@@ -37,16 +29,17 @@ public:
 
     Monopoly(const std::string names[maxPlayersCount], const int&);
     const std::list<Player>& GetPlayersList() const;
-    const std::list<std::tuple<std::string, Type, int, bool>>& GetFieldsList() const;
+    const std::list<Field>& GetFieldsList() const;
     const Player& GetPlayerInfo(const int&) const;
-    const std::tuple<std::string, Type, int, bool>& GetFieldByName(const std::string&) const;
+    const Field& GetFieldByName(const std::string&) const;
 
-    bool Buy(const int p, std::tuple<std::string, Type, int, bool>&);
-    bool Renta(const int p, const std::tuple<std::string, Type, int, bool>&c);
+    bool Buy(const int& p, Field&);
+    bool Renta(const int& p, Field&);
 
 private:
-    std::list<std::tuple<std::string, Type, int, bool>> Fields;
+    std::list<Field> Fields;
     std::list<Player> Players;
+
 };
 
 #endif

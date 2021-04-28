@@ -2,7 +2,7 @@
 #define PLAYER_HPP
 
 #include <list>
-#include <tuple>
+//#include <tuple>
 #include <string>
 
 class Player

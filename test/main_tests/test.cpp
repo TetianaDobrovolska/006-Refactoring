@@ -21,16 +21,16 @@ TEST(LAB2, GetPlayersListReturnCorrectList)
 
 TEST(LAB2, GetFieldsListReturnCorrectList)
 {
-    tuple<string, Monopoly::Type,int,bool> expectedCompanies[]{
-        //make_tuple(company name, company industry type, owner id, isInMonopoly)
-        make_tuple("Ford",Monopoly::AUTO ,0,false),
-        make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("Lamoda",Monopoly::CLOTHES,0,false),
-        make_tuple("Air Baltic",Monopoly::TRAVEL,0,false),
-        make_tuple("Nordavia",Monopoly::TRAVEL,0,false),
-        make_tuple("Prison",Monopoly::PRISON,0,false),
-        make_tuple("MCDonald",Monopoly::FOOD,0,false),
-        make_tuple("TESLA",Monopoly::AUTO,0,false)
+    Field expectedCompanies[]{
+        //make_tuple(company name, company industry type, owner id)
+        Field("Ford", Field::AUTO ,0),
+        Field("MCDonald", Field::FOOD,0),
+        Field("Lamoda", Field::CLOTHES,0),
+        Field("Air Baltic", Field::TRAVEL,0),
+        Field("Nordavia", Field::TRAVEL,0),
+        Field("Prison", Field::PRISON,0),
+        Field("MCDonald", Field::FOOD,0),
+        Field("TESLA", Field::AUTO,0)
     };
     string players[]{ "Peter","Ekaterina","Alexander" };
 
@@ -55,7 +55,7 @@ TEST(LAB2, PlayerBuyNoOwnedCompanies)
     auto player = monopoly.GetPlayerInfo(1);
     ASSERT_EQ(player.GetMoney(), 5500);
     x = monopoly.GetFieldByName("Ford");
-    ASSERT_TRUE(get<2>(x) != 0);
+    ASSERT_TRUE(x.GetOwnerIndex() != 0);
 }
 
 TEST(LAB2, RentaShouldBeCorrectTransferMoney)
@@ -75,7 +75,7 @@ TEST(LAB2, RentaShouldBeCorrectTransferMoney)
 }
 
 
-bool operator== (std::tuple<std::string, Monopoly::Type, int, bool> & a , std::tuple<std::string, Monopoly::Type, int, bool> & b)
+bool operator== (const Field & a , const Field & b)
 {
-    return get<0>(a) == get<0>(b) && get<1>(a) == get<1>(b) && get<2>(a) == get<2>(b) && get<3>(a) == get<3>(b);
+    return a.GetCompanyName() == b.GetCompanyName() && a.GetBusinessType() == b.GetBusinessType() && a.GetOwnerIndex() == b.GetOwnerIndex();
 }

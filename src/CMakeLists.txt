@@ -3,6 +3,9 @@ project(monopoly)
 set(SRC
 	main.cpp
 	monopoly.cpp
+  player.cpp
+  field.cpp
+  utils.cpp
 )
 
 add_executable(${PROJECT_NAME}

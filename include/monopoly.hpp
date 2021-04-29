@@ -2,37 +2,30 @@
 #define MONOPOLY_HPP
 
 #include <list>
-#include <tuple>
+#include <vector>
 #include <string>
+
+#include "player.hpp"
+#include "field.hpp"
 
 class Monopoly
 {
-	public:
-		enum Type
-		{
-			AUTO,
-			FOOD,
-			TRAVEL,
-			CLOTHER,
-			PRISON,
-			BANK
-		};
 
-		Monopoly(std::string names[10],int);
-		const std::list<std::tuple<std::string,int>> *GetPlayersList();
-		const std::list<std::tuple<std::string, Type, int,bool>> *GetFieldsList();
-		std::tuple<std::string, int>  GetPlayerInfo(int);
-		std::tuple<std::string, Type, int, bool> GetFieldByName(std::string);
+public:
+	Monopoly(std::vector<std::string>, int);
+	~Monopoly();
 
-		bool Buy(int,std::tuple<std::string, Type, int, bool>);
-		bool Renta(int, std::tuple<std::string, Type, int, bool>);
-		
-		void UpdatePlayerCash(int, int);
-		void UpdateFieldOwner(std::string, int);
-	
-	private:
-		std::list<std::tuple<std::string, Type, int, bool>> Fields;
-		std::list<std::tuple<std::string, int>> Players;
+	std::vector<Player *> players() const { return m_players; }
+	std::vector<Field *> fields() const { return m_fields; }
+
+	bool byuField(Player *, Field *);
+
+	bool rentField(Player *, Field *);
+
+private:
+	std::vector<Player *> m_players;
+	std::vector<Field *> m_fields;
+
 
 };
 

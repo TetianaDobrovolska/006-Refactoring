@@ -1,6 +1,14 @@
 #include "BishopFigure.hpp"
 
-bool BishopFigure::Move(const std::string& curCoord, const std::string& nextCoord)
+BishopFigure::BishopFigure(const std::string& coord)
+  : ChessFigure(coord)
+{ }
+
+BishopFigure::~BishopFigure()
+{ }
+
+bool BishopFigure::Move(const std::string& nextCoord)
 {
-  return abs(nextCoord[0] - curCoord[0]) == abs(nextCoord[1] - curCoord[1]) ? true : false;
+  return (isCoordValid(nextCoord) &&
+      abs(nextCoord[0] - currentCoord[0]) == abs(nextCoord[1] - currentCoord[1])) ? true : false;
 }

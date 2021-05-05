@@ -1,13 +1,14 @@
 #ifndef PAWN_FIGURE_TYPE_HPP
 #define PAWN_FIGURE_TYPE_HPP
 
-#include "FigureType.hpp"
+#include "ChessFigure.hpp"
 
-class PawnFigure : public FigureType
+class PawnFigure : public ChessFigure
 {
 public:
-  PawnFigure() = default;
-  bool Move(const std::string& curCoord, const std::string& nextCoord) override;
+  PawnFigure(const std::string& coord);
+  ~PawnFigure() override;
+  bool Move(const std::string& nextCoord) override;
 };
 
 #endif //PAWN_FIGURE_TYPE_HPP

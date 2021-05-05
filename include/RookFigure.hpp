@@ -1,13 +1,14 @@
 #ifndef ROOK_FIGURE_TYPE_HPP
 #define ROOK_FIGURE_TYPE_HPP
 
-#include "FigureType.hpp"
+#include "ChessFigure.hpp"
 
-class RookFigure : public FigureType
+class RookFigure : public ChessFigure
 {
 public:
-  RookFigure() = default;
-  bool Move(const std::string& curCoord, const std::string& nextCoord) override;
+  RookFigure(const std::string& coord);
+  ~RookFigure() override;
+  bool Move(const std::string& nextCoord) override;
 };
 
 #endif //ROOK_FIGURE_TYPE_HPP

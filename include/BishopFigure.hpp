@@ -1,13 +1,14 @@
 #ifndef BISHOP_FIGURE_TYPE_HPP
 #define BISHOP_FIGURE_TYPE_HPP
 
-#include "FigureType.hpp"
+#include "ChessFigure.hpp"
 
-class BishopFigure : public FigureType
+class BishopFigure : public ChessFigure
 {
 public:
-  BishopFigure() = default;
-  bool Move(const std::string& curCoord, const std::string& nextCoord) override;
+  BishopFigure(const std::string& coord);
+  ~BishopFigure() override;
+  bool Move(const std::string& nextCoord) override;
 };
 
 #endif //BISHOP_FIGURE_TYPE_HPP

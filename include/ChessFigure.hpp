@@ -1,18 +1,23 @@
 #ifndef CHESS_FIGURE_HPP
 #define CHESS_FIGURE_HPP
 
-#include "FigureType.hpp"
+#include <string>
 
 class ChessFigure
 {
 public:
-  ChessFigure(FigureType* type, const std::string& coord);
+  static constexpr int kFirstLetter = 'A';
+  static constexpr int kLastLetter = 'H';
+  static constexpr int kFirstDigit = '1';
+  static constexpr int kLastDigit = '8';
+
+  ChessFigure(const std::string& coord);
   virtual ~ChessFigure();
 
-  bool Move(const std::string& nextCoord);
+  virtual bool Move(const std::string& nextCoord) = 0;
 
-private:
-  FigureType* type;
+protected:
+  bool isCoordValid(const std::string& coord);
   std::string currentCoord;
 };
 

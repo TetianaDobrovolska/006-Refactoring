@@ -1,10 +1,19 @@
 #include "QueenFigure.hpp"
 
-bool QueenFigure::Move(const std::string& curCoord, const std::string& nextCoord)
+QueenFigure::QueenFigure(const std::string& coord)
+  : ChessFigure(coord)
+{ }
+
+QueenFigure::~QueenFigure()
+{ }
+
+bool QueenFigure::Move(const std::string& nextCoord)
 {
-  const int dx = abs(nextCoord[0] - curCoord[0]);
-  const int dy = abs(nextCoord[1] - curCoord[1]);
+  if(!isCoordValid(nextCoord))
+    return false;
+  const int dx = abs(nextCoord[0] - currentCoord[0]);
+  const int dy = abs(nextCoord[1] - currentCoord[1]);
   return !(dx == dy ||
-      nextCoord[0] == curCoord[0] ||
-      nextCoord[1] == curCoord[1]) ? false : true;
+      nextCoord[0] == currentCoord[0] ||
+      nextCoord[1] == currentCoord[1]) ? false : true;
 }

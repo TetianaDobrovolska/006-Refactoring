@@ -1,9 +1,17 @@
 #include "RookFigure.hpp"
 
-bool RookFigure::Move(const std::string& curCoord, const std::string& nextCoord)
+RookFigure::RookFigure(const std::string& coord)
+  : ChessFigure(coord)
+{ }
+
+RookFigure::~RookFigure()
+{ }
+
+bool RookFigure::Move(const std::string& nextCoord)
 {
-  return ((nextCoord[0] != curCoord[0]) &&
-      (nextCoord[1] != curCoord[1])) ||
-      ((nextCoord[0] == curCoord[0]) &&
-      (nextCoord[1] == curCoord[1])) ? false : true;
+  return isCoordValid(nextCoord) &&
+      (((nextCoord[0] != currentCoord[0]) &&
+      (nextCoord[1] != currentCoord[1])) ||
+      ((nextCoord[0] == currentCoord[0]) &&
+      (nextCoord[1] == currentCoord[1]))) ? false : true;
 }

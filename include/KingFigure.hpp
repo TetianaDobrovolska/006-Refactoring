@@ -1,13 +1,14 @@
 #ifndef KING_FIGURE_TYPE_HPP
 #define KING_FIGURE_TYPE_HPP
 
-#include "FigureType.hpp"
+#include "ChessFigure.hpp"
 
-class KingFigure : public FigureType
+class KingFigure : public ChessFigure
 {
 public:
-  KingFigure() = default;
-  bool Move(const std::string& curCoord, const std::string& nextCoord) override;
+  KingFigure(const std::string& coord);
+  ~KingFigure() override;
+  bool Move(const std::string& nextCoord) override;
 };
 
 #endif //KING_FIGURE_TYPE_HPP

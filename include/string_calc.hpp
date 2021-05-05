@@ -15,7 +15,11 @@ public:
     int Add(const std::string& numbers);
 private:
     bool IsValidity(const std::string& str);
-    void Equalizer(const std::string& str, std::string&);
+
+    size_t AddDelims(const std::string& str);
+    void RemoveDelims();
+
+    void Digits(const std::string& str, std::vector<int>& digits);
     std::string::size_type FindFirstDelim(const std::string& str,
                                         std::vector<std::string>& delims,
                                         size_t offset,

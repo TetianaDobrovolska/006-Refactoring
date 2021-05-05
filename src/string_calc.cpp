@@ -29,6 +29,8 @@ std::string::size_type StringCalc::FindFirstDelim(const std::string& str,
 bool StringCalc::IsValidity(const std::string& str)
 {
     size_t endDelim = 0;
+    std::vector<std::string> tmp;
+    std::copy(delims.begin(), delims.end(), std::back_inserter(tmp));
     if ("//" == str.substr(0, 2))
     {
         size_t startDelim = 2;
@@ -39,7 +41,7 @@ bool StringCalc::IsValidity(const std::string& str)
             {
                 return false;
             }
-            delims.emplace_back(str.substr(startDelim, (endDelim - startDelim)));
+            tmp.emplace_back(str.substr(startDelim + 1, (endDelim - startDelim - 1)));
             startDelim = endDelim + 1;
         }
         endDelim = str.find_first_of("\n", startDelim);
@@ -49,45 +51,79 @@ bool StringCalc::IsValidity(const std::string& str)
         }
         for (size_t i = startDelim; i < endDelim; ++i)
         {
-            delims.emplace_back(std::string(1, str[i]));
+            tmp.emplace_back(std::string(1, str[i]));
         }
     }
 
-    std::vector<std::string> tmp;
-    std::copy(delims.begin(), delims.end(), std::back_inserter(tmp));
     auto validChar = [tmp](char ch)
     {
+        auto longDelim = [ch](auto it)
+        {
+            return it.find(ch) != std::string::npos;
+        };
         return std::isdigit(ch) || '\n' == ch ||
-                tmp.end() != std::find(tmp.begin(), tmp.end(), std::string(1, ch));
+                tmp.end() != std::find_if(tmp.begin(), tmp.end(), longDelim);
     };
     return std::all_of(str.begin() + endDelim, str.end(), validChar);
 }
 
+size_t StringCalc::AddDelims(const std::string& str)
+{
+    size_t endDelim = 0;
+    if ("//" != str.substr(0, 2))
+        return endDelim;
+
+    size_t startDelim = 2;
+    if ("[" == str.substr(startDelim, 1))
+    {
+        endDelim = str.find("]", startDelim);
+        delims.emplace_back(str.substr(startDelim + 1, (endDelim - startDelim - 1)));
+        startDelim = endDelim + 1;
+    }
+    endDelim = str.find_first_of("\n", startDelim);
+    for (size_t i = startDelim; i < endDelim; ++i)
+    {
+        delims.emplace_back(std::string(1, str[i]));
+    }
+    return endDelim + 1;
+}
+
+void StringCalc::StringCalc::RemoveDelims()
+{
+    delims.erase(delims.begin() + 2, delims.end());
+}
+
+void StringCalc::Digits(const std::string& str, std::vector<int>& digits)
+{
+    size_t begin = AddDelims(str);
+    size_t end = std::string::npos;
+    size_t pos = std::string::npos;
+    while (std::string::npos != (end = FindFirstDelim(str, delims, begin, pos)))
+    {
+        const std::string tmp = str.substr(begin, end - begin);
+        digits.push_back(std::stoi(tmp));
+        begin = end + (std::string::npos != pos ? delims[pos].size() : 1);
+    }
+    RemoveDelims();
+}
+
 int StringCalc::Add(const std::string& numbers)
 {
+    int sum = 0;
     if (numbers.empty())
     {
-        return 0;
+        return sum;
     }
-
     if(!IsValidity(numbers))
     {
         throw std::invalid_argument("Invalid argument");
     }
 
-    size_t begin = 0, end = 0;
-    if ("//" == numbers.substr(0, 2))
-        begin = numbers.find_first_of("\n", begin) + 1;
-
-    int sum = 0;
-    size_t pos = std::string::npos;
-    while (std::string::npos != (end = FindFirstDelim(numbers, delims, begin, pos)))
+    std::vector<int> digits;
+    Digits(numbers, digits);
+    for (auto i : digits)
     {
-        const std::string tmp = numbers.substr(begin, end - begin);
-        int num = std::stoi(tmp);
-        sum += kMaxNumber >= num  ? num : 0;
-        begin = end + (std::string::npos != pos ? delims[pos].size() : 1);
+        sum += kMaxNumber < i ? 0 : i;
     }
-    delims.erase(delims.begin() + 2, delims.end());
     return sum;
 }
